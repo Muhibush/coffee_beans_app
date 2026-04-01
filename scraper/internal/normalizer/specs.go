@@ -20,19 +20,37 @@ var processKeywords = []string{
 }
 
 // Coffee variety/cultivar keywords.
-var varietyKeywords = []string{
-	"sigarar utang", "sigararutang",
-	"typica", "bourbon", "caturra", "catuai",
-	"sl28", "sl34", "sl 28", "sl 34",
-	"heirloom",
-	"kartika", "andungsari", "lini s", "lini-s",
-	"ateng", "ateng super",
-	"jember", "s-795", "s795",
-	"tim tim", "timtim",
-	"gesha", "geisha",
-	"catimor",
-	"rasuna",
-	"abyssinia",
+var varietyKeywords = map[string]string{
+	"sigarar utang": "Sigarar Utang",
+	"sigararutang":  "Sigarar Utang",
+	"typica":        "Typica",
+	"bourbon":       "Bourbon",
+	"caturra":       "Caturra",
+	"catuai":        "Catuai",
+	"sl28":          "SL28",
+	"sl34":          "SL34",
+	"sl 28":         "SL28",
+	"sl 34":         "SL34",
+	"heirloom":      "Heirloom",
+	"kartika":       "Kartika",
+	"andungsari":    "Andungsari",
+	"lini s":        "Lini S",
+	"lini-s":        "Lini S",
+	"ateng":         "Ateng",
+	"ateng super":   "Ateng Super",
+	"jember":        "Jember",
+	"s-795":         "S-795",
+	"s795":          "S-795",
+	"tim tim":       "Tim Tim",
+	"timtim":        "Tim Tim",
+	"gesha":         "Gesha",
+	"geisha":        "Gesha",
+	"catimor":       "Catimor",
+	"rasuna":        "Rasuna",
+	"abyssinia":     "Abyssinia",
+	"mix variety":   "Mix Variety",
+	"mixed variety": "Mix Variety",
+	"mixvariety":    "Mix Variety",
 }
 
 // Origin keywords (Indonesian regions + common international origins).
@@ -133,21 +151,31 @@ var noteKeywords = []string{
 // Roast level keywords.
 var roastLevelKeywords = map[string]string{
 	"light roast":        "Light",
+	"lightroast":         "Light",
 	"light":              "Light",
 	"medium light":       "Medium Light",
 	"medium-light":       "Medium Light",
+	"mediumlight":        "Medium Light",
 	"medium roast":       "Medium",
+	"mediumroast":        "Medium",
 	"medium":             "Medium",
 	"medium dark":        "Medium Dark",
 	"medium-dark":        "Medium Dark",
+	"mediumdark":         "Medium Dark",
 	"dark roast":         "Dark",
+	"darkroast":          "Dark",
 	"dark":               "Dark",
 	"omni roast":         "Omni",
+	"omniroast":          "Omni",
 	"omni":               "Omni",
 	"city roast":         "Medium",
+	"cityroast":          "Medium",
 	"full city":          "Medium Dark",
+	"fullcity":           "Medium Dark",
 	"filter roast":       "Light",
+	"filterroast":        "Light",
 	"espresso roast":     "Medium Dark",
+	"espressoroast":      "Medium Dark",
 }
 
 // altitudePattern matches altitude values like "1800 masl", "1200 mdpl", "1500m asl".
@@ -180,13 +208,16 @@ func ExtractSpecs(title, description string) CoffeeSpecs {
 }
 
 func extractProcess(text string) string {
-	// Check longer phrases first to avoid partial matches
+	longestMatch := ""
+	longestLen := 0
+
 	for _, keyword := range processKeywords {
-		if strings.Contains(text, strings.ToLower(keyword)) {
-			return toTitleCase(keyword)
+		if strings.Contains(text, strings.ToLower(keyword)) && len(keyword) > longestLen {
+			longestMatch = toTitleCase(keyword)
+			longestLen = len(keyword)
 		}
 	}
-	return ""
+	return longestMatch
 }
 
 func extractRoastLevel(text string) string {
@@ -208,9 +239,8 @@ func extractVariety(text string) []string {
 	var found []string
 	seen := make(map[string]bool)
 
-	for _, keyword := range varietyKeywords {
-		if strings.Contains(text, strings.ToLower(keyword)) {
-			canonical := toTitleCase(keyword)
+	for keyword, canonical := range varietyKeywords {
+		if strings.Contains(text, keyword) {
 			if !seen[canonical] {
 				seen[canonical] = true
 				found = append(found, canonical)

@@ -2,9 +2,12 @@
     "success": true,
     "data": {
         "clean_name": "Watermelon Smash Natural",
-        "image_url": "https://p16-images-sign-sg.tokopedia-static.net/tos-alisg-i-aphluv4xwc-sg/44c35f8ea27944c18964c974cdd2dd9d~tplv-aphluv4xwc-resize-jpeg:700:0.jpeg?lk3s=0ccea506\u0026x-expires=1775034839\u0026x-signature=aIWjxBBhf0ZWzH9i90g%2FWvSLZug%3D\u0026x-signature-webp=KKneS2q1OZyktTfLJfxEeiA1jjs%3D",
-        "process": "Natural",
-        "roast_level": "Medium",
+        "image_url": "https://p16-images-sign-sg.tokopedia-static.net/tos-alisg-i-aphluv4xwc-sg/44c35f8ea27944c18964c974cdd2dd9d~tplv-aphluv4xwc-resize-jpeg:700:0.jpeg?lk3s=0ccea506\u0026x-expires=1775037802\u0026x-signature=vKcmM0NICT5X0aeA5sNg7BM8GDk%3D\u0026x-signature-webp=TC2%2BegQ%2FALtEkIyijF3Rf%2BCZpQg%3D",
+        "process": "Anaerobic Natural",
+        "roast_level": "Light",
+        "variety": [
+            "Mix Variety"
+        ],
         "notes": [
             "Berry",
             "Strawberry",

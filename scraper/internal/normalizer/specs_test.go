@@ -115,6 +115,25 @@ func TestExtractSpecs(t *testing.T) {
 				}
 			},
 		},
+		{
+			name:  "Tokopedia dense description",
+			title: "Kopi Arabika Watermelon Smash",
+			desc:  "HALAL ID32110016691860324P-IRT3083273010347-27Origin:Kamojang,WestjavaProses: Anaerobic NaturalVariety:MixvarietyAltitude:1500maslRoasted:LightRoastTastingnotes:Watermelon,Strawberry,MandarinOrangeBijikopidapatlangsungdigilinglangsungsesuaipermintaan:-GilingEspresso-GilingKasar-GilingMedium-GilingHalus-GIlingV60",
+			check: func(t *testing.T, specs CoffeeSpecs) {
+				if specs.Process != "Anaerobic Natural" {
+					t.Errorf("expected Process 'Anaerobic Natural', got %q", specs.Process)
+				}
+				if specs.RoastLevel != "Light" {
+					t.Errorf("expected RoastLevel 'Light', got %q", specs.RoastLevel)
+				}
+				if len(specs.Variety) == 0 || specs.Variety[0] != "Mix Variety" {
+					t.Errorf("expected Variety 'Mix Variety', got %v", specs.Variety)
+				}
+				if specs.Altitude != "1500 masl" {
+					t.Errorf("expected Altitude '1500 masl', got %q", specs.Altitude)
+				}
+			},
+		},
 	}
 
 	for _, tt := range tests {
