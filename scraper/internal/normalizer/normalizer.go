@@ -136,8 +136,6 @@ func mapSourceToMarketplace(source string) string {
 	switch source {
 	case "tokopedia":
 		return "tokopedia"
-	case "shopee":
-		return "shopee"
 	case "shopify":
 		return "web"
 	default:

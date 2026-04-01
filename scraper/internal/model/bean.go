@@ -3,7 +3,7 @@ package model
 // RawProduct holds the raw extracted data from any source before normalization.
 type RawProduct struct {
 	SourceURL   string            `json:"source_url"`
-	Source      string            `json:"source"` // "tokopedia", "shopee", "shopify", "generic"
+	Source      string            `json:"source"` // "tokopedia", "shopify", "generic"
 	Title       string            `json:"title"`
 	Price       int64             `json:"price"`    // in IDR, 0 if not found
 	Currency    string            `json:"currency"` // "IDR"
@@ -41,7 +41,7 @@ type ScrapedBean struct {
 type Variant struct {
 	Price       int64  `json:"price"`
 	BuyURL      string `json:"buy_url"`
-	Marketplace string `json:"marketplace"` // "tokopedia", "shopee", "web"
+	Marketplace string `json:"marketplace"` // "tokopedia", "web"
 	GrindType   string `json:"grind_type,omitempty"` // "biji" (whole bean), "bubuk" (ground) — only if from variant
 }
 

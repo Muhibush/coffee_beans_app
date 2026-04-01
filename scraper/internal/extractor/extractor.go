@@ -30,7 +30,6 @@ func Register(e Extractor) {
 // init registers all extractors. Order matters — more specific patterns first.
 func init() {
 	Register(&TokopediaExtractor{})
-	Register(&ShopeeExtractor{})
 	Register(&ShopifyExtractor{})
 	Register(&GenericExtractor{}) // fallback — must be last
 }
