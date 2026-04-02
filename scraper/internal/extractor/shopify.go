@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -58,6 +59,7 @@ type shopifyProductResponse struct {
 
 type shopifyProduct struct {
 	ID          int64              `json:"id"`
+	Handle      string             `json:"handle"`
 	Title       string             `json:"title"`
 	BodyHTML    string             `json:"body_html"`
 	Vendor      string             `json:"vendor"`
@@ -87,6 +89,87 @@ type shopifyImage struct {
 	Src       string `json:"src"`
 	Width     int    `json:"width"`
 	Height    int    `json:"height"`
+}
+
+func (e *ShopifyExtractor) CanHandleBulk(storeURL string) bool {
+	return e.CanHandle(storeURL)
+}
+
+type shopifyCollectionProduct struct {
+	Handle string `json:"handle"`
+}
+
+// shopifyCollectionResponse represents a Shopify collection JSON response containing multiple products.
+type shopifyCollectionResponse struct {
+	Products []shopifyCollectionProduct `json:"products"`
+}
+
+func (e *ShopifyExtractor) ExtractURLs(ctx context.Context, storeURL string, maxProducts int) ([]string, error) {
+	log.Printf("[shopify] Extracting bulk URLs from: %s", storeURL)
+
+	parsed, err := url.Parse(storeURL)
+	if err != nil {
+		return nil, fmt.Errorf("invalid store URL: %w", err)
+	}
+
+	cleanPath := strings.TrimRight(parsed.Path, "/")
+	var jsonURL string
+	if strings.Contains(cleanPath, "/collections/") || cleanPath == "" {
+		jsonURL = parsed.Scheme + "://" + parsed.Host + cleanPath + "/products.json"
+	} else {
+		jsonURL = parsed.Scheme + "://" + parsed.Host + cleanPath + ".json"
+	}
+
+	log.Printf("[shopify] Bulk JSON endpoint: %s", jsonURL)
+
+	client := &http.Client{Timeout: 15 * time.Second}
+	req, err := http.NewRequestWithContext(ctx, "GET", jsonURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch Shopify Collection JSON: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("Shopify JSON endpoint returned status %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	var collectionResp shopifyCollectionResponse
+	if err := json.Unmarshal(body, &collectionResp); err != nil {
+		return nil, fmt.Errorf("failed to parse Shopify JSON collection: %w", err)
+	}
+
+	if len(collectionResp.Products) == 0 {
+		return nil, fmt.Errorf("no products found in collection")
+	}
+
+	// base URL for reconstructing product URLs
+	baseURL := parsed.Scheme + "://" + parsed.Host
+
+	var urls []string
+	for i, product := range collectionResp.Products {
+		if maxProducts > 0 && i >= maxProducts {
+			break
+		}
+		if product.Handle != "" {
+			urls = append(urls, baseURL+"/products/"+product.Handle)
+		}
+	}
+
+	log.Printf("[shopify] Extracted %d product URLs successfully", len(urls))
+	return urls, nil
 }
 
 func (e *ShopifyExtractor) Extract(ctx context.Context, productURL string) (*model.RawProduct, error) {

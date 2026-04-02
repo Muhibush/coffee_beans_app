@@ -1,0 +1,14 @@
+2026/04/02 05:58:21 [server] Coffee Beans Scraper starting on http://localhost:8080
+2026/04/02 05:58:21 [server] POST /scrape       — Scrape a single product URL
+2026/04/02 05:58:21 [server] POST /scrape-bulk  — Scrape multiple product URLs from a store
+2026/04/02 05:58:21 [server] GET  /health       — Health check
+2026/04/02 05:58:21 [handler] Bulk Scrape request for: https://www.tokopedia.com/fugolcoffee/product (max_products: 2)
+2026/04/02 05:58:21 [tokopedia] Extracting bulk URLs from: https://www.tokopedia.com/fugolcoffee/product
+2026/04/02 05:58:23 [browser] Chrome browser initialized
+2026/04/02 05:58:31 [tokopedia] Extracted 2 product URLs successfully
+2026/04/02 05:58:31 [handler] Successfully extracted 2 URLs fromtokopedia
+2026/04/02 05:58:43 [handler] Bulk Scrape request for: https://fugolcoffeeroasters.com/collections/filter-roast (max_products: 3)
+2026/04/02 05:58:43 [shopify] Extracting bulk URLs from: https://fugolcoffeeroasters.com/collections/filter-roast
+2026/04/02 05:58:43 [shopify] Bulk JSON endpoint: https://fugolcoffeeroasters.com/collections/filter-roast/products.json
+2026/04/02 05:58:43 [shopify] Extracted 3 product URLs successfully
+2026/04/02 05:58:43 [handler] Successfully extracted 3 URLs fromshopify

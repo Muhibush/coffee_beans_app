@@ -52,7 +52,21 @@ type ScrapeRequest struct {
 
 // ScrapeResponse is the API response envelope.
 type ScrapeResponse struct {
-	Success bool        `json:"success"`
+	Success bool         `json:"success"`
 	Data    *ScrapedBean `json:"data,omitempty"`
-	Error   string      `json:"error,omitempty"`
+	Error   string       `json:"error,omitempty"`
+}
+
+// BulkScrapeRequest is the incoming API request body for bulk scraping.
+type BulkScrapeRequest struct {
+	URL         string `json:"url"`
+	MaxProducts int    `json:"max_products,omitempty"`
+}
+
+// BulkScrapeResponse is the API response envelope for bulk scraping.
+type BulkScrapeResponse struct {
+	Success      bool     `json:"success"`
+	URLs         []string `json:"urls,omitempty"`
+	ProductCount int      `json:"product_count"`
+	Error        string   `json:"error,omitempty"`
 }

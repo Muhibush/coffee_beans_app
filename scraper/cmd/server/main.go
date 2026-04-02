@@ -20,6 +20,7 @@ func main() {
 	// Set up routes
 	mux := http.NewServeMux()
 	mux.HandleFunc("/scrape", handler.ScrapeHandler)
+	mux.HandleFunc("/scrape-bulk", handler.BulkScrapeHandler)
 	mux.HandleFunc("/health", handler.HealthHandler)
 
 	// Graceful shutdown
@@ -35,8 +36,9 @@ func main() {
 
 	addr := ":" + port
 	log.Printf("[server] Coffee Beans Scraper starting on http://localhost%s", addr)
-	log.Printf("[server] POST /scrape  — Scrape a single product URL")
-	log.Printf("[server] GET  /health  — Health check")
+	log.Printf("[server] POST /scrape       — Scrape a single product URL")
+	log.Printf("[server] POST /scrape-bulk  — Scrape multiple product URLs from a store")
+	log.Printf("[server] GET  /health       — Health check")
 
 	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatalf("[server] Failed to start: %v", err)

@@ -13,6 +13,8 @@ trigger: always_on
   - Clean name stripping noise (Promo, Murah, Ready).
   - Fingerprint logic: `roastery_id` + `slugify(clean_name)` prevents duplicates.
   - Deep-Merge Upsert: Scraper updates specific dictionary keys inside `variants` without wiping other weights using PostgreSQL `jsonb_set`.
+  - **Endpoints**: Offers `/scrape` for extracting a single product URL and `/scrape-bulk` for full store page extraction.
+  - **Reference**: Developers & agents modifying the scraper MUST consult `.agent/skills/scraper/SKILL.md`.
 
 ---
 
