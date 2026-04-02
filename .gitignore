@@ -1,0 +1,56 @@
+# =========================
+# Security & Config
+# =========================
+# STRICTLY IGNORE: Contains sensitive keys (Supabase URL, Anon Key, Service Role)
+.env
+web/assets/config.json
+/env
+
+# =========================
+# Flutter / Dart
+# =========================
+.dart_tool/
+.packages
+build/
+# Add web build directory
+/build/web/
+
+# If you're using coverage:
+coverage/
+
+# Crashlytics and other logs
+*.log
+
+# =========================
+# Go (Scraper)
+# =========================
+# Ignore compiled binaries/executables
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Ignore binary output directories if you compile to a bin/ folder
+/scraper/bin/
+/scraper/server
+vendor/
+
+# =========================
+# macOS
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# =========================
+# IDEs and Editors
+# =========================
+.vscode/
+.idea/
+*.iml
+*.swp
+*~

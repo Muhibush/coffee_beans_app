@@ -12,3 +12,13 @@
 2026/04/02 05:58:43 [shopify] Bulk JSON endpoint: https://fugolcoffeeroasters.com/collections/filter-roast/products.json
 2026/04/02 05:58:43 [shopify] Extracted 3 product URLs successfully
 2026/04/02 05:58:43 [handler] Successfully extracted 3 URLs fromshopify
+2026/04/02 09:07:18 [handler] Bulk Scrape request for: https://www.tokopedia.com/fugolcoffee/product (max_products: 7)
+2026/04/02 09:07:18 [tokopedia] Extracting bulk URLs from: https://www.tokopedia.com/fugolcoffee/product
+2026/04/02 09:07:25 [tokopedia] Extracted 7 product URLs successfully
+2026/04/02 09:07:25 [handler] Successfully extracted 7 URLs fromtokopedia
+2026/04/02 09:15:18 [handler] Bulk Scrape request for: https://initialcoffee.com/single-origin (max_products: 7)
+2026/04/02 09:15:18 [handler] Bulk Extraction failed: no bulk extractor found for URL: https://initialcoffee.com/single-origin
+2026/04/02 09:16:26 [handler] Bulk Scrape request for: https://www.tokopedia.com/initialcoffee/product (max_products: 7)
+2026/04/02 09:16:26 [tokopedia] Extracting bulk URLs from: https://www.tokopedia.com/initialcoffee/product
+2026/04/02 09:16:33 [tokopedia] Extracted 7 product URLs successfully
+2026/04/02 09:16:33 [handler] Successfully extracted 7 URLs fromtokopedia
