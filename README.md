@@ -69,3 +69,25 @@ curl http://localhost:8080/health
 
 ### Data Pipeline
 The scraper engine parses data, standardizes weights into `g` and `kg`, cleans product names from promotional noise, and normalizes processing methods. This data is then returned for deep-merge upserting into Supabase using PostgreSQL `jsonb_set` based on `roastery_id + slugify(clean_name)` fingerprinting to prevent duplicates across multiple variants (like 250g and 1kg sizes).
+
+## 🛠️ Local Development & Deployment
+
+### **Prerequisites**
+* Flutter SDK (3.x+)
+* Go (1.21+)
+* Supabase CLI
+
+### **Database Setup**
+We have defined the precise schema and RLS requirements. Please refer to the [Supabase Preparation Guide](docs/supabase_setup_guide.md) to set up the PostgreSQL tables, constraints, and Row Level Security policies.
+
+### **Environment Variables**
+Create a `.env` file for the Go service and a `web/assets/config.json` for Flutter:
+```env
+SUPABASE_URL=your_project_url
+SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE=your_service_role # (for Scraper)
+```
+
+### **Deployment**
+* **Frontend:** Deploy to Vercel. Ensure `vercel.json` is configured for SPA routing.
+* **Scraper:** Deploy as an API on Render/Railway or as an Edge Function.
