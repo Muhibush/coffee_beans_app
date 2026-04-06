@@ -101,22 +101,22 @@ class AppTheme {
           elevation: 0,
           textStyle: textTheme.labelLarge,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radiusFull),
+            borderRadius: BorderRadius.circular(radiusLg),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         ),
       ),
 
       // ── Filled Button ──
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primaryContainer,
+          backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onPrimary,
           textStyle: textTheme.labelLarge,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radiusFull),
+            borderRadius: BorderRadius.circular(radiusLg),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         ),
       ),
 
@@ -150,6 +150,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surfaceContainerLow,
+        hintStyle: textTheme.bodyLarge?.copyWith(
+          color: AppColors.outline.withOpacity(0.6),
+        ),
+        prefixIconColor: AppColors.outline,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusLg),
           borderSide: BorderSide.none,
@@ -160,11 +164,11 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusLg),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: 14,
+          vertical: 16,
         ),
       ),
     );

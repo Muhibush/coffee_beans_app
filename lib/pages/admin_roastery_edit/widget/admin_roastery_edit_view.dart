@@ -60,7 +60,7 @@ class AdminRoasteryEditView extends StatelessWidget {
               onPressed: () => context.pop(),
             ),
             title: Text(
-              state.isNew ? 'Add Roastery' : 'Edit Roastery',
+              'Roastery',
               style: textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -128,11 +128,16 @@ class AdminRoasteryEditView extends StatelessWidget {
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.add_a_photo_outlined, size: 48, color: AppColors.outline.withOpacity(0.5)),
+                        Icon(
+                          Icons.add_a_photo_outlined,
+                          size: 48,
+                          color: AppColors.outline.withOpacity(0.5),
+                        ),
                         const SizedBox(height: 12),
                         Text(
                           'Long press to set logo',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.outline),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: AppColors.outline),
                         ),
                       ],
                     ),
@@ -153,6 +158,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           context,
           label: 'NAME',
           initialValue: roastery.name,
+          hint: 'Enter the roastery brand name',
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('name', val),
           ),
@@ -165,6 +171,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           label: 'BIO',
           initialValue: roastery.bio ?? '',
           maxLines: 4,
+          hint: 'Tell the world your roastery\'s unique story...',
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('bio', val),
           ),
@@ -291,6 +298,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           context,
           label: 'INSTAGRAM',
           initialValue: links['instagram'] ?? '',
+          hint: 'instagram.com/yourbrandname',
           prefixIcon: Icons.camera_alt_outlined,
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('instagram', val),
@@ -301,6 +309,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           context,
           label: 'TOKOPEDIA',
           initialValue: links['tokopedia'] ?? '',
+          hint: 'tokopedia.com/your-store',
           prefixIcon: Icons.storefront_outlined,
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('tokopedia', val),
@@ -311,6 +320,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           context,
           label: 'SHOPEE',
           initialValue: links['shopee'] ?? '',
+          hint: 'shopee.co.id/your-store',
           prefixIcon: Icons.shopping_bag_outlined,
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('shopee', val),
@@ -321,6 +331,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           context,
           label: 'WEBSITE',
           initialValue: links['website'] ?? '',
+          hint: 'www.yourwebsite.com',
           prefixIcon: Icons.language_outlined,
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('website', val),
@@ -365,22 +376,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           ),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: textTheme.bodyLarge?.copyWith(color: AppColors.outline.withOpacity(0.6)),
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 20, color: AppColors.outline) : null,
-            filled: true,
-            fillColor: AppColors.surfaceContainerLow,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.primary, width: 2),
-            ),
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 20) : null,
           ),
         ),
       ],
@@ -423,10 +419,6 @@ class AdminRoasteryEditView extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.errorContainer,
                   foregroundColor: AppColors.onErrorContainer,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
                 ),
                 child: const Text('Delete'),
               ),
@@ -443,12 +435,6 @@ class AdminRoasteryEditView extends StatelessWidget {
                   : () => context.read<AdminRoasteryEditBloc>().add(
                       SaveRoastery(),
                     ),
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
               child: state.status == AdminRoasteryEditStatus.saving
                   ? const SizedBox(
                       width: 20,
@@ -458,7 +444,7 @@ class AdminRoasteryEditView extends StatelessWidget {
                         color: AppColors.onPrimary,
                       ),
                     )
-                  : const Text('Save Roastery'),
+                  : const Text('Save'),
             ),
           ),
         ],
