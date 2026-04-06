@@ -124,12 +124,12 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.outlineVariant),
           textStyle: textTheme.labelLarge,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radiusFull),
+            borderRadius: BorderRadius.circular(radiusLg),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          side: BorderSide(color: AppColors.outlineVariant.withOpacity(0.5)),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         ),
       ),
 
@@ -145,6 +145,8 @@ class AppTheme {
         selectedItemColor: AppColors.primaryContainer,
         unselectedItemColor: AppColors.onSurfaceVariant,
       ),
+
+
 
       // ── Input Decoration ──
       inputDecorationTheme: InputDecorationTheme(

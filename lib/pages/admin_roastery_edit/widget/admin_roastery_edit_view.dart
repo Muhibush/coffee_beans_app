@@ -86,6 +86,38 @@ class AdminRoasteryEditView extends StatelessWidget {
                       _buildProfileForm(context, state),
                       const SizedBox(height: 32),
                       _buildSocialLinksForm(context, state),
+                      if (!state.isNew) ...[
+                        const SizedBox(height: 48),
+                        const Divider(height: 1),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Danger Zone',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: AppColors.error,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Deleting this roastery will permanently remove it and all its associated bean catalog data. This action cannot be undone.',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        const SizedBox(height: 20),
+                        FilledButton.tonal(
+                          onPressed: state.status == AdminRoasteryEditStatus.saving ||
+                                  state.status == AdminRoasteryEditStatus.loading
+                              ? null
+                              : () => context.read<AdminRoasteryEditBloc>().add(
+                                    DeleteRoastery(),
+                                  ),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColors.errorContainer,
+                            foregroundColor: AppColors.onErrorContainer,
+                            minimumSize: const Size(double.infinity, 56),
+                          ),
+                          child: const Text('Delete Roastery'),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -164,6 +196,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
+
         _buildCityField(context, state),
         const SizedBox(height: 16),
         _buildInputField(
@@ -408,25 +441,16 @@ class AdminRoasteryEditView extends StatelessWidget {
           if (!state.isNew) ...[
             Expanded(
               flex: 1,
-              child: FilledButton.tonal(
-                onPressed:
-                    state.status == AdminRoasteryEditStatus.saving ||
-                        state.status == AdminRoasteryEditStatus.loading
-                    ? null
-                    : () => context.read<AdminRoasteryEditBloc>().add(
-                        DeleteRoastery(),
-                      ),
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.errorContainer,
-                  foregroundColor: AppColors.onErrorContainer,
-                ),
-                child: const Text('Delete'),
+              child: OutlinedButton.icon(
+                onPressed: () => context.push('/admin/roastery/${state.roastery!.id}/beans'),
+                icon: const Icon(Icons.inventory_2_outlined, size: 20),
+                label: const Text('Beans'),
               ),
             ),
             const SizedBox(width: 12),
           ],
           Expanded(
-            flex: 2,
+            flex: 1,
             child: FilledButton(
               onPressed:
                   state.status == AdminRoasteryEditStatus.saving ||
