@@ -77,7 +77,7 @@ class AdminRoasteryEditView extends StatelessWidget {
                 _buildLogoSection(context, state),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
+                    horizontal: 20,
                     vertical: 24,
                   ),
                   child: Column(
@@ -112,25 +112,33 @@ class AdminRoasteryEditView extends StatelessWidget {
           ),
         );
       },
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(color: AppColors.surfaceVariant),
-          child: hasLogo
-              ? Image.network(roastery.logoUrl!, fit: BoxFit.cover)
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.image, size: 48, color: AppColors.outline),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Long press to set logo',
-                      style: Theme.of(context).textTheme.bodyMedium,
+      child: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: hasLogo
+                  ? Image.network(roastery.logoUrl!, fit: BoxFit.cover)
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.add_a_photo_outlined, size: 48, color: AppColors.outline.withOpacity(0.5)),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Long press to set logo',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.outline),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -269,42 +277,51 @@ class AdminRoasteryEditView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Social Links',
-          style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Text(
+            'Social Presence',
+            style: textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: AppColors.onSurface,
+            ),
+          ),
         ),
-        const SizedBox(height: 16),
         _buildInputField(
           context,
           label: 'INSTAGRAM',
           initialValue: links['instagram'] ?? '',
+          prefixIcon: Icons.camera_alt_outlined,
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('instagram', val),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         _buildInputField(
           context,
           label: 'TOKOPEDIA',
           initialValue: links['tokopedia'] ?? '',
+          prefixIcon: Icons.storefront_outlined,
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('tokopedia', val),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         _buildInputField(
           context,
           label: 'SHOPEE',
           initialValue: links['shopee'] ?? '',
+          prefixIcon: Icons.shopping_bag_outlined,
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('shopee', val),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         _buildInputField(
           context,
           label: 'WEBSITE',
           initialValue: links['website'] ?? '',
+          prefixIcon: Icons.language_outlined,
           onChanged: (val) => context.read<AdminRoasteryEditBloc>().add(
             UpdateRoasteryField('website', val),
           ),
@@ -320,20 +337,24 @@ class AdminRoasteryEditView extends StatelessWidget {
     required Function(String) onChanged,
     int maxLines = 1,
     String? hint,
+    IconData? prefixIcon,
   }) {
     final textTheme = Theme.of(context).textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppColors.onSurfaceVariant,
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 8),
+          child: Text(
+            label,
+            style: textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
+              color: AppColors.onSurfaceVariant.withOpacity(0.8),
+            ),
           ),
         ),
-        const SizedBox(height: 6),
         TextFormField(
           initialValue: initialValue,
           onChanged: onChanged,
@@ -344,12 +365,13 @@ class AdminRoasteryEditView extends StatelessWidget {
           ),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: textTheme.bodyLarge?.copyWith(color: AppColors.outline),
+            hintStyle: textTheme.bodyLarge?.copyWith(color: AppColors.outline.withOpacity(0.6)),
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 20, color: AppColors.outline) : null,
             filled: true,
             fillColor: AppColors.surfaceContainerLow,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 14,
+              vertical: 16,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
