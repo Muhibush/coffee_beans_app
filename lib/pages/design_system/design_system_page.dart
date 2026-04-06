@@ -40,8 +40,14 @@ class DesignSystemPage extends StatelessWidget {
           const SizedBox(height: 48),
           _Section(
             title: 'Buttons',
-            subtitle: 'Themed Material 3 buttons',
+            subtitle: 'Themed Material 3 actions',
             child: const _ButtonSection(),
+          ),
+          const SizedBox(height: 48),
+          _Section(
+            title: 'Form Fields',
+            subtitle: 'Input system with hint and validation styles',
+            child: const _InputSection(),
           ),
         ],
       ),
@@ -232,19 +238,102 @@ class _ButtonSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton(
-            onPressed: () {},
-            child: const Text('Filled Button'),
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: FilledButton(
+                onPressed: () {},
+                child: const Text('Primary Action'),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: FilledButton(
+                onPressed: null,
+                child: const Text('Disabled'),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.inventory_2_outlined, size: 20),
+                label: const Text('Secondary'),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: FilledButton.tonal(
+                onPressed: () {},
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.errorContainer,
+                  foregroundColor: AppColors.onErrorContainer,
+                ),
+                child: const Text('Danger'),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
-          child: OutlinedButton(
+          child: FilledButton.tonal(
             onPressed: () {},
-            child: const Text('Outlined Button'),
+            child: const Text('Tonal Button'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _InputSection extends StatelessWidget {
+  const _InputSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          decoration: const InputDecoration(
+            label: Text('INPUT LABEL'),
+            hintText: 'Enter some information here...',
+          ),
+        ),
+        const SizedBox(height: 24),
+        TextFormField(
+          initialValue: 'Selected Value',
+          decoration: const InputDecoration(
+            label: Text('WITH PREFIX ICON'),
+            prefixIcon: Icon(Icons.language_outlined, size: 20),
+          ),
+        ),
+        const SizedBox(height: 24),
+        TextFormField(
+          maxLines: 3,
+          decoration: const InputDecoration(
+            label: Text('MULTI-LINE TEXT AREA'),
+            hintText: 'Tell a story with multiple lines...',
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'DYNAMC FIELD TITLE',
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.2,
+            color: AppColors.onSurfaceVariant.withOpacity(0.8),
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          decoration: const InputDecoration(
+            hintText: 'Custom title pattern used in rosters...',
           ),
         ),
       ],
