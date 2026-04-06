@@ -226,6 +226,17 @@ class _ComponentSection extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 24),
+        Text('Floating Action Button', style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(Icons.add_rounded, size: 28),
+            ),
+          ],
+        ),
       ],
     );
   }

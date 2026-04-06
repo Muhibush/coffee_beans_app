@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
-import 'package:coffee_beans_app/pages/admin_dashboard/admin_dashboard_page.dart'; // To get RoasteryFilter
 
-/// A sticky header delegate for the Admin Dashboard providing search and status filtering.
-class StickySearchFilter extends SliverPersistentHeaderDelegate {
+class FilterOption<T> {
+  final String label;
+  final T value;
+
+  const FilterOption({required this.label, required this.value});
+}
+
+/// A generic sticky header delegate providing search and status filtering.
+class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
   StickySearchFilter({
     required this.searchController,
     required this.activeFilter,
+    required this.filters,
     required this.onFilterChanged,
     required this.onSearchChanged,
     required this.resultCount,
+    this.searchHint = 'Search...',
   });
 
   final TextEditingController searchController;
-  final RoasteryFilter activeFilter;
-  final ValueChanged<RoasteryFilter> onFilterChanged;
+  final T activeFilter;
+  final List<FilterOption<T>> filters;
+  final ValueChanged<T> onFilterChanged;
   final ValueChanged<String> onSearchChanged;
   final int resultCount;
+  final String searchHint;
 
   @override
   double get maxExtent => 140;
@@ -48,57 +58,60 @@ class StickySearchFilter extends SliverPersistentHeaderDelegate {
             : [],
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+        padding: const EdgeInsets.only(top: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ── Search Bar ──
-            TextField(
-              controller: searchController,
-              onChanged: onSearchChanged,
-              decoration: InputDecoration(
-                hintText: 'Search by name or city',
-                hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
-                ),
-                prefixIcon: const Icon(
-                  Icons.search_rounded,
-                  color: AppColors.onSurfaceVariant,
-                  size: 22,
-                ),
-                suffixIcon: searchController.text.isNotEmpty
-                    ? IconButton(
-                        onPressed: () {
-                          searchController.clear();
-                          onSearchChanged('');
-                        },
-                        icon: const Icon(
-                          Icons.close_rounded,
-                          size: 18,
-                          color: AppColors.onSurfaceVariant,
-                        ),
-                      )
-                    : null,
-                filled: true,
-                fillColor: AppColors.surfaceContainerLow,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(
-                    color: AppColors.primaryContainer,
-                    width: 1.5,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextField(
+                controller: searchController,
+                onChanged: onSearchChanged,
+                decoration: InputDecoration(
+                  hintText: searchHint,
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
                   ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
+                  prefixIcon: const Icon(
+                    Icons.search_rounded,
+                    color: AppColors.onSurfaceVariant,
+                    size: 22,
+                  ),
+                  suffixIcon: searchController.text.isNotEmpty
+                      ? IconButton(
+                          onPressed: () {
+                            searchController.clear();
+                            onSearchChanged('');
+                          },
+                          icon: const Icon(
+                            Icons.close_rounded,
+                            size: 18,
+                            color: AppColors.onSurfaceVariant,
+                          ),
+                        )
+                      : null,
+                  filled: true,
+                  fillColor: AppColors.surfaceContainerLow,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(
+                      color: AppColors.primaryContainer,
+                      width: 1.5,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
                 ),
               ),
             ),
@@ -108,25 +121,16 @@ class StickySearchFilter extends SliverPersistentHeaderDelegate {
               height: 38,
               child: ListView(
                 scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _buildFilterChip(
-                    context,
-                    label: 'All',
-                    filter: RoasteryFilter.all,
-                  ),
-                  const SizedBox(width: 8),
-                  _buildFilterChip(
-                    context,
-                    label: 'Active',
-                    filter: RoasteryFilter.active,
-                  ),
-                  const SizedBox(width: 8),
-                  _buildFilterChip(
-                    context,
-                    label: 'Inactive',
-                    filter: RoasteryFilter.inactive,
-                  ),
-                  const SizedBox(width: 8),
+                  ...filters.map((filter) => Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: _buildFilterChip(
+                          context,
+                          label: filter.label,
+                          filterValue: filter.value,
+                        ),
+                      )),
                   // Result count badge
                   Center(
                     child: Text(
@@ -149,13 +153,13 @@ class StickySearchFilter extends SliverPersistentHeaderDelegate {
   Widget _buildFilterChip(
     BuildContext context, {
     required String label,
-    required RoasteryFilter filter,
+    required T filterValue,
   }) {
     final theme = Theme.of(context);
-    final isSelected = activeFilter == filter;
+    final isSelected = activeFilter == filterValue;
 
     return GestureDetector(
-      onTap: () => onFilterChanged(filter),
+      onTap: () => onFilterChanged(filterValue),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
@@ -180,7 +184,7 @@ class StickySearchFilter extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  bool shouldRebuild(covariant StickySearchFilter oldDelegate) {
+  bool shouldRebuild(covariant StickySearchFilter<T> oldDelegate) {
     return oldDelegate.activeFilter != activeFilter ||
         oldDelegate.resultCount != resultCount ||
         oldDelegate.searchController.text != searchController.text;

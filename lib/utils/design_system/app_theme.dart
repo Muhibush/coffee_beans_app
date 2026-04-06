@@ -139,8 +139,19 @@ class AppTheme {
         thickness: 1,
       ),
 
+      // ── Floating Action Button ──
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.onPrimary,
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+
       // ── Bottom Navigation ──
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+
         backgroundColor: AppColors.surfaceCard,
         selectedItemColor: AppColors.primaryContainer,
         unselectedItemColor: AppColors.onSurfaceVariant,

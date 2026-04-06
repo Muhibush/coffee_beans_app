@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script content="tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'primary': '#6F4E37', 'background-light': '#f7f7f6', 'background-dark': '#1c1816' }, fontFamily: { 'display': ['Inter'], 'body': ['Inter'], 'headline': ['Inter'] }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' } } } }" id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-secondary": "#ffffff",
+            "surface-container-high": "#eae8e4",
+            "error-container": "#ffdad6",
+            "surface-container-highest": "#e5e2de",
+            "on-secondary-fixed": "#2e1503",
+            "inverse-surface": "#31302e",
+            "surface-tint": "#79573f",
+            "on-primary-fixed-variant": "#5f402a",
+            "surface": "#fcf9f5",
+            "on-tertiary-fixed-variant": "#2d4b54",
+            "inverse-on-surface": "#f3f0ec",
+            "primary": "#553722",
+            "on-tertiary-container": "#b0d0db",
+            "surface-variant": "#e5e2de",
+            "secondary-fixed-dim": "#ecbd9d",
+            "secondary": "#7a573d",
+            "tertiary-container": "#3c5a63",
+            "primary-fixed": "#ffdcc6",
+            "tertiary-fixed-dim": "#acccd6",
+            "outline": "#82746d",
+            "secondary-container": "#fecdad",
+            "surface-bright": "#fcf9f5",
+            "on-surface-variant": "#50453e",
+            "on-tertiary": "#ffffff",
+            "on-primary-container": "#eec1a4",
+            "on-primary-fixed": "#2d1604",
+            "on-surface": "#1c1c1a",
+            "background": "#fcf9f5",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#603f27",
+            "secondary-fixed": "#ffdcc5",
+            "on-tertiary-fixed": "#001f27",
+            "inverse-primary": "#eabda0",
+            "tertiary": "#24434b",
+            "surface-container-low": "#f6f3ef",
+            "tertiary-fixed": "#c8e8f3",
+            "primary-container": "#6f4e37",
+            "on-error-container": "#93000a",
+            "on-background": "#1c1c1a",
+            "on-secondary-container": "#79563c",
+            "error": "#ba1a1a",
+            "surface-container": "#f0ede9",
+            "outline-variant": "#d4c3ba",
+            "on-primary": "#ffffff",
+            "on-error": "#ffffff",
+            "surface-dim": "#dcdad6",
+            "primary-fixed-dim": "#eabda0"
+          },
+          fontFamily: {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    body { font-family: 'Inter', sans-serif; background-color: #fcf9f5; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fcf9f5]/80 backdrop-blur-xl flex items-center justify-between px-4 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#f6f3ef] transition-colors rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#553722]" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Inter'] font-semibold tracking-tight text-on-surface text-lg">Roastery Beans</h1>
+</div>
+</header>
+<main class="pt-20 px-4 max-w-2xl mx-auto space-y-8 pb-8">
+<!-- Scraper Section -->
+<section class="space-y-4">
+<h2 class="text-xl font-bold tracking-tight text-on-surface font-headline">Scraper</h2>
+<div class="bg-surface-container-lowest p-4 rounded-2xl space-y-4">
+<div class="flex flex-col sm:flex-row gap-3">
+<div class="relative flex-grow">
+<input class="w-full h-12 pr-4 bg-surface-container-low border-none rounded-xl text-sm focus:ring-2 focus:ring-primary px-4" placeholder="Paste store/product URL..." type="url"/>
+</div>
+<button class="h-12 px-8 bg-primary-container text-white font-semibold rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-sm">
+            Scrape
+          </button>
+</div>
+</div>
+</section>
+<!-- Search & Filter Section -->
+<div class="space-y-8">
+<!-- Search Section -->
+<section>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant text-xl" data-icon="search">search</span>
+<input class="w-full h-12 pl-12 pr-4 bg-surface-container-low border-none rounded-xl text-body-md focus:ring-2 focus:ring-primary transition-all placeholder:text-on-surface-variant/60" placeholder="Search beans..." type="text"/>
+</div>
+</section>
+<!-- Filter Section -->
+<section class="flex overflow-x-auto gap-2 hide-scrollbar -mx-4 px-4">
+<button class="px-5 py-2 rounded-full bg-primary text-white text-sm font-medium whitespace-nowrap active:scale-95 duration-150">All</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-medium whitespace-nowrap active:scale-95 duration-150">Published</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-medium whitespace-nowrap active:scale-95 duration-150">Draft</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-medium whitespace-nowrap active:scale-95 duration-150">Unpublished</button>
+</section>
+</div>
+<!-- Inventory Section -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-bold tracking-tight text-on-surface font-headline">Inventory</h2>
+<span class="text-xs font-medium text-on-surface-variant bg-surface-container-high px-2 py-1 rounded-md">3 Items</span>
+</div>
+<div class="space-y-3">
+<!-- Bean Item 1 -->
+<div class="bg-surface-container-lowest p-3 rounded-2xl flex items-center gap-4 hover:bg-surface-container-low transition-colors group">
+<div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
+<img alt="Ethiopia Guji" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close-up of roasted specialty coffee beans with rich brown tones and natural oily sheen on a minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4CvGI_BJqnCC6sNcEqTxBZgRNtywgBvOkAs0U8RCzM8_0_XMetFziJJrCvQ_Hf15r7Qg1PxGS78S6M2G1jvrDBVoW8H6BWZro5K-ovlsHIruMwdetHTj4bm0qgWSeZTqC5H6Af2hzt2ch77liNd_jo-SjKqnrXusTdXzgszDbNi_Kj0h4_P1SVWt198_IHd0nWk9D-mjSSNAejHXXOvtd-UUGwAcfn162lvpHfJZZiLMTVpTB2JQDNFoE5cHkWOvHjuvL1tiBdRrv"/>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-on-surface font-semibold text-base truncate">Ethiopia Guji</h3>
+<span class="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider">published</span>
+</div>
+<div class="flex items-center">
+<span class="text-primary font-bold">Rp 85.000</span>
+</div>
+</div>
+</div>
+<!-- Bean Item 2 -->
+<div class="bg-surface-container-lowest p-3 rounded-2xl flex items-center gap-4 hover:bg-surface-container-low transition-colors group">
+<div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
+<img alt="Watermelon Smash" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Vibrant artistic shot of green unroasted coffee cherries and pink watermelon slices for a concept of experimental processing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfHCkg8cqPPWFPG7HUimWv-E1DCY3sLsjKPo8TsL-tNqmu-wvODEXZZzk9RgOs0Jl2pQ-uogzDVLpSp9q_IexPEIUc-caorV3NH-USS81mg2Wv92HjUHKgZT0qGdnQdb7nCmCfttS2KqvsfLBfongBJDGZ5r5LCvgsKaU73FP7OP9Ri8skVrYUM_UfqI2vO0pkkOukUiI9Y_hb5SVVWiFkX3My1NmxLcS15qMSIk9qMUpS5CIBzSzLJCkexT1-mctgA3A2K9DeJXH2"/>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-on-surface font-semibold text-base truncate">Watermelon Smash</h3>
+<span class="inline-block px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider">draft</span>
+</div>
+<div class="flex items-center">
+<span class="text-primary font-bold">Rp 96.570</span>
+</div>
+</div>
+</div>
+<!-- Bean Item 3 -->
+<div class="bg-surface-container-lowest p-3 rounded-2xl flex items-center gap-4 hover:bg-surface-container-low transition-colors group opacity-80">
+<div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 filter grayscale-[40%]">
+<img alt="Aceh Gayo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Traditional Indonesian coffee farm scene with mountains of Sumatra in the background under soft atmospheric light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeFdZzxnyBuQZ4b0SoFUvgdpi5TBL3INrm4063PWfqg7cfgIrYl44n2AjKgbVumyRzO6mqphQPJ1TD7SCSr7e5_mMNUWkGPw8mCByzv-HJpEG7anu2Kk1xnsvskMolktA9oYnd5-9At0OiNvagBh55R7WgadZWPbzKvcuywmsmEeHyyC7OKnziwGu3FdNJUOmolKlkeaLia0Gj_YDg89fuSl0TNsUSYWSp2r00Znp-KK41DIneETZdrOz1NpJzyflj6B1yAEwqHKQS"/>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-on-surface font-semibold text-base truncate">Aceh Gayo</h3>
+<span class="inline-block px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider">unpublished</span>
+</div>
+<div class="flex items-center">
+<span class="text-primary font-bold">Rp 120.000</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<button class="fixed bottom-8 right-6 w-14 h-14 bg-[#6F4E37] text-white rounded-full flex items-center justify-center shadow-lg hover:brightness-110 active:scale-95 transition-all z-[60]">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+</body></html>

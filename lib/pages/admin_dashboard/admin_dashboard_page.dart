@@ -143,13 +143,19 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
         slivers: [
           _buildAppBar(context),
           SliverToBoxAdapter(child: _buildDashboardHeader(context)),
-          
+
           // ── Sticky Search + Filters ──
           SliverPersistentHeader(
             pinned: true,
-            delegate: StickySearchFilter(
+            delegate: StickySearchFilter<RoasteryFilter>(
               searchController: _searchController,
+              searchHint: 'Search by name or city',
               activeFilter: _activeFilter,
+              filters: const [
+                FilterOption(label: 'All', value: RoasteryFilter.all),
+                FilterOption(label: 'Active', value: RoasteryFilter.active),
+                FilterOption(label: 'Inactive', value: RoasteryFilter.inactive),
+              ],
               onFilterChanged: (f) => setState(() => _activeFilter = f),
               onSearchChanged: (q) => setState(() => _searchQuery = q),
               resultCount: filtered.length,
@@ -202,7 +208,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
     final theme = Theme.of(context);
     return SliverAppBar(
       pinned: true,
-      backgroundColor: AppColors.surfaceBackground.withAlpha(217),
+      backgroundColor: AppColors.surfaceBackground,
       surfaceTintColor: Colors.transparent,
       title: Text(
         'Coffee Beans App',
@@ -320,10 +326,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
   Widget _buildFAB(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {},
-      backgroundColor: AppColors.primary,
-      foregroundColor: AppColors.onPrimary,
-      elevation: 6,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: const Icon(Icons.add_rounded, size: 28),
     );
   }
