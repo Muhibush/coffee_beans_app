@@ -22,3 +22,6 @@
 2026/04/02 09:16:26 [tokopedia] Extracting bulk URLs from: https://www.tokopedia.com/initialcoffee/product
 2026/04/02 09:16:33 [tokopedia] Extracted 7 product URLs successfully
 2026/04/02 09:16:33 [handler] Successfully extracted 7 URLs fromtokopedia
+2026/04/02 20:22:25 [server] Shutting down...
+2026/04/02 20:22:25 [browser] Error closing browser: write tcp 127.0.0.1:54304->127.0.0.1:54302: use of closed network connection
+2026/04/02 20:22:25 [browser] Chrome browser closed
