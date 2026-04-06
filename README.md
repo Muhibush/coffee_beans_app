@@ -1,93 +1,106 @@
-# Coffee Beans App
+# ☕ Coffee Beans App
 
-A high-performance, mobile-first web platform (MWeb) designed to aggregate and normalize specialty coffee data from various Indonesian roasteries and marketplaces, providing a distraction-free catalog for users and zero-effort management for roasteries.
+[![Platform: Flutter Web](https://img.shields.io/badge/Platform-Flutter%20Web-02569B?logo=flutter)](https://flutter.dev)
+[![Engine: Go](https://img.shields.io/badge/Engine-Go-00ADD8?logo=go)](https://go.dev)
+[![Database: Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?logo=supabase)](https://supabase.com)
+[![Deployment: Vercel](https://img.shields.io/badge/Deployment-Vercel-000000?logo=vercel)](https://vercel.com)
 
-## Architecture
+**Discover specialty coffee from Indonesia's finest roasteries.**
 
-Distributed micro-frontend/micro-service model:
-- **Frontend**: Flutter Web (CanvasKit/WASM)
-- **Database/Auth**: Supabase (PostgreSQL)
-- **Scraper Service**: Go (go-rod and goquery)
+Coffee Beans App is a high-performance, mobile-first web platform (MWeb) designed to aggregate and normalize specialty coffee data from various Indonesian roasteries and marketplaces (Tokopedia, Shopee, Shopify stores) into one **distraction-free catalog**.
 
-## Scraper Service
+---
 
-The Scraper service is a Go-based normalization engine used to aggregate marketplace data from Tokopedia, Shopee, Shopify, and local roasteries.
+## 🚀 The Problem & Solution
+
+### The Fragmented Coffee Scene
+Indonesian specialty coffee buyers currently face fragmented listings, noisy product titles filled with promotional trash ("PROMO MURAH READY..."), and duplicate entries where the same bean sold in different weights appears as separate products.
+
+### Our Intelligent Approach
+- **Aggregation**: Leverages a Go-based scraper to pull data from multiple sources.
+- **Normalization**: Standardizes names, weights, and metadata (processing methods, variety, etc.).
+- **Master-Variant Architecture**: Merges multiple weights (100g, 200g, 1kg) under a single "master bean" entry.
+- **Unified Discovery**: Advanced filtering by variety, process, and tasting notes across all roasteries.
+
+---
+
+## 🏗️ Technical Stack
+
+- **Frontend**: Flutter Web (CanvasKit/WASM) using **BLoC** for state management.
+- **Backend/Scraper**: **Go (Golang)** with `go-rod` (headless) and `goquery`.
+- **Database & Auth**: **Supabase** (PostgreSQL) with Row Level Security (RLS).
+- **Routing**: **Go Router** managing a Shell + Detail navigation split.
+- **Infrastructure**: **Vercel** for frontend delivery and **GitHub Actions** for automated bulk scraping.
+
+---
+
+## 🎨 Design System & UI/UX
+
+The app follows a "Premium Indonesian Specialty Coffee Aggregator" identity:
+- **Philosophy**: Distraction-free, mobile-native feel, and native-app-like experience.
+- **Typography**: Strictly uses the **Inter** font family.
+- **Format**: Prices are formatted in Indonesian Rupiah (e.g., `Rp 125.000`).
+- **Color Palette**:
+  - `Primary`: #6F4E37 (Coffee Brown)
+  - `Surface`: #FBF8F4 (Warm Off-white)
+  - `Accent`: #2E7D32 (Success Green)
+
+---
+
+## 🗄️ Database Strategy & Schema
+
+### The "Fingerprint" Pattern
+To prevent duplicates, each bean is assigned a unique `fingerprint`:
+`roastery_id + slugify(clean_name)`
+This ensures that "Aceh Gayo 250g" and "Aceh Gayo 500g" are merged into a single entry.
+
+### Primary Tables
+- **`roasteries`**: Brand profiles with `social_links` (JSONB).
+- **`beans`**: Product data using `variants` (JSONB) to map multiple storefront links and prices to a single record.
+- **`filter_metadata`**: Dynamic source for UI filter chips (Variety, Process, Origin, Notes).
+
+---
+
+## 🕸️ Scraper Service (Go)
+
+The Scraper service is the normalization engine. It performs extraction via headless browsers to bypass bot protection and standardizes the output.
+
+### API Endpoints
+The scraper runs on `http://localhost:8080` by default.
+
+- **`POST /scrape`**: Extracts data from a single product URL.
+- **`POST /scrape-bulk`**: Extracts multiple product URLs from a store index page.
+- **`GET /health`**: Health check.
 
 ### Running the Scraper
-
-1. Navigate to the `scraper` folder:
-   ```bash
-   cd scraper
-   ```
-2. Start the service:
-   ```bash
-   go run cmd/server/main.go
-   ```
-
-### Scraper API Endpoints
-
-The scraper exposes REST endpoints to trigger extractions. By default, the server runs on `http://localhost:8080`.
-
-#### 1. Single Product Scrape (`POST /scrape`)
-Extracts and normalizes data from a single product page (e.g., a specific coffee bean on Tokopedia).
-
-**Request:**
 ```bash
-curl -X POST http://localhost:8080/scrape \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://www.tokopedia.com/roastery/ethiopia-guji-250g"}'
+cd scraper
+go run cmd/server/main.go
 ```
 
-**What it does:**
-1. Opens a headless browser (`go-rod`) to bypass bot protection.
-2. Extracts raw HTML/JSON data specific to the marketplace (Tokopedia or Shopify).
-3. Normalizes the output into a structured `ScrapedBean` object (cleans product names, standardizes weights into `g` or `kg`, extracts processing methods and tasting notes).
+---
 
-#### 2. Bulk Store Scrape (`POST /scrape-bulk`)
-Extracts multiple product URLs from a store's main catalog or index page.
+## 🛠️ Local Development & Setup
 
-**Request:**
-```bash
-curl -X POST http://localhost:8080/scrape-bulk \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://www.tokopedia.com/roastery", "max_products": 10}'
-```
+### Prerequisites
+- Flutter SDK (3.x+)
+- Go (1.21+)
+- Supabase CLI
 
-**What it does:**
-1. Navigates to the main roastery store page.
-2. Identifies product grid elements and extracts valid product links.
-3. Scrolls and paginates if necessary to collect up to `max_products`.
-4. Returns an array of URLs that can subsequently be fed into the `/scrape` endpoint.
+### Environment Configuration
+1.  **Go Service**: Create a `.env` file in the `scraper` directory.
+2.  **Flutter App**: Configure `web/assets/config.json`.
 
-#### 3. Health Check (`GET /health`)
-Verifies the service is running.
-
-**Request:**
-```bash
-curl http://localhost:8080/health
-```
-
-### Data Pipeline
-The scraper engine parses data, standardizes weights into `g` and `kg`, cleans product names from promotional noise, and normalizes processing methods. This data is then returned for deep-merge upserting into Supabase using PostgreSQL `jsonb_set` based on `roastery_id + slugify(clean_name)` fingerprinting to prevent duplicates across multiple variants (like 250g and 1kg sizes).
-
-## 🛠️ Local Development & Deployment
-
-### **Prerequisites**
-* Flutter SDK (3.x+)
-* Go (1.21+)
-* Supabase CLI
-
-### **Database Setup**
-We have defined the precise schema and RLS requirements. Please refer to the [Supabase Preparation Guide](docs/supabase_setup_guide.md) to set up the PostgreSQL tables, constraints, and Row Level Security policies.
-
-### **Environment Variables**
-Create a `.env` file for the Go service and a `web/assets/config.json` for Flutter:
 ```env
 SUPABASE_URL=your_project_url
 SUPABASE_ANON_KEY=your_anon_key
-SUPABASE_SERVICE_ROLE=your_service_role # (for Scraper)
+SUPABASE_SERVICE_ROLE=your_service_role # (Internal scraper use only)
 ```
 
-### **Deployment**
-* **Frontend:** Deploy to Vercel. Ensure `vercel.json` is configured for SPA routing.
-* **Scraper:** Deploy as an API on Render/Railway or as an Edge Function.
+### Database Setup
+Refer to the [Supabase Setup Guide](docs/supabase_setup_guide.md) to apply migrations and RLS policies.
+
+---
+
+## 📝 License & Copyright
+This project is proprietary. Developed for the Indonesian Specialty Coffee Scene. © 2026.

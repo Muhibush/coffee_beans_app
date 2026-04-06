@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/theme/app_theme.dart';
-import 'package:coffee_beans_app/pages/design_system_page.dart';
-import 'package:coffee_beans_app/pages/admin_dashboard_page.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
+import 'package:coffee_beans_app/utils/router/app_router.dart';
 
 void main() {
-  runApp(const MainApp());
+  usePathUrlStrategy();
+  runApp(const CoffeeBeansApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+/// Root Application widget for Coffee Beans App.
+/// Orchestrates the global theme and routing configuration.
+class CoffeeBeansApp extends StatelessWidget {
+  const CoffeeBeansApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Coffee Beans App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      // Default home for public users — will be replaced with go_router later
-      home: const DesignSystemPage(),
-      routes: {
-        // Admin dashboard — accessed via URL bypass from admin login
-        '/admin/roastery': (context) => const AdminDashboardPage(),
-        // Design system reference page
-        '/design-system': (context) => const DesignSystemPage(),
-      },
+      routerConfig: AppRouter.router,
     );
   }
 }

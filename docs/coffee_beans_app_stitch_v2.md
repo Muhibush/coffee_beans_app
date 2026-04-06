@@ -14,7 +14,7 @@
 - **Tagline:** "Discover specialty coffee from Indonesia's finest roasteries"
 - **Domain:** Specialty coffee discovery & comparison
 - **Region Focus:** Indonesia (prices in IDR/Rupiah, Indonesian roastery names, Indonesian coffee origins)
-- **Language:** Indonesian (Bahasa) for labels & UI copy, English for brand-level text
+- **Language:** English
 - **Platform:** Mobile Web (optimized for ~375px viewport, Flutter Web with CanvasKit/WASM)
 - **Deployment:** Vercel (frontend), Supabase (database/auth/storage)
 
@@ -247,54 +247,6 @@ CREATE TABLE filter_metadata (
 | `bottomNavHeight` | 56px | Bottom navigation bar height |
 | `chipHeight` | 36px | Filter/sort chip height |
 | `imageAspectRatio` | 1:1 | Bean card thumbnail ratio |
-
-### 0.8 UI Copy & Content Guide
-
-> Indonesian labels for the main UI — use these exact strings.
-
-| Element | Indonesian (ID) | English Fallback |
-|---|---|---|
-| Bottom Nav Tab 1 | Home | Home |
-| Bottom Nav Tab 2 | Beans | Beans |
-| Bottom Nav Tab 3 | Roastery | Roastery |
-| Search (Beans) | Cari beans... | Search beans... |
-| Search (Roastery) | Cari nama atau kota... | Search by name or city... |
-| Filter chip label | Filter | Filter |
-| Sort: Default | Paling Sesuai | Most Relevant |
-| Sort: Newest | Terbaru | Newest |
-| Sort: Price High | Harga Tertinggi | Price High to Low |
-| Sort: Price Low | Harga Terendah | Price Low to High |
-| Sort: Most Viewed | Paling Banyak Dilihat | Most Viewed |
-| Filter sheet title | Filter | Filter |
-| Filter reset | Reset | Reset |
-| Filter apply button | Tampilkan {N} produk | Show {N} products |
-| Sort sheet title | Urutkan | Sort By |
-| Product count | {N} Produk | {N} Products |
-| Bean Detail: Specs | Spesifikasi | Specifications |
-| Bean Detail: Notes | Tasting Notes | Tasting Notes |
-| Bean Detail: Weight | Pilih Berat | Choose Weight |
-| Bean Detail: Buy | Beli Dari | Buy From |
-| Buy button: Tokopedia | Beli di Tokopedia | Buy on Tokopedia |
-| Buy button: Shopee | Beli di Shopee | Buy on Shopee |
-| Buy button: Website | Kunjungi Website | Visit Website |
-| Home hero title | Coffee Beans | Coffee Beans |
-| Home hero subtitle | Temukan kopi spesialti dari roasteri terbaik Indonesia | Discover specialty coffee from Indonesia's finest roasteries |
-| Home CTA | Jelajahi Beans | Explore Beans |
-| Home About title | Tentang Kami | About Us |
-| Home About body | Kami mengumpulkan dan menyusun data kopi spesialti dari berbagai roasteri dan marketplace di Indonesia ke dalam satu katalog yang bersih dan mudah digunakan. | We aggregate and normalize specialty coffee data from Indonesian roasteries and marketplaces into one distraction-free catalog. |
-| Home Featured | Beans Pilihan | Featured Beans |
-| Roastery Profile: About | Tentang | About |
-| Roastery Profile: Social | Tautan Sosial | Social Links |
-| Roastery Profile: Beans section | Beans ({N}) | Beans ({N}) |
-| Back button | Kembali | Back |
-| Admin Login title | Admin | Admin |
-| Admin Sign In | Masuk | Sign In |
-| Admin Logout | Keluar | Logout |
-| Admin Dashboard title | Dashboard Admin | Admin Dashboard |
-| Admin Bean List: Scrape | Scrape | Scrape |
-| Admin Publish | Publish | Publish |
-| Admin Draft | Draft | Draft |
-| Admin Unpublish | Unpublish | Unpublish |
 
 ### 0.9 Stitch Execution Guide
 

@@ -1,0 +1,27 @@
+import 'package:go_router/go_router.dart';
+import 'package:coffee_beans_app/pages/design_system/design_system_page.dart';
+import 'package:coffee_beans_app/pages/admin_dashboard/admin_dashboard_page.dart';
+
+/// Central router configuration for the Coffee Beans App.
+/// Handles all public and admin-level navigation logic.
+class AppRouter {
+  AppRouter._();
+
+  static final router = GoRouter(
+    initialLocation: '/admin/roastery',
+    routes: [
+      GoRoute(
+        path: '/',
+        redirect: (context, state) => '/admin/roastery',
+      ),
+      GoRoute(
+        path: '/design-system',
+        builder: (context, state) => const DesignSystemPage(),
+      ),
+      GoRoute(
+        path: '/admin/roastery',
+        builder: (context, state) => const AdminDashboardPage(),
+      ),
+    ],
+  );
+}
