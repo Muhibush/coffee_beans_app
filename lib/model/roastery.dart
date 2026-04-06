@@ -9,6 +9,8 @@ class Roastery {
     required this.city,
     required this.beanCount,
     required this.isActive,
+    this.bio,
+    this.socialLinks,
     this.logoUrl,
   });
 
@@ -17,5 +19,7 @@ class Roastery {
   final String city;
   final int beanCount;
   final bool isActive;
+  final String? bio;
+  final Map<String, String>? socialLinks;
   final String? logoUrl;
 }
