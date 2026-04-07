@@ -6,6 +6,11 @@ class AdminBeanCard extends StatelessWidget {
   final String imageUrl;
   final String status;
   final VoidCallback? onTap;
+  
+  // Selection support
+  final bool? isSelectionMode;
+  final bool isSelected;
+  final ValueChanged<bool?>? onSelectedChanged;
 
   const AdminBeanCard({
     super.key,
@@ -14,6 +19,9 @@ class AdminBeanCard extends StatelessWidget {
     required this.imageUrl,
     required this.status,
     this.onTap,
+    this.isSelectionMode = false,
+    this.isSelected = false,
+    this.onSelectedChanged,
   });
 
   Color _getStatusBgColor(ColorScheme colorScheme) {
@@ -51,17 +59,33 @@ class AdminBeanCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
+        onLongPress: onSelectedChanged != null ? () => onSelectedChanged!(!isSelected) : null,
         borderRadius: BorderRadius.circular(12),
         hoverColor: colorScheme.surfaceContainerLow,
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerLowest,
+            color: isSelected 
+                ? colorScheme.primaryContainer.withValues(alpha: 0.3)
+                : colorScheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12),
+            border: isSelected 
+                ? Border.all(color: colorScheme.primary.withValues(alpha: 0.5), width: 1)
+                : Border.all(color: Colors.transparent, width: 1),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // Selection Checkbox
+              if (isSelectionMode == true) ...[
+                Checkbox(
+                  value: isSelected,
+                  onChanged: onSelectedChanged,
+                  visualDensity: VisualDensity.compact,
+                ),
+                const SizedBox(width: 8),
+              ],
+
               // Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),

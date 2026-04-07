@@ -31,16 +31,24 @@ class AdminBeanListRepository {
         .eq('id', beanId);
   }
 
-  /// Bulk update status for multiple beans.
+  /// Bulk update status for multiple beans using a single query.
   Future<void> bulkUpdateStatus(List<String> beanIds, String status) async {
-    for (final id in beanIds) {
-      await updateBeanStatus(id, status);
-    }
+    if (beanIds.isEmpty) return;
+    await _client
+        .from('beans')
+        .update({'status': status})
+        .inFilter('id', beanIds);
   }
 
   /// Deletes a bean by id.
   Future<void> deleteBean(String beanId) async {
     await _client.from('beans').delete().eq('id', beanId);
+  }
+
+  /// Bulk delete beans by ids.
+  Future<void> bulkDelete(List<String> beanIds) async {
+    if (beanIds.isEmpty) return;
+    await _client.from('beans').delete().inFilter('id', beanIds);
   }
 
   /// Converts a ScrapedBean into a Bean row and inserts it as 'draft'.

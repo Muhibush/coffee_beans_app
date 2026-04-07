@@ -16,6 +16,8 @@ class AdminBeanListState extends Equatable {
   final String? errorMessage;
   final String? scraperError;
   final ScrapedBean? scrapedResult;
+  final String? scraperMessage;
+  final Set<String> selectedIds;
 
   const AdminBeanListState({
     this.status = AdminBeanListStatus.initial,
@@ -27,10 +29,13 @@ class AdminBeanListState extends Equatable {
     this.errorMessage,
     this.scraperError,
     this.scrapedResult,
+    this.scraperMessage,
+    this.selectedIds = const {},
   });
 
   int get publishedCount => allBeans.where((b) => b.status == 'published').length;
   int get draftCount => allBeans.where((b) => b.status == 'draft').length;
+  bool get isSelectionMode => selectedIds.isNotEmpty;
 
   AdminBeanListState copyWith({
     AdminBeanListStatus? status,
@@ -42,6 +47,8 @@ class AdminBeanListState extends Equatable {
     String? errorMessage,
     String? scraperError,
     ScrapedBean? scrapedResult,
+    String? scraperMessage,
+    Set<String>? selectedIds,
   }) {
     return AdminBeanListState(
       status: status ?? this.status,
@@ -53,12 +60,23 @@ class AdminBeanListState extends Equatable {
       errorMessage: errorMessage,
       scraperError: scraperError,
       scrapedResult: scrapedResult,
+      scraperMessage: scraperMessage,
+      selectedIds: selectedIds ?? this.selectedIds,
     );
   }
 
   @override
   List<Object?> get props => [
-        status, scraperStatus, allBeans, filteredBeans,
-        searchQuery, activeFilter, errorMessage, scraperError, scrapedResult,
+        status,
+        scraperStatus,
+        allBeans,
+        filteredBeans,
+        searchQuery,
+        activeFilter,
+        errorMessage,
+        scraperError,
+        scrapedResult,
+        scraperMessage,
+        selectedIds,
       ];
 }
