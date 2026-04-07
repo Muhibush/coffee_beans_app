@@ -1,86 +1,114 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../model/bean_model.dart';
+import '../bloc/admin_bean_edit_bloc.dart';
+import '../bloc/admin_bean_edit_event.dart';
+import '../bloc/admin_bean_edit_state.dart';
 import 'variant_editor_card.dart';
 import 'add_chip_bottom_sheet.dart';
 
-// A simple local model for variants to use in state
-class VariantUiModel {
-  String weight;
-  String price;
-  String url;
-  VariantUiModel({required this.weight, required this.price, required this.url});
+class AdminBeanEditView extends StatelessWidget {
+  const AdminBeanEditView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AdminBeanEditBloc, AdminBeanEditState>(
+      listenWhen: (prev, curr) =>
+          prev.status != curr.status || prev.errorMessage != curr.errorMessage,
+      listener: (context, state) {
+        if (state.status == AdminBeanEditStatus.error &&
+            state.errorMessage != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage!)),
+          );
+        } else if (state.status == AdminBeanEditStatus.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Saved successfully')),
+          );
+          context.pop();
+        } else if (state.status == AdminBeanEditStatus.deleted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Bean deleted')),
+          );
+          context.pop();
+        }
+      },
+      builder: (context, state) {
+        if (state.status == AdminBeanEditStatus.initial ||
+            state.status == AdminBeanEditStatus.loading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final bean = state.bean;
+        if (bean == null) {
+          return const Scaffold(
+            body: Center(child: Text('Failed to load data')),
+          );
+        }
+
+        return _BeanEditForm(bean: bean, isNew: state.isNew, state: state);
+      },
+    );
+  }
 }
 
-class AdminBeanEditView extends StatefulWidget {
-  final bool isEditMode;
-  // Initialize with some dummy data if edit mode, otherwise empty
-  final String? initialName;
-  final String? initialStatus;
-  final String? initialOrigin;
-  final String? initialProcess;
-  final String? initialRoast;
-  final String? initialAltitude;
-  final List<String> initialVarieties;
-  final List<String> initialNotes;
-  final List<VariantUiModel> initialVariants;
-  final String? initialImageUrl;
+class _BeanEditForm extends StatefulWidget {
+  final Bean bean;
+  final bool isNew;
+  final AdminBeanEditState state;
 
-  const AdminBeanEditView({
-    super.key,
-    this.isEditMode = true,
-    this.initialName,
-    this.initialStatus,
-    this.initialOrigin,
-    this.initialProcess,
-    this.initialRoast,
-    this.initialAltitude,
-    this.initialVarieties = const [],
-    this.initialNotes = const [],
-    this.initialVariants = const [],
-    this.initialImageUrl,
+  const _BeanEditForm({
+    required this.bean,
+    required this.isNew,
+    required this.state,
   });
 
   @override
-  State<AdminBeanEditView> createState() => _AdminBeanEditViewState();
+  State<_BeanEditForm> createState() => _BeanEditFormState();
 }
 
-class _AdminBeanEditViewState extends State<AdminBeanEditView> {
+class _BeanEditFormState extends State<_BeanEditForm> {
   late TextEditingController _nameController;
   late TextEditingController _altitudeController;
-  
-  String _status = 'Draft';
-  String? _origin;
-  String? _process;
-  String? _roast;
-  
-  List<String> _varieties = [];
-  List<String> _notes = [];
-  List<VariantUiModel> _variants = [];
 
-  final List<String> _statusOptions = ['Draft', 'Published', 'Archived'];
-  final List<String> _roastOptions = ['Light', 'Medium-Light', 'Medium', 'Medium-Dark', 'Dark'];
-  final List<String> _originOptions = ['Java', 'Sumatra', 'Bali', 'Flores', 'Sulawesi', 'Ethiopia', 'Colombia', 'Brazil'];
-  final List<String> _processOptions = ['Washed', 'Natural', 'Honey', 'Anaerobic Natural', 'Anaerobic Washed'];
-  
-  final List<String> _knownVarieties = ['Mix Variety', 'Heirloom', 'Typica', 'Bourbon', 'Caturra', 'Geisha'];
-  final List<String> _knownNotes = ['Berry', 'Strawberry', 'Melon', 'Orange', 'Watermelon', 'Chocolate', 'Floral'];
+  final List<String> _statusOptions = ['draft', 'published', 'unpublished'];
+  final List<String> _roastOptions = [
+    'Light', 'Medium-Light', 'Medium', 'Medium-Dark', 'Dark'
+  ];
+  final List<String> _originOptions = [
+    'Java', 'Sumatra', 'Bali', 'Flores', 'Sulawesi', 'Ethiopia', 'Colombia', 'Brazil'
+  ];
+  final List<String> _processOptions = [
+    'Washed', 'Natural', 'Honey', 'Anaerobic Natural', 'Anaerobic Washed'
+  ];
+  final List<String> _knownVarieties = [
+    'Mix Variety', 'Heirloom', 'Typica', 'Bourbon', 'Caturra', 'Geisha'
+  ];
+  final List<String> _knownNotes = [
+    'Berry', 'Strawberry', 'Melon', 'Orange', 'Watermelon', 'Chocolate',
+    'Floral', 'Citrus', 'Caramel', 'Nutty', 'Spicy', 'Fruity'
+  ];
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.initialName ?? '');
-    _altitudeController = TextEditingController(text: widget.initialAltitude ?? '');
-    if (widget.initialStatus != null && _statusOptions.contains(widget.initialStatus)) {
-      _status = widget.initialStatus!;
+    _nameController = TextEditingController(text: widget.bean.cleanName);
+    _altitudeController = TextEditingController(text: widget.bean.altitude ?? '');
+  }
+
+  @override
+  void didUpdateWidget(covariant _BeanEditForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update controllers if bean changes from outside (e.g., reload)
+    if (oldWidget.bean.cleanName != widget.bean.cleanName) {
+      _nameController.text = widget.bean.cleanName;
     }
-    _origin = widget.initialOrigin;
-    _process = widget.initialProcess;
-    _roast = widget.initialRoast;
-    _varieties = List.from(widget.initialVarieties);
-    _notes = List.from(widget.initialNotes);
-    _variants = widget.initialVariants.isNotEmpty 
-      ? widget.initialVariants 
-      : (widget.isEditMode ? [] : [VariantUiModel(weight: '', price: '', url: '')]);
+    if (oldWidget.bean.altitude != widget.bean.altitude) {
+      _altitudeController.text = widget.bean.altitude ?? '';
+    }
   }
 
   @override
@@ -90,7 +118,15 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
     super.dispose();
   }
 
-  void _showSingleSelectBottomSheet(String title, List<String> options, ValueChanged<String> onSelected) {
+  void _dispatch(AdminBeanEditEvent event) {
+    context.read<AdminBeanEditBloc>().add(event);
+  }
+
+  void _showSingleSelectBottomSheet(
+    String title,
+    List<String> options,
+    ValueChanged<String> onSelected,
+  ) {
     AddChipBottomSheet.show(
       context,
       title: title,
@@ -104,6 +140,8 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
+    final bean = widget.bean;
+    final isSaving = widget.state.status == AdminBeanEditStatus.saving;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -112,17 +150,15 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          widget.isEditMode ? 'Edit Bean' : 'Add Bean',
+          widget.isNew ? 'Add Bean' : 'Edit Bean',
           style: textTheme.headlineMedium?.copyWith(color: colorScheme.onSurface),
         ),
         actions: [
-          if (widget.isEditMode)
+          if (!widget.isNew)
             IconButton(
               icon: Icon(Icons.delete_outline, color: colorScheme.error),
               tooltip: 'Delete Bean',
-              onPressed: () {
-                // Delete action
-              },
+              onPressed: isSaving ? null : () => _dispatch(DeleteBean()),
             ),
         ],
       ),
@@ -131,7 +167,7 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
           ListView(
             padding: const EdgeInsets.only(bottom: 120),
             children: [
-              _buildHeroImage(),
+              _buildHeroImage(bean),
               Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
@@ -139,47 +175,60 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                   children: [
                     _buildSectionTitle('Basic Info'),
                     const SizedBox(height: 16),
-                    _buildTextField('Name', _nameController),
-                    const SizedBox(height: 16),
-                    _buildDropdownField('Status', _statusOptions, _status, (val) {
-                      if (val != null) setState(() => _status = val);
+                    _buildTextField('Name', _nameController, (val) {
+                      _dispatch(const UpdateBeanField('cleanName', '').copyWithValue(val));
                     }),
-                    
+                    const SizedBox(height: 16),
+                    _buildDropdownField('Status', _statusOptions, bean.status, (val) {
+                      if (val != null) _dispatch(UpdateBeanField('status', val));
+                    }),
+
                     const SizedBox(height: 32),
                     _buildSectionTitle('Specs'),
                     const SizedBox(height: 16),
-                    _buildBottomSheetSelector('Origin', _origin ?? 'Select Origin', () {
-                      _showSingleSelectBottomSheet('Select Origin', _originOptions, (val) {
-                        setState(() => _origin = val);
-                      });
-                    }),
+                    _buildBottomSheetSelector(
+                      'Origin',
+                      bean.origin ?? 'Select Origin',
+                      () => _showSingleSelectBottomSheet('Select Origin', _originOptions, (val) {
+                        _dispatch(UpdateBeanField('origin', val));
+                      }),
+                    ),
                     const SizedBox(height: 16),
-                    _buildBottomSheetSelector('Process', _process ?? 'Select Process', () {
-                      _showSingleSelectBottomSheet('Select Process', _processOptions, (val) {
-                        setState(() => _process = val);
-                      });
-                    }),
+                    _buildBottomSheetSelector(
+                      'Process',
+                      bean.process ?? 'Select Process',
+                      () => _showSingleSelectBottomSheet('Select Process', _processOptions, (val) {
+                        _dispatch(UpdateBeanField('process', val));
+                      }),
+                    ),
                     const SizedBox(height: 16),
-                    _buildBottomSheetSelector('Roast', _roast ?? 'Select Roast', () {
-                      _showSingleSelectBottomSheet('Select Roast', _roastOptions, (val) {
-                        setState(() => _roast = val);
-                      });
-                    }),
+                    _buildBottomSheetSelector(
+                      'Roast',
+                      bean.roastLevel ?? 'Select Roast',
+                      () => _showSingleSelectBottomSheet('Select Roast', _roastOptions, (val) {
+                        _dispatch(UpdateBeanField('roastLevel', val));
+                      }),
+                    ),
                     const SizedBox(height: 16),
-                    _buildTextField('Altitude (e.g., 1500 masl)', _altitudeController),
+                    _buildTextField('Altitude (e.g., 1500 masl)', _altitudeController, (val) {
+                      _dispatch(UpdateBeanField('altitude', val));
+                    }),
 
                     const SizedBox(height: 32),
                     _buildSectionTitle('Variety'),
                     const SizedBox(height: 16),
                     _buildChipsSection(
-                      items: _varieties,
-                      onAdd: () {
-                        _showSingleSelectBottomSheet('Add Variety', _knownVarieties, (val) {
-                          if (!_varieties.contains(val)) setState(() => _varieties.add(val));
-                        });
-                      },
+                      items: bean.variety,
+                      onAdd: () => _showSingleSelectBottomSheet('Add Variety', _knownVarieties, (val) {
+                        if (!bean.variety.contains(val)) {
+                          _dispatch(UpdateBeanField('variety', [...bean.variety, val]));
+                        }
+                      }),
                       onRemove: (val) {
-                        setState(() => _varieties.remove(val));
+                        _dispatch(UpdateBeanField(
+                          'variety',
+                          bean.variety.where((v) => v != val).toList(),
+                        ));
                       },
                     ),
 
@@ -187,57 +236,31 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                     _buildSectionTitle('Tasting Notes'),
                     const SizedBox(height: 16),
                     _buildChipsSection(
-                      items: _notes,
-                      onAdd: () {
-                        _showSingleSelectBottomSheet('Add Tasting Note', _knownNotes, (val) {
-                          if (!_notes.contains(val)) setState(() => _notes.add(val));
-                        });
-                      },
+                      items: bean.notes,
+                      onAdd: () => _showSingleSelectBottomSheet('Add Tasting Note', _knownNotes, (val) {
+                        if (!bean.notes.contains(val)) {
+                          _dispatch(UpdateBeanField('notes', [...bean.notes, val]));
+                        }
+                      }),
                       onRemove: (val) {
-                        setState(() => _notes.remove(val));
+                        _dispatch(UpdateBeanField(
+                          'notes',
+                          bean.notes.where((n) => n != val).toList(),
+                        ));
                       },
                     ),
 
                     const SizedBox(height: 32),
                     _buildSectionTitle('Variants'),
                     const SizedBox(height: 16),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _variants.length,
-                      itemBuilder: (context, index) {
-                        final variant = _variants[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: VariantEditorCard(
-                            weight: variant.weight,
-                            price: variant.price,
-                            url: variant.url,
-                            onDelete: () {
-                              setState(() => _variants.removeAt(index));
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(56),
-                        side: BorderSide(color: colorScheme.outlineVariant),
-                      ),
-                      onPressed: () {
-                        setState(() => _variants.add(VariantUiModel(weight: '', price: '', url: '')));
-                      },
-                      icon: const Icon(Icons.add_circle_outline),
-                      label: const Text('Add Variant'),
-                    ),
+                    _buildVariantsSection(bean),
                   ],
                 ),
               ),
             ],
           ),
-          
-          // Fixed bottom button
+
+          // Fixed bottom save button
           Positioned(
             bottom: 0,
             left: 0,
@@ -256,11 +279,17 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                 ),
               ),
               child: FilledButton(
-                onPressed: () {
-                  // Save action
-                  context.pop();
-                },
-                child: const Text('Save'),
+                onPressed: isSaving ? null : () => _dispatch(SaveBean()),
+                child: isSaving
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: colorScheme.onPrimary,
+                        ),
+                      )
+                    : const Text('Save'),
               ),
             ),
           ),
@@ -273,13 +302,17 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
     return Text(
       title,
       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context).colorScheme.onSurface,
-      ),
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller) {
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller,
+    ValueChanged<String> onChanged,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
@@ -294,6 +327,7 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
+          onChanged: onChanged,
           style: textTheme.bodyLarge,
           decoration: InputDecoration(
             filled: true,
@@ -309,10 +343,18 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
     );
   }
 
-  Widget _buildDropdownField(String label, List<String> options, String value, ValueChanged<String?> onChanged) {
+  Widget _buildDropdownField(
+    String label,
+    List<String> options,
+    String value,
+    ValueChanged<String?> onChanged,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
+
+    // Ensure value is in options
+    final effectiveValue = options.contains(value) ? value : options.first;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,9 +365,14 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: effectiveValue,
           onChanged: onChanged,
-          items: options.map((opt) => DropdownMenuItem(value: opt, child: Text(opt, style: textTheme.bodyLarge))).toList(),
+          items: options
+              .map((opt) => DropdownMenuItem(
+                    value: opt,
+                    child: Text(opt, style: textTheme.bodyLarge),
+                  ))
+              .toList(),
           decoration: InputDecoration(
             filled: true,
             fillColor: colorScheme.surfaceContainerLow,
@@ -366,10 +413,7 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  value,
-                  style: textTheme.bodyLarge,
-                ),
+                Text(value, style: textTheme.bodyLarge),
                 Icon(Icons.expand_more, color: colorScheme.onSurfaceVariant),
               ],
             ),
@@ -384,9 +428,8 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
     required VoidCallback onAdd,
     required ValueChanged<String> onRemove,
   }) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Wrap(
       spacing: 8.0,
@@ -398,9 +441,13 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
             deleteIcon: const Icon(Icons.close, size: 16),
             onDeleted: () => onRemove(item),
             backgroundColor: colorScheme.secondaryContainer,
-            labelStyle: textTheme.labelMedium?.copyWith(color: colorScheme.onSecondaryContainer),
+            labelStyle: textTheme.labelMedium?.copyWith(
+              color: colorScheme.onSecondaryContainer,
+            ),
             deleteIconColor: colorScheme.onSecondaryContainer,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
             side: BorderSide.none,
           );
         }),
@@ -408,17 +455,60 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
           label: const Text('Add'),
           avatar: const Icon(Icons.add, size: 18),
           backgroundColor: Colors.transparent,
-          side: BorderSide(color: colorScheme.outlineVariant, style: BorderStyle.solid, width: 2),
+          side: BorderSide(
+            color: colorScheme.outlineVariant,
+            style: BorderStyle.solid,
+            width: 2,
+          ),
           onPressed: onAdd,
         ),
       ],
     );
   }
 
-  Widget _buildHeroImage() {
+  Widget _buildVariantsSection(Bean bean) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final entries = bean.variants.entries.toList();
+
+    return Column(
+      children: [
+        ...entries.map((entry) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: VariantEditorCard(
+              weight: entry.key,
+              price: 'Rp ${entry.value.price}',
+              url: entry.value.buyUrl,
+              onDelete: () {
+                final updated = Map<String, BeanVariant>.from(bean.variants);
+                updated.remove(entry.key);
+                _dispatch(UpdateBeanField('variants', updated));
+              },
+            ),
+          );
+        }),
+        OutlinedButton.icon(
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size.fromHeight(56),
+            side: BorderSide(color: colorScheme.outlineVariant),
+          ),
+          onPressed: () {
+            final updated = Map<String, BeanVariant>.from(bean.variants);
+            final key = '${(entries.length + 1) * 100}g';
+            updated[key] = const BeanVariant(price: 0, buyUrl: '', marketplace: '');
+            _dispatch(UpdateBeanField('variants', updated));
+          },
+          icon: const Icon(Icons.add_circle_outline),
+          label: const Text('Add Variant'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeroImage(Bean bean) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
+    final hasImage = bean.imageUrl != null && bean.imageUrl!.isNotEmpty;
 
     return AspectRatio(
       aspectRatio: 1.0,
@@ -432,14 +522,14 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),
               ),
-              image: widget.initialImageUrl != null
-                ? DecorationImage(
-                    image: NetworkImage(widget.initialImageUrl!),
-                    fit: BoxFit.cover,
-                  )
-                : null,
+              image: hasImage
+                  ? DecorationImage(
+                      image: NetworkImage(bean.imageUrl!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
-            child: widget.initialImageUrl == null
+            child: !hasImage
                 ? Icon(Icons.image_outlined, size: 48, color: colorScheme.outlineVariant)
                 : null,
           ),
@@ -448,36 +538,34 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  // Change image action
+                  // Image change action — future enhancement
                 },
-                child: AnimatedOpacity(
-                  opacity: 1.0,
-                  duration: const Duration(milliseconds: 200),
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainerLowest.withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(100),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainerLowest.withValues(alpha: 0.9),
+                      borderRadius: BorderRadius.circular(100),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.photo_camera, color: colorScheme.primary),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Change Image',
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: colorScheme.primary,
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.photo_camera, color: colorScheme.primary),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Change Image',
-                            style: textTheme.labelLarge?.copyWith(color: colorScheme.primary),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -487,5 +575,12 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
         ],
       ),
     );
+  }
+}
+
+/// Extension to create UpdateBeanField with a runtime value.
+extension _UpdateBeanFieldExt on UpdateBeanField {
+  UpdateBeanField copyWithValue(String value) {
+    return UpdateBeanField(field, value);
   }
 }

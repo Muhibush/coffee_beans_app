@@ -1,96 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/model/roastery.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:coffee_beans_app/widget/stat_chip.dart';
 import 'package:coffee_beans_app/pages/admin_dashboard/widget/admin_roastery_card.dart';
 import 'package:coffee_beans_app/pages/admin_dashboard/widget/sticky_search_filter.dart';
+import 'package:coffee_beans_app/pages/admin_login/bloc/auth_bloc.dart';
+import 'package:coffee_beans_app/pages/admin_login/bloc/auth_event.dart';
+import 'package:coffee_beans_app/pages/admin_login/bloc/auth_state.dart';
+import 'bloc/admin_dashboard_bloc.dart';
+import 'bloc/admin_dashboard_event.dart';
+import 'bloc/admin_dashboard_state.dart';
+import 'repository/admin_dashboard_repository.dart';
 
 /// Status filter options for the roastery list.
 enum RoasteryFilter { all, active, inactive }
 
 /// Admin Dashboard page — the landing screen for authenticated admin users.
-class AdminDashboardPage extends StatefulWidget {
+class AdminDashboardPage extends StatelessWidget {
   const AdminDashboardPage({super.key});
 
   @override
-  State<AdminDashboardPage> createState() => _AdminDashboardPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => AdminDashboardBloc(
+        repository: AdminDashboardRepository(),
+      )..add(LoadRoasteries()),
+      child: const _AdminDashboardView(),
+    );
+  }
 }
 
-class _AdminDashboardPageState extends State<AdminDashboardPage>
-    with SingleTickerProviderStateMixin {
-  // ── State ──
+class _AdminDashboardView extends StatefulWidget {
+  const _AdminDashboardView();
+
+  @override
+  State<_AdminDashboardView> createState() => _AdminDashboardViewState();
+}
+
+class _AdminDashboardViewState extends State<_AdminDashboardView> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   RoasteryFilter _activeFilter = RoasteryFilter.all;
-  String _searchQuery = '';
-
-  bool _isLoadingMore = false;
-  bool _hasMoreData = true;
-
-  // ── Dummy Data ──
-  final List<Roastery> _allRoasteries = const [
-    Roastery(
-      id: '1',
-      name: 'Tanamera Coffee',
-      city: 'Jakarta',
-      beanCount: 12,
-      isActive: true,
-    ),
-    Roastery(
-      id: '2',
-      name: 'Otten Coffee',
-      city: 'Medan',
-      beanCount: 24,
-      isActive: true,
-    ),
-    Roastery(
-      id: '3',
-      name: 'Common Grounds',
-      city: 'Bandung',
-      beanCount: 8,
-      isActive: true,
-    ),
-    Roastery(
-      id: '4',
-      name: 'Kopi Kenangan',
-      city: 'Jakarta',
-      beanCount: 15,
-      isActive: false,
-    ),
-    Roastery(
-      id: '5',
-      name: 'Tuku Coffee',
-      city: 'Jakarta',
-      beanCount: 6,
-      isActive: true,
-    ),
-    Roastery(
-      id: '6',
-      name: 'Anomali Coffee',
-      city: 'Ubud',
-      beanCount: 10,
-      isActive: true,
-    ),
-    Roastery(
-      id: '7',
-      name: 'Kopi Kalyan',
-      city: 'Yogyakarta',
-      beanCount: 5,
-      isActive: false,
-    ),
-    Roastery(
-      id: '8',
-      name: 'Coffeeland Roasters',
-      city: 'Surabaya',
-      beanCount: 18,
-      isActive: true,
-    ),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
 
   @override
   void dispose() {
@@ -99,109 +50,82 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
     super.dispose();
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent * 0.8 &&
-        !_isLoadingMore &&
-        _hasMoreData) {
-      _loadMoreRoasteries();
-    }
-  }
-
-  Future<void> _loadMoreRoasteries() async {
-    setState(() => _isLoadingMore = true);
-    await Future.delayed(const Duration(seconds: 1));
-    if (mounted) {
-      setState(() {
-        _isLoadingMore = false;
-        _hasMoreData = false;
-      });
-    }
-  }
-
-  List<Roastery> get _filteredRoasteries {
-    return _allRoasteries.where((r) {
-      if (_activeFilter == RoasteryFilter.active && !r.isActive) return false;
-      if (_activeFilter == RoasteryFilter.inactive && r.isActive) return false;
-      if (_searchQuery.isNotEmpty) {
-        final query = _searchQuery.toLowerCase();
-        return r.name.toLowerCase().contains(query) ||
-            r.city.toLowerCase().contains(query);
-      }
-      return true;
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final filtered = _filteredRoasteries;
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
-    return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          _buildAppBar(context),
-          SliverToBoxAdapter(child: _buildDashboardHeader(context)),
+    return BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
+      builder: (context, state) {
+        final filtered = state.filteredRoasteries;
 
-          // ── Sticky Search + Filters ──
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: StickySearchFilter<RoasteryFilter>(
-              searchController: _searchController,
-              searchHint: 'Search by name or city',
-              activeFilter: _activeFilter,
-              filters: const [
-                FilterOption(label: 'All', value: RoasteryFilter.all),
-                FilterOption(label: 'Active', value: RoasteryFilter.active),
-                FilterOption(label: 'Inactive', value: RoasteryFilter.inactive),
-              ],
-              onFilterChanged: (f) => setState(() => _activeFilter = f),
-              onSearchChanged: (q) => setState(() => _searchQuery = q),
-              resultCount: filtered.length,
-            ),
-          ),
+        return Scaffold(
+          body: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              _buildAppBar(context),
+              SliverToBoxAdapter(child: _buildDashboardHeader(context, state)),
 
-          // ── Roastery List ──
-          if (filtered.isEmpty)
-            SliverFillRemaining(child: _buildEmptyState(context))
-          else
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  if (index == filtered.length) {
-                    return _isLoadingMore
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24),
-                            child: Center(
-                              child: SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: colorScheme.primaryContainer,
-                                ),
-                              ),
-                            ),
-                          )
-                        : const SizedBox.shrink();
-                  }
-                  return AdminRoasteryCard(
-                    roastery: filtered[index],
-                    index: index,
-                    onTap: () {
-                      // TODO: Navigate to /admin/roastery/:id
-                    },
-                  );
-                }, childCount: filtered.length + 1),
+              // ── Sticky Search + Filters ──
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: StickySearchFilter<RoasteryFilter>(
+                  searchController: _searchController,
+                  searchHint: 'Search by name or city',
+                  activeFilter: _activeFilter,
+                  filters: const [
+                    FilterOption(label: 'All', value: RoasteryFilter.all),
+                    FilterOption(label: 'Active', value: RoasteryFilter.active),
+                    FilterOption(label: 'Inactive', value: RoasteryFilter.inactive),
+                  ],
+                  onFilterChanged: (f) {
+                    setState(() => _activeFilter = f);
+                    context.read<AdminDashboardBloc>().add(
+                      FilterRoasteries(f.name),
+                    );
+                  },
+                  onSearchChanged: (q) {
+                    context.read<AdminDashboardBloc>().add(
+                      SearchRoasteries(q),
+                    );
+                  },
+                  resultCount: filtered.length,
+                ),
               ),
-            ),
-          const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
-        ],
-      ),
-      floatingActionButton: _buildFAB(context),
+
+              // ── Content ──
+              if (state.status == AdminDashboardStatus.loading)
+                const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              else if (state.status == AdminDashboardStatus.error)
+                SliverFillRemaining(
+                  child: _buildErrorState(context, state.errorMessage),
+                )
+              else if (filtered.isEmpty)
+                SliverFillRemaining(child: _buildEmptyState(context))
+              else
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      return AdminRoasteryCard(
+                        roastery: filtered[index],
+                        index: index,
+                        onTap: () {
+                          context.push('/admin/roastery/${filtered[index].id}');
+                        },
+                      );
+                    }, childCount: filtered.length),
+                  ),
+                ),
+              const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => context.push('/admin/roastery/new'),
+            child: const Icon(Icons.add_rounded, size: 28),
+          ),
+        );
+      },
     );
   }
 
@@ -221,13 +145,22 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
       ),
       centerTitle: false,
       actions: [
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            'Logout',
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: colorScheme.primary,
-              fontWeight: FontWeight.w700,
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is Unauthenticated) {
+              context.go('/admin-login');
+            }
+          },
+          child: TextButton(
+            onPressed: () {
+              context.read<AuthBloc>().add(LogoutRequested());
+            },
+            child: Text(
+              'Logout',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: colorScheme.primary,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),
@@ -236,11 +169,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
     );
   }
 
-  Widget _buildDashboardHeader(BuildContext context) {
+  Widget _buildDashboardHeader(BuildContext context, AdminDashboardState state) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final activeCount = _allRoasteries.where((r) => r.isActive).length;
-    final totalBeans = _allRoasteries.fold(0, (sum, r) => sum + r.beanCount);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
@@ -270,21 +201,21 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
             children: [
               StatChip(
                 icon: Icons.store_rounded,
-                value: '${_allRoasteries.length}',
+                value: '${state.allRoasteries.length}',
                 label: 'Roasteries',
                 color: colorScheme.primaryContainer,
               ),
               const SizedBox(width: 8),
               StatChip(
                 icon: Icons.check_circle_rounded,
-                value: '$activeCount',
+                value: '${state.activeCount}',
                 label: 'Active',
                 color: colorScheme.tertiaryContainer,
               ),
               const SizedBox(width: 8),
               StatChip(
                 icon: Icons.inventory_2_rounded,
-                value: '$totalBeans',
+                value: '${state.totalBeans}',
                 label: 'Beans',
                 color: colorScheme.secondaryContainer,
               ),
@@ -303,34 +234,48 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.search_off_rounded,
-            size: 64,
-            color: colorScheme.outlineVariant,
-          ),
+          Icon(Icons.search_off_rounded, size: 64, color: colorScheme.outlineVariant),
           const SizedBox(height: 16),
           Text(
             'No roasteries found',
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
+            style: theme.textTheme.titleMedium?.copyWith(color: colorScheme.onSurfaceVariant),
           ),
           const SizedBox(height: 8),
           Text(
             'Try adjusting your search or filters',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colorScheme.outline,
-            ),
+            style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFAB(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {},
-      child: const Icon(Icons.add_rounded, size: 28),
+  Widget _buildErrorState(BuildContext context, String? message) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.error_outline, size: 64, color: colorScheme.error),
+          const SizedBox(height: 16),
+          Text(
+            'Failed to load roasteries',
+            style: theme.textTheme.titleMedium?.copyWith(color: colorScheme.error),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            message ?? 'Unknown error',
+            style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.outline),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          FilledButton.tonal(
+            onPressed: () => context.read<AdminDashboardBloc>().add(LoadRoasteries()),
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
     );
   }
 }

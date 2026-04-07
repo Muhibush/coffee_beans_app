@@ -54,7 +54,7 @@ class AdminRoasteryEditView extends StatelessWidget {
         return Scaffold(
           backgroundColor: theme.scaffoldBackgroundColor,
           appBar: AppBar(
-            backgroundColor: theme.scaffoldBackgroundColor.withOpacity(0.9),
+            backgroundColor: theme.scaffoldBackgroundColor.withValues(alpha: 0.9),
             elevation: 0,
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: colorScheme.primary),
@@ -166,7 +166,7 @@ class AdminRoasteryEditView extends StatelessWidget {
                         Icon(
                           Icons.add_a_photo_outlined,
                           size: 48,
-                          color: colorScheme.outline.withOpacity(0.5),
+                          color: colorScheme.outline.withValues(alpha: 0.5),
                         ),
                         const SizedBox(height: 12),
                         Text(
@@ -404,7 +404,7 @@ class AdminRoasteryEditView extends StatelessWidget {
             style: textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
-              color: colorScheme.onSurfaceVariant.withOpacity(0.8),
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
             ),
           ),
         ),
@@ -436,7 +436,7 @@ class AdminRoasteryEditView extends StatelessWidget {
         color: theme.scaffoldBackgroundColor,
         border: Border(
           top: BorderSide(
-            color: colorScheme.outlineVariant.withOpacity(0.3),
+            color: colorScheme.outlineVariant.withValues(alpha: 0.3),
             width: 1,
           ),
         ),

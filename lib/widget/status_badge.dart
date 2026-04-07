@@ -19,7 +19,7 @@ class StatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: isActive
             ? colorScheme.tertiaryContainer
-            : colorScheme.surfaceVariant,
+            : colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(9999), // radiusFull
       ),
       child: Text(

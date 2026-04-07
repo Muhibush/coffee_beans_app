@@ -5,6 +5,7 @@ class AdminBeanCard extends StatelessWidget {
   final String price;
   final String imageUrl;
   final String status;
+  final VoidCallback? onTap;
 
   const AdminBeanCard({
     super.key,
@@ -12,6 +13,7 @@ class AdminBeanCard extends StatelessWidget {
     required this.price,
     required this.imageUrl,
     required this.status,
+    this.onTap,
   });
 
   Color _getStatusBgColor(ColorScheme colorScheme) {
@@ -48,35 +50,32 @@ class AdminBeanCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {},
-        borderRadius: BorderRadius.circular(12), // radiusXl
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
         hoverColor: colorScheme.surfaceContainerLow,
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: colorScheme.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(12), // radiusXl
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Image
               ClipRRect(
-                borderRadius: BorderRadius.circular(8), // radiusLg
-                child: Image.network(
-                  imageUrl,
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 80,
-                      height: 80,
-                      color: colorScheme.surfaceContainerHigh,
-                      child: Icon(Icons.image_not_supported, color: colorScheme.onSurfaceVariant),
-                    );
-                  },
-                ),
+                borderRadius: BorderRadius.circular(8),
+                child: imageUrl.isNotEmpty
+                    ? Image.network(
+                        imageUrl,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return _buildPlaceholder(colorScheme);
+                        },
+                      )
+                    : _buildPlaceholder(colorScheme),
               ),
               const SizedBox(width: 16),
               
@@ -103,7 +102,7 @@ class AdminBeanCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
                             color: _getStatusBgColor(colorScheme),
-                            borderRadius: BorderRadius.circular(9999), // radiusFull
+                            borderRadius: BorderRadius.circular(9999),
                           ),
                           child: Text(
                             status.toUpperCase(),
@@ -132,6 +131,18 @@ class AdminBeanCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPlaceholder(ColorScheme colorScheme) {
+    return Container(
+      width: 80,
+      height: 80,
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Icon(Icons.coffee_rounded, color: colorScheme.onSurfaceVariant),
     );
   }
 }

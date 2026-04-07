@@ -58,7 +58,8 @@ class AppRouter {
       GoRoute(
         path: '/admin/roastery/:id/beans',
         builder: (context, state) {
-          return const AdminBeanListPage();
+          final roasteryId = state.pathParameters['id']!;
+          return AdminBeanListPage(roasteryId: roasteryId);
         },
       ),
       GoRoute(

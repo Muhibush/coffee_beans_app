@@ -1,49 +1,44 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../model/roastery.dart';
+import '../../../utils/api_provider/supabase_client.dart';
 
 class AdminRoasteryEditRepository {
-  /// Fetches a Roastery from the backend.
-  /// If [id] is null, it signifies adding a new Roastery, returning an empty template.
-  Future<Roastery> getRoastery(String? id) async {
-    await Future.delayed(const Duration(milliseconds: 600)); // Simulate network
+  final SupabaseClient _client;
 
+  AdminRoasteryEditRepository({SupabaseClient? client})
+      : _client = client ?? SupabaseClientProvider.client;
+
+  /// Fetches a Roastery from Supabase.
+  /// If [id] is null, returns an empty template for creation.
+  Future<Roastery> getRoastery(String? id) async {
     if (id == null) {
       return const Roastery(
         id: 'new',
         name: '',
         city: '',
         beanCount: 0,
-        isActive: false,
+        isActive: true,
         bio: '',
         socialLinks: {},
       );
     }
 
-    // Mock an existing roastery
-    return Roastery(
-      id: id,
-      name: 'Roastery A',
-      city: 'Jakarta',
-      beanCount: 12,
-      isActive: true,
-      bio: 'Specialty coffee roastery focusing on Indonesian single origin beans. Established 2021, curated for the modern enthusiast.',
-      socialLinks: {
-        'instagram': '@roastery_a',
-        'tokopedia': 'tokopedia.com/roasterya',
-        'website': 'www.roasterya.com',
-      },
-      logoUrl: 'https://via.placeholder.com/300x300.png?text=Roastery+A',
-    );
+    final response = await _client
+        .from('roasteries')
+        .select()
+        .eq('id', id)
+        .single();
+
+    return Roastery.fromJson(response);
   }
 
-  /// Saves a Roastery to the backend (insert/update).
+  /// Saves a Roastery to Supabase (insert or update via upsert).
   Future<void> saveRoastery(Roastery roastery) async {
-    await Future.delayed(const Duration(milliseconds: 800)); // Simulate network
-    // TODO: integrate Supabase upsert
+    await _client.from('roasteries').upsert(roastery.toJson());
   }
 
-  /// Deletes a Roastery.
+  /// Deletes a Roastery by id.
   Future<void> deleteRoastery(String id) async {
-    await Future.delayed(const Duration(milliseconds: 800)); // Simulate network
-    // TODO: integrate Supabase delete
+    await _client.from('roasteries').delete().eq('id', id);
   }
 }
