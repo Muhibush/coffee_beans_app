@@ -129,13 +129,36 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
       int errorCount = 0;
       int skippedCount = 0;
 
-      // Map existing beans by fingerprint for quick lookup
+      // Build registries for fast lookup and skipping
       final currentBeans = await repository.fetchBeans(event.roasteryId);
       final existingFingerprints =
           currentBeans.map((b) => b.fingerprint).toSet();
+      final existingUrls = currentBeans
+          .expand((b) => b.variants.values.map((v) => v.buyUrl))
+          .toSet();
 
       for (int i = 0; i < urls.length; i++) {
         final url = urls[i];
+
+        // 1. Pre-scrape Scope Filtering using URL as a proxy
+        if (event.scope == BulkScrapeScope.newOnly &&
+            existingUrls.contains(url)) {
+          skippedCount++;
+          emit(state.copyWith(
+            scraperMessage: 'Skipping existing: ${i + 1}/${urls.length}',
+          ));
+          continue;
+        }
+
+        if (event.scope == BulkScrapeScope.updateOnly &&
+            !existingUrls.contains(url)) {
+          skippedCount++;
+          emit(state.copyWith(
+            scraperMessage: 'Skipping new item: ${i + 1}/${urls.length}',
+          ));
+          continue;
+        }
+
         emit(state.copyWith(
           scraperMessage: 'Scraping ${i + 1}/${urls.length}: $url',
         ));
@@ -148,25 +171,21 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
               .replaceAll(RegExp(r'^-|-$'), '');
           final fingerprint = '${event.roasteryId}_$slug';
 
-          // Apply Scope Filtering
-          bool shouldSave = true;
+          // 2. Post-scrape Scope Filtering
+          // Needed for new URLs that map to existing beans (same fingerprint)
           if (event.scope == BulkScrapeScope.newOnly &&
               existingFingerprints.contains(fingerprint)) {
-            shouldSave = false;
             skippedCount++;
-          } else if (event.scope == BulkScrapeScope.updateOnly &&
-              !existingFingerprints.contains(fingerprint)) {
-            shouldSave = false;
-            skippedCount++;
+            continue;
           }
 
-          if (shouldSave) {
-            await repository.insertScrapedBean(event.roasteryId, scraped);
-            successCount++;
-          }
+          // For UpdateOnly, we already verified the URL exists above.
+          // If a new URL somehow maps to an existing fingerprint, we still want to save (merge).
+
+          await repository.insertScrapedBean(event.roasteryId, scraped);
+          successCount++;
         } catch (e) {
           errorCount++;
-          // Log error but continue bulk process
           debugPrint('Error scraping bulk item $url: $e');
         }
       }

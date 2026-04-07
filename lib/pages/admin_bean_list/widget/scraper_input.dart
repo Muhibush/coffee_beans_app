@@ -122,12 +122,14 @@ class _ScraperInputState extends State<ScraperInput> {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
-                                  state.scraperMessage ?? 'Initializing...',
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    color: colorScheme.primary,
-                                  ),
+                                state.scraperMessage ?? 'Initializing...',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: colorScheme.primary,
                                 ),
+                              ),
                               ),
                             ],
                           ),
