@@ -8,6 +8,9 @@ trigger: always_on
 
 - **Business Logic:** State Management is handled strictly using BLoC pattern (`Catalog`, `Admin`, `Auth` modules).
 - **Component Responsibility:** UI widgets handle presentation while BLoCs handle logic and external interactions (Supabase, Scraper APIs). 
+- **Theming & Styling:**
+  - **MANDATORY**: Always use `Theme.of(context)` to access colors (`colorScheme`), typography (`textTheme`), and other theme properties.
+  - **PROHIBITED**: Never use direct static references to `AppColors`, `AppTheme`, or `AppTextStyles` within UI widgets. This ensures the app correctly reflects the theme configured in `main.dart`.
 - **Scraper / Normalization:**
   - Standardize weight to `g` or `kg`.
   - Clean name stripping noise (Promo, Murah, Ready).
