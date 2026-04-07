@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 
 class VariantEditorCard extends StatelessWidget {
   final String weight;
@@ -17,14 +16,17 @@ class VariantEditorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceCard,
+        color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(24.0),
-        border: Border.all(color: AppColors.surfaceContainer),
+        border: Border.all(color: colorScheme.surfaceContainer),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.04),
+            color: colorScheme.primary.withValues(alpha: 0.04),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -39,15 +41,15 @@ class VariantEditorCard extends StatelessWidget {
             children: [
               Text(
                 'Variant Details',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                style: theme.textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: colorScheme.primary,
                 ),
               ),
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-                icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                icon: Icon(Icons.delete_outline, color: colorScheme.error),
                 onPressed: onDelete,
               ),
             ],
@@ -64,10 +66,13 @@ class VariantEditorCard extends StatelessWidget {
   }
 
   Widget _buildField(BuildContext context, String label, String value) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -75,14 +80,14 @@ class VariantEditorCard extends StatelessWidget {
         children: [
           Text(
             label,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: AppColors.onSurfaceVariant,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 4),
           TextFormField(
             initialValue: value,
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: theme.textTheme.bodyLarge,
             decoration: const InputDecoration(
               isDense: true,
               contentPadding: EdgeInsets.zero,

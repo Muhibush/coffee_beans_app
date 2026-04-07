@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 
 class AddChipBottomSheet extends StatefulWidget {
   final String title;
@@ -19,10 +18,11 @@ class AddChipBottomSheet extends StatefulWidget {
     required List<String> existingOptions,
     required ValueChanged<String> onAdd,
   }) {
+    final theme = Theme.of(context);
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: theme.scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
       ),
@@ -40,7 +40,7 @@ class AddChipBottomSheet extends StatefulWidget {
 
 class _AddChipBottomSheetState extends State<AddChipBottomSheet> {
   final TextEditingController _controller = TextEditingController();
-  List<String> _filteredOptions = [];
+  late List<String> _filteredOptions;
 
   @override
   void initState() {
@@ -75,6 +75,9 @@ class _AddChipBottomSheetState extends State<AddChipBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -93,7 +96,7 @@ class _AddChipBottomSheetState extends State<AddChipBottomSheet> {
               children: [
                 Text(
                   widget.title,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: theme.textTheme.titleLarge,
                 ),
                 IconButton(
                   icon: const Icon(Icons.close),
@@ -114,9 +117,9 @@ class _AddChipBottomSheetState extends State<AddChipBottomSheet> {
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: AppColors.surfaceContainerLow,
+                fillColor: colorScheme.surfaceContainerLow,
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.check, color: AppColors.primary),
+                  icon: Icon(Icons.check, color: colorScheme.primary),
                   onPressed: () => _submit(_controller.text),
                 ),
               ),
@@ -131,7 +134,7 @@ class _AddChipBottomSheetState extends State<AddChipBottomSheet> {
                   itemBuilder: (context, index) {
                     final option = _filteredOptions[index];
                     return ListTile(
-                      title: Text(option, style: Theme.of(context).textTheme.bodyMedium),
+                      title: Text(option, style: theme.textTheme.bodyMedium),
                       onTap: () => _submit(option),
                     );
                   },

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 
 class AdminBeanCard extends StatelessWidget {
   final String title;
@@ -15,54 +14,55 @@ class AdminBeanCard extends StatelessWidget {
     required this.status,
   });
 
-  Color _getStatusBgColor() {
+  Color _getStatusBgColor(ColorScheme colorScheme) {
     switch (status.toLowerCase()) {
       case 'published':
-        return Colors.green.shade100;
+        return Colors.green.withValues(alpha: 0.1);
       case 'draft':
-        return Colors.amber.shade100;
+        return Colors.amber.withValues(alpha: 0.1);
       case 'unpublished':
-        return Colors.grey.shade200;
+        return colorScheme.outlineVariant.withValues(alpha: 0.2);
       default:
-        return Colors.grey.shade200;
+        return colorScheme.outlineVariant.withValues(alpha: 0.2);
     }
   }
 
-  Color _getStatusTextColor() {
+  Color _getStatusTextColor(ColorScheme colorScheme) {
     switch (status.toLowerCase()) {
       case 'published':
-        return Colors.green.shade800;
+        return Colors.green.shade700;
       case 'draft':
         return Colors.amber.shade900;
       case 'unpublished':
-        return Colors.grey.shade700;
+        return colorScheme.outline;
       default:
-        return Colors.grey.shade700;
+        return colorScheme.outline;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () {},
-        borderRadius: BorderRadius.circular(AppTheme.radiusXl),
-        hoverColor: theme.colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(12), // radiusXl
+        hoverColor: colorScheme.surfaceContainerLow,
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+            color: colorScheme.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(12), // radiusXl
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Image
               ClipRRect(
-                borderRadius: BorderRadius.circular(AppTheme.radiusLg),
+                borderRadius: BorderRadius.circular(8), // radiusLg
                 child: Image.network(
                   imageUrl,
                   width: 80,
@@ -72,8 +72,8 @@ class AdminBeanCard extends StatelessWidget {
                     return Container(
                       width: 80,
                       height: 80,
-                      color: theme.colorScheme.surfaceVariant,
-                      child: Icon(Icons.image_not_supported, color: theme.colorScheme.onSurfaceVariant),
+                      color: colorScheme.surfaceContainerHigh,
+                      child: Icon(Icons.image_not_supported, color: colorScheme.onSurfaceVariant),
                     );
                   },
                 ),
@@ -102,8 +102,8 @@ class AdminBeanCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: _getStatusBgColor(),
-                            borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+                            color: _getStatusBgColor(colorScheme),
+                            borderRadius: BorderRadius.circular(9999), // radiusFull
                           ),
                           child: Text(
                             status.toUpperCase(),
@@ -111,7 +111,7 @@ class AdminBeanCard extends StatelessWidget {
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 0.5,
-                              color: _getStatusTextColor(),
+                              color: _getStatusTextColor(colorScheme),
                             ),
                           ),
                         ),
@@ -121,7 +121,7 @@ class AdminBeanCard extends StatelessWidget {
                     Text(
                       price,
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.primary,
+                        color: colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

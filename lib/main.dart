@@ -1,3 +1,5 @@
+import 'package:coffee_beans_app/utils/design_system/app_theme_forest.dart';
+import 'package:coffee_beans_app/utils/design_system/app_theme_sage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
@@ -18,7 +20,9 @@ class CoffeeBeansApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Coffee Beans App',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
+      // theme: AppTheme.lightTheme,
+      // theme: AppThemeForest.lightTheme,
+      theme: AppThemeSage.lightTheme,
       routerConfig: AppRouter.router,
     );
   }

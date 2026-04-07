@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 
 class FilterOption<T> {
   final String label;
@@ -40,17 +39,18 @@ class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     // Show subtle shadow when pinned/overlapping
     final isPinned = shrinkOffset > 0;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
-        color: AppColors.surfaceBackground,
+        color: theme.scaffoldBackgroundColor,
         boxShadow: isPinned
             ? [
                 BoxShadow(
-                  color: AppColors.onSurface.withValues(alpha: 0.06),
+                  color: colorScheme.onSurface.withValues(alpha: 0.06),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -71,11 +71,11 @@ class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
                 decoration: InputDecoration(
                   hintText: searchHint,
                   hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                   ),
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     Icons.search_rounded,
-                    color: AppColors.onSurfaceVariant,
+                    color: colorScheme.onSurfaceVariant,
                     size: 22,
                   ),
                   suffixIcon: searchController.text.isNotEmpty
@@ -84,15 +84,15 @@ class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
                             searchController.clear();
                             onSearchChanged('');
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close_rounded,
                             size: 18,
-                            color: AppColors.onSurfaceVariant,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         )
                       : null,
                   filled: true,
-                  fillColor: AppColors.surfaceContainerLow,
+                  fillColor: colorScheme.surfaceContainerLow,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
                     borderSide: BorderSide.none,
@@ -103,8 +103,8 @@ class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
-                    borderSide: const BorderSide(
-                      color: AppColors.primaryContainer,
+                    borderSide: BorderSide(
+                      color: colorScheme.primaryContainer,
                       width: 1.5,
                     ),
                   ),
@@ -136,7 +136,7 @@ class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
                     child: Text(
                       '$resultCount results',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppColors.outline,
+                        color: colorScheme.outline,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -156,6 +156,7 @@ class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
     required T filterValue,
   }) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final isSelected = activeFilter == filterValue;
 
     return GestureDetector(
@@ -165,10 +166,10 @@ class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
         curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppTheme.radiusFull),
+          color: isSelected ? colorScheme.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(9999), // radiusFull
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.outlineVariant,
+            color: isSelected ? colorScheme.primary : colorScheme.outlineVariant,
           ),
         ),
         child: Text(
@@ -176,7 +177,7 @@ class StickySearchFilter<T> extends SliverPersistentHeaderDelegate {
           style: theme.textTheme.labelLarge?.copyWith(
             fontSize: 13,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-            color: isSelected ? AppColors.onPrimary : AppColors.onSurface,
+            color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
           ),
         ),
       ),

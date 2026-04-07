@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 
 /// A card displaying a summary stat with an icon and label.
 /// Used in dashboard overview sections.
@@ -20,13 +19,14 @@ class StatChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.35),
-          borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+          borderRadius: BorderRadius.circular(12), // radiusXl
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +34,7 @@ class StatChip extends StatelessWidget {
             Icon(
               icon,
               size: 18,
-              color: AppColors.onSurface.withValues(alpha: 0.7),
+              color: colorScheme.onSurface.withValues(alpha: 0.7),
             ),
             const SizedBox(height: 6),
             Text(
@@ -47,7 +47,7 @@ class StatChip extends StatelessWidget {
             Text(
               label,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: AppColors.onSurfaceVariant,
+                color: colorScheme.onSurfaceVariant,
                 fontSize: 11,
               ),
             ),

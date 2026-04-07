@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 import 'variant_editor_card.dart';
 import 'add_chip_bottom_sheet.dart';
 
@@ -102,20 +101,24 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.surface.withOpacity(0.8),
+        backgroundColor: theme.scaffoldBackgroundColor.withValues(alpha: 0.8),
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         title: Text(
           widget.isEditMode ? 'Edit Bean' : 'Add Bean',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.onSurface),
+          style: textTheme.headlineMedium?.copyWith(color: colorScheme.onSurface),
         ),
         actions: [
           if (widget.isEditMode)
             IconButton(
-              icon: const Icon(Icons.delete_outline, color: AppColors.error),
+              icon: Icon(Icons.delete_outline, color: colorScheme.error),
               tooltip: 'Delete Bean',
               onPressed: () {
                 // Delete action
@@ -220,7 +223,7 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                     OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
                         minimumSize: const Size.fromHeight(56),
-                        side: const BorderSide(color: AppColors.outlineVariant),
+                        side: BorderSide(color: colorScheme.outlineVariant),
                       ),
                       onPressed: () {
                         setState(() => _variants.add(VariantUiModel(weight: '', price: '', url: '')));
@@ -246,8 +249,8 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.surface.withOpacity(0.0),
-                    AppColors.surface,
+                    theme.scaffoldBackgroundColor.withValues(alpha: 0.0),
+                    theme.scaffoldBackgroundColor,
                   ],
                   stops: const [0.0, 0.4],
                 ),
@@ -271,26 +274,30 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
       title,
       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
         fontWeight: FontWeight.bold,
-        color: AppColors.onSurface,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
 
   Widget _buildTextField(String label, TextEditingController controller) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.onSurfaceVariant),
+          style: textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant),
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: textTheme.bodyLarge,
           decoration: InputDecoration(
             filled: true,
-            fillColor: AppColors.surfaceContainerLow,
+            fillColor: colorScheme.surfaceContainerLow,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -303,40 +310,48 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
   }
 
   Widget _buildDropdownField(String label, List<String> options, String value, ValueChanged<String?> onChanged) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.onSurfaceVariant),
+          style: textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant),
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           value: value,
           onChanged: onChanged,
-          items: options.map((opt) => DropdownMenuItem(value: opt, child: Text(opt, style: Theme.of(context).textTheme.bodyLarge))).toList(),
+          items: options.map((opt) => DropdownMenuItem(value: opt, child: Text(opt, style: textTheme.bodyLarge))).toList(),
           decoration: InputDecoration(
             filled: true,
-            fillColor: AppColors.surfaceContainerLow,
+            fillColor: colorScheme.surfaceContainerLow,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           ),
-          icon: const Icon(Icons.expand_more, color: AppColors.onSurfaceVariant),
+          icon: Icon(Icons.expand_more, color: colorScheme.onSurfaceVariant),
         ),
       ],
     );
   }
 
   Widget _buildBottomSheetSelector(String label, String value, VoidCallback onTap) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.onSurfaceVariant),
+          style: textTheme.labelMedium?.copyWith(color: colorScheme.onSurfaceVariant),
         ),
         const SizedBox(height: 8),
         InkWell(
@@ -345,7 +360,7 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
           child: Ink(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -353,9 +368,9 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
               children: [
                 Text(
                   value,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: textTheme.bodyLarge,
                 ),
-                const Icon(Icons.expand_more, color: AppColors.onSurfaceVariant),
+                Icon(Icons.expand_more, color: colorScheme.onSurfaceVariant),
               ],
             ),
           ),
@@ -369,6 +384,10 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
     required VoidCallback onAdd,
     required ValueChanged<String> onRemove,
   }) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return Wrap(
       spacing: 8.0,
       runSpacing: 8.0,
@@ -378,9 +397,9 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
             label: Text(item),
             deleteIcon: const Icon(Icons.close, size: 16),
             onDeleted: () => onRemove(item),
-            backgroundColor: AppColors.secondaryContainer,
-            labelStyle: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.onSecondaryContainer),
-            deleteIconColor: AppColors.onSecondaryContainer,
+            backgroundColor: colorScheme.secondaryContainer,
+            labelStyle: textTheme.labelMedium?.copyWith(color: colorScheme.onSecondaryContainer),
+            deleteIconColor: colorScheme.onSecondaryContainer,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
             side: BorderSide.none,
           );
@@ -389,7 +408,7 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
           label: const Text('Add'),
           avatar: const Icon(Icons.add, size: 18),
           backgroundColor: Colors.transparent,
-          side: BorderSide(color: AppColors.outlineVariant, style: BorderStyle.solid, width: 2),
+          side: BorderSide(color: colorScheme.outlineVariant, style: BorderStyle.solid, width: 2),
           onPressed: onAdd,
         ),
       ],
@@ -397,6 +416,10 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
   }
 
   Widget _buildHeroImage() {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return AspectRatio(
       aspectRatio: 1.0,
       child: Stack(
@@ -404,7 +427,7 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),
@@ -417,7 +440,7 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                 : null,
             ),
             child: widget.initialImageUrl == null
-                ? const Icon(Icons.image_outlined, size: 48, color: AppColors.outlineVariant)
+                ? Icon(Icons.image_outlined, size: 48, color: colorScheme.outlineVariant)
                 : null,
           ),
           Positioned.fill(
@@ -434,11 +457,11 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceCard.withOpacity(0.9),
+                        color: colorScheme.surfaceContainerLowest.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(100),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -447,11 +470,11 @@ class _AdminBeanEditViewState extends State<AdminBeanEditView> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.photo_camera, color: AppColors.primary),
+                          Icon(Icons.photo_camera, color: colorScheme.primary),
                           const SizedBox(width: 8),
                           Text(
                             'Change Image',
-                            style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.primary),
+                            style: textTheme.labelLarge?.copyWith(color: colorScheme.primary),
                           ),
                         ],
                       ),

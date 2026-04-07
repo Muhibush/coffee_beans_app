@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../utils/design_system/app_colors.dart';
 import '../bloc/admin_roastery_edit_bloc.dart';
 import '../bloc/admin_roastery_edit_event.dart';
 import '../bloc/admin_roastery_edit_state.dart';
@@ -48,15 +47,17 @@ class AdminRoasteryEditView extends StatelessWidget {
           );
         }
 
-        final textTheme = Theme.of(context).textTheme;
+        final theme = Theme.of(context);
+        final colorScheme = theme.colorScheme;
+        final textTheme = theme.textTheme;
 
         return Scaffold(
-          backgroundColor: AppColors.surface,
+          backgroundColor: theme.scaffoldBackgroundColor,
           appBar: AppBar(
-            backgroundColor: AppColors.surface.withOpacity(0.9),
+            backgroundColor: theme.scaffoldBackgroundColor.withOpacity(0.9),
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.primary),
+              icon: Icon(Icons.arrow_back, color: colorScheme.primary),
               onPressed: () => context.pop(),
             ),
             title: Text(
@@ -92,27 +93,27 @@ class AdminRoasteryEditView extends StatelessWidget {
                         const SizedBox(height: 24),
                         Text(
                           'Danger Zone',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: AppColors.error,
+                          style: textTheme.titleMedium?.copyWith(
+                                color: colorScheme.error,
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Deleting this roastery will permanently remove it and all its associated bean catalog data. This action cannot be undone.',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: textTheme.bodyMedium,
                         ),
                         const SizedBox(height: 20),
                         FilledButton.tonal(
                           onPressed: state.status == AdminRoasteryEditStatus.saving ||
                                   state.status == AdminRoasteryEditStatus.loading
-                              ? null
-                              : () => context.read<AdminRoasteryEditBloc>().add(
-                                    DeleteRoastery(),
-                                  ),
+                               ? null
+                               : () => context.read<AdminRoasteryEditBloc>().add(
+                                     DeleteRoastery(),
+                                   ),
                           style: FilledButton.styleFrom(
-                            backgroundColor: AppColors.errorContainer,
-                            foregroundColor: AppColors.onErrorContainer,
+                            backgroundColor: colorScheme.errorContainer,
+                            foregroundColor: colorScheme.onErrorContainer,
                             minimumSize: const Size(double.infinity, 56),
                           ),
                           child: const Text('Delete Roastery'),
@@ -131,6 +132,8 @@ class AdminRoasteryEditView extends StatelessWidget {
   }
 
   Widget _buildLogoSection(BuildContext context, AdminRoasteryEditState state) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final roastery = state.roastery!;
     final hasLogo = roastery.logoUrl != null && roastery.logoUrl!.isNotEmpty;
 
@@ -151,7 +154,7 @@ class AdminRoasteryEditView extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLow,
+                color: colorScheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(16),
               ),
               clipBehavior: Clip.antiAlias,
@@ -163,13 +166,13 @@ class AdminRoasteryEditView extends StatelessWidget {
                         Icon(
                           Icons.add_a_photo_outlined,
                           size: 48,
-                          color: AppColors.outline.withOpacity(0.5),
+                          color: colorScheme.outline.withOpacity(0.5),
                         ),
                         const SizedBox(height: 12),
                         Text(
                           'Long press to set logo',
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(color: AppColors.outline),
+                          style: theme.textTheme.bodyMedium
+                              ?.copyWith(color: colorScheme.outline),
                         ),
                       ],
                     ),
@@ -215,7 +218,9 @@ class AdminRoasteryEditView extends StatelessWidget {
 
   Widget _buildCityField(BuildContext context, AdminRoasteryEditState state) {
     final city = state.roastery!.city;
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +229,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           'CITY',
           style: textTheme.labelSmall?.copyWith(
             fontWeight: FontWeight.bold,
-            color: AppColors.onSurfaceVariant,
+            color: colorScheme.onSurfaceVariant,
           ),
         ),
         const SizedBox(height: 6),
@@ -235,14 +240,14 @@ class AdminRoasteryEditView extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
               city.isEmpty ? 'Select a city' : city,
               style: textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w500,
-                color: city.isEmpty ? AppColors.outline : AppColors.onSurface,
+                color: city.isEmpty ? colorScheme.outline : colorScheme.onSurface,
               ),
             ),
           ),
@@ -266,7 +271,7 @@ class AdminRoasteryEditView extends StatelessWidget {
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -312,7 +317,9 @@ class AdminRoasteryEditView extends StatelessWidget {
     AdminRoasteryEditState state,
   ) {
     final links = state.roastery!.socialLinks ?? {};
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,7 +330,7 @@ class AdminRoasteryEditView extends StatelessWidget {
             'Social Presence',
             style: textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.onSurface,
+              color: colorScheme.onSurface,
             ),
           ),
         ),
@@ -383,7 +390,9 @@ class AdminRoasteryEditView extends StatelessWidget {
     String? hint,
     IconData? prefixIcon,
   }) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,7 +404,7 @@ class AdminRoasteryEditView extends StatelessWidget {
             style: textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
-              color: AppColors.onSurfaceVariant.withOpacity(0.8),
+              color: colorScheme.onSurfaceVariant.withOpacity(0.8),
             ),
           ),
         ),
@@ -405,7 +414,7 @@ class AdminRoasteryEditView extends StatelessWidget {
           maxLines: maxLines,
           style: textTheme.bodyLarge?.copyWith(
             fontWeight: FontWeight.w500,
-            color: AppColors.onSurface,
+            color: colorScheme.onSurface,
           ),
           decoration: InputDecoration(
             hintText: hint,
@@ -420,12 +429,14 @@ class AdminRoasteryEditView extends StatelessWidget {
     BuildContext context,
     AdminRoasteryEditState state,
   ) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: theme.scaffoldBackgroundColor,
         border: Border(
           top: BorderSide(
-            color: AppColors.outlineVariant.withOpacity(0.3),
+            color: colorScheme.outlineVariant.withOpacity(0.3),
             width: 1,
           ),
         ),
@@ -460,12 +471,12 @@ class AdminRoasteryEditView extends StatelessWidget {
                       SaveRoastery(),
                     ),
               child: state.status == AdminRoasteryEditStatus.saving
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: AppColors.onPrimary,
+                        color: colorScheme.onPrimary,
                       ),
                     )
                   : const Text('Save'),

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
+import 'package:coffee_beans_app/utils/design_system/app_theme_sage.dart';
 import 'package:coffee_beans_app/widget/stat_chip.dart';
 import 'package:coffee_beans_app/widget/status_badge.dart';
 
 /// A living design system documentation page.
 /// 
 /// Displays typography, colors, and reusable components defined in the 
-/// app's design system.
+/// app's active design system (currently Sage).
 class DesignSystemPage extends StatelessWidget {
   const DesignSystemPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Design System'),
         centerTitle: false,
@@ -22,31 +25,31 @@ class DesignSystemPage extends StatelessWidget {
         children: [
           _Section(
             title: 'Typography',
-            subtitle: 'Inter (Google Fonts) with material scale',
+            subtitle: 'Plus Jakarta Sans with Material Scale',
             child: const _TypographySection(),
           ),
           const SizedBox(height: 48),
           _Section(
             title: 'Colors',
-            subtitle: 'Brand palette & surface tokens',
+            subtitle: 'Sage Brand Palette & Surface Tokens',
             child: const _ColorSection(),
           ),
           const SizedBox(height: 48),
           _Section(
             title: 'Reusable Components',
-            subtitle: 'Global atomic & composite widgets',
+            subtitle: 'Global Atomic & Composite Widgets',
             child: const _ComponentSection(),
           ),
           const SizedBox(height: 48),
           _Section(
             title: 'Buttons',
-            subtitle: 'Themed Material 3 actions',
+            subtitle: 'Themed Material 3 Actions',
             child: const _ButtonSection(),
           ),
           const SizedBox(height: 48),
           _Section(
             title: 'Form Fields',
-            subtitle: 'Input system with hint and validation styles',
+            subtitle: 'Input System with Hint and Validation Styles',
             child: const _InputSection(),
           ),
         ],
@@ -82,7 +85,7 @@ class _Section extends StatelessWidget {
         Text(
           subtitle,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
           ),
         ),
         const SizedBox(height: 24),
@@ -148,16 +151,17 @@ class _ColorSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Wrap(
       spacing: 12,
       runSpacing: 12,
-      children: const [
-        _ColorSwatch(name: 'Primary', color: AppColors.primary),
-        _ColorSwatch(name: 'Secndry', color: AppColors.secondary),
-        _ColorSwatch(name: 'Tertiry', color: AppColors.tertiary),
-        _ColorSwatch(name: 'Surface', color: AppColors.surfaceBackground),
-        _ColorSwatch(name: 'Card', color: AppColors.surfaceCard),
-        _ColorSwatch(name: 'Outline', color: AppColors.outline),
+      children: [
+        _ColorSwatch(name: 'Primary', color: colorScheme.primary),
+        _ColorSwatch(name: 'Secndry', color: colorScheme.secondary),
+        _ColorSwatch(name: 'Tertiry', color: colorScheme.tertiary),
+        _ColorSwatch(name: 'Surface', color: Theme.of(context).scaffoldBackgroundColor),
+        _ColorSwatch(name: 'Card', color: colorScheme.surfaceContainerLowest),
+        _ColorSwatch(name: 'Outline', color: colorScheme.outline),
       ],
     );
   }
@@ -171,6 +175,7 @@ class _ColorSwatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Container(
@@ -178,8 +183,8 @@ class _ColorSwatch extends StatelessWidget {
           height: 60,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(AppTheme.radiusLg),
-            border: Border.all(color: AppColors.outlineVariant),
+            borderRadius: BorderRadius.circular(AppThemeSage.radiusXl),
+            border: Border.all(color: colorScheme.outlineVariant),
           ),
         ),
         const SizedBox(height: 8),
@@ -194,6 +199,7 @@ class _ComponentSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -210,19 +216,19 @@ class _ComponentSection extends StatelessWidget {
         Text('Stat Chip', style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 12),
         Row(
-          children: const [
+          children: [
             StatChip(
               icon: Icons.store_rounded,
               value: '12',
               label: 'Roasteries',
-              color: AppColors.primaryContainer,
+              color: colorScheme.primaryContainer,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             StatChip(
               icon: Icons.inventory_2_rounded,
               value: '150',
               label: 'Beans',
-              color: AppColors.secondaryContainer,
+              color: colorScheme.secondaryContainer,
             ),
           ],
         ),
@@ -247,6 +253,7 @@ class _ButtonSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Row(
@@ -281,8 +288,8 @@ class _ButtonSection extends StatelessWidget {
               child: FilledButton.tonal(
                 onPressed: () {},
                 style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.errorContainer,
-                  foregroundColor: AppColors.onErrorContainer,
+                  backgroundColor: colorScheme.errorContainer,
+                  foregroundColor: colorScheme.onErrorContainer,
                 ),
                 child: const Text('Danger'),
               ),
@@ -307,6 +314,7 @@ class _InputSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -335,10 +343,10 @@ class _InputSection extends StatelessWidget {
         const SizedBox(height: 24),
         Text(
           'DYNAMC FIELD TITLE',
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          style: theme.textTheme.labelSmall?.copyWith(
             fontWeight: FontWeight.w700,
             letterSpacing: 1.2,
-            color: AppColors.onSurfaceVariant.withOpacity(0.8),
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
           ),
         ),
         const SizedBox(height: 8),

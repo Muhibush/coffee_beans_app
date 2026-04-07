@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:coffee_beans_app/model/roastery.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 import 'package:coffee_beans_app/widget/status_badge.dart';
 
 /// The card used in the Admin Dashboard to display a roastery overview.
@@ -19,15 +18,16 @@ class AdminRoasteryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final isInactive = !roastery.isActive;
 
-    // Generate distinct avatar colors based on index
+    // Generate distinct avatar colors based on index using colorScheme slots
     final avatarColors = [
-      AppColors.primaryContainer,
-      AppColors.tertiaryContainer,
-      AppColors.secondary,
-      AppColors.primaryDark,
-      AppColors.tertiary,
+      colorScheme.primaryContainer,
+      colorScheme.tertiaryContainer,
+      colorScheme.secondary,
+      colorScheme.primary,
+      colorScheme.tertiary,
     ];
     final avatarColor = avatarColors[index % avatarColors.length];
 
@@ -47,17 +47,17 @@ class AdminRoasteryCard extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+            borderRadius: BorderRadius.circular(12), // radiusXl
             child: Ink(
               decoration: BoxDecoration(
-                color: AppColors.surfaceCard,
-                borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+                color: colorScheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(12), // radiusXl
                 border: Border.all(
-                  color: AppColors.outlineVariant.withValues(alpha: 0.3),
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.3),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.onSurface.withValues(alpha: 0.04),
+                    color: colorScheme.onSurface.withValues(alpha: 0.04),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -68,7 +68,7 @@ class AdminRoasteryCard extends StatelessWidget {
                 child: Row(
                   children: [
                     // ── Avatar / Logo ──
-                    _buildRoasteryAvatar(roastery, avatarColor, isInactive),
+                    _buildRoasteryAvatar(context, roastery, avatarColor, isInactive),
                     const SizedBox(width: 16),
                     // ── Info ──
                     Expanded(
@@ -92,7 +92,7 @@ class AdminRoasteryCard extends StatelessWidget {
                                 Icon(
                                   Icons.location_on_outlined,
                                   size: 14,
-                                  color: AppColors.onSurfaceVariant,
+                                  color: colorScheme.onSurfaceVariant,
                                 ),
                                 const SizedBox(width: 2),
                                 Text(
@@ -107,13 +107,13 @@ class AdminRoasteryCard extends StatelessWidget {
                                 Icon(
                                   Icons.inventory_2_rounded,
                                   size: 14,
-                                  color: AppColors.primary,
+                                  color: colorScheme.primary,
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   '${roastery.beanCount} coffee beans',
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppColors.primary,
+                                    color: colorScheme.primary,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12,
                                   ),
@@ -137,13 +137,14 @@ class AdminRoasteryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildRoasteryAvatar(Roastery roastery, Color color, bool isInactive) {
+  Widget _buildRoasteryAvatar(BuildContext context, Roastery roastery, Color color, bool isInactive) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: 80,
       height: 80,
       decoration: BoxDecoration(
-        color: isInactive ? AppColors.surfaceContainer : color,
-        borderRadius: BorderRadius.circular(AppTheme.radiusXl),
+        color: isInactive ? colorScheme.surfaceContainer : color,
+        borderRadius: BorderRadius.circular(12), // radiusXl
       ),
       child: Center(
         child: Text(
@@ -154,8 +155,8 @@ class AdminRoasteryCard extends StatelessWidget {
             fontSize: 32,
             fontWeight: FontWeight.w800,
             color: isInactive
-                ? AppColors.onSurfaceVariant
-                : AppColors.onPrimary.withValues(alpha: 0.9),
+                ? colorScheme.onSurfaceVariant
+                : colorScheme.onPrimary.withValues(alpha: 0.9),
           ),
         ),
       ),

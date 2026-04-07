@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 import 'package:coffee_beans_app/model/roastery.dart';
 import 'package:coffee_beans_app/widget/stat_chip.dart';
 import 'package:coffee_beans_app/pages/admin_dashboard/widget/admin_roastery_card.dart';
@@ -136,6 +135,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
   @override
   Widget build(BuildContext context) {
     final filtered = _filteredRoasteries;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       body: CustomScrollView(
@@ -172,15 +173,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
                 delegate: SliverChildBuilderDelegate((context, index) {
                   if (index == filtered.length) {
                     return _isLoadingMore
-                        ? const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 24),
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 24),
                             child: Center(
                               child: SizedBox(
                                 width: 24,
                                 height: 24,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2.5,
-                                  color: AppColors.primaryContainer,
+                                  color: colorScheme.primaryContainer,
                                 ),
                               ),
                             ),
@@ -206,9 +207,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
 
   Widget _buildAppBar(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return SliverAppBar(
       pinned: true,
-      backgroundColor: AppColors.surfaceBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       surfaceTintColor: Colors.transparent,
       title: Text(
         'Coffee Beans App',
@@ -224,7 +226,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
           child: Text(
             'Logout',
             style: theme.textTheme.labelLarge?.copyWith(
-              color: AppColors.primary,
+              color: colorScheme.primary,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -236,6 +238,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
 
   Widget _buildDashboardHeader(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final activeCount = _allRoasteries.where((r) => r.isActive).length;
     final totalBeans = _allRoasteries.fold(0, (sum, r) => sum + r.beanCount);
 
@@ -250,7 +253,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
               fontSize: 11,
               fontWeight: FontWeight.w600,
               letterSpacing: 2.5,
-              color: AppColors.onSurfaceVariant,
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 4),
@@ -269,21 +272,21 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
                 icon: Icons.store_rounded,
                 value: '${_allRoasteries.length}',
                 label: 'Roasteries',
-                color: AppColors.primaryContainer,
+                color: colorScheme.primaryContainer,
               ),
               const SizedBox(width: 8),
               StatChip(
                 icon: Icons.check_circle_rounded,
                 value: '$activeCount',
                 label: 'Active',
-                color: AppColors.tertiaryContainer,
+                color: colorScheme.tertiaryContainer,
               ),
               const SizedBox(width: 8),
               StatChip(
                 icon: Icons.inventory_2_rounded,
                 value: '$totalBeans',
                 label: 'Beans',
-                color: AppColors.secondaryContainer,
+                color: colorScheme.secondaryContainer,
               ),
             ],
           ),
@@ -295,27 +298,28 @@ class _AdminDashboardPageState extends State<AdminDashboardPage>
 
   Widget _buildEmptyState(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.search_off_rounded,
             size: 64,
-            color: AppColors.outlineVariant,
+            color: colorScheme.outlineVariant,
           ),
           const SizedBox(height: 16),
           Text(
             'No roasteries found',
             style: theme.textTheme.titleMedium?.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Try adjusting your search or filters',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppColors.outline,
+              color: colorScheme.outline,
             ),
           ),
         ],

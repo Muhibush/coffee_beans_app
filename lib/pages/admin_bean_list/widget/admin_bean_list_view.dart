@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 import 'package:coffee_beans_app/pages/admin_dashboard/widget/sticky_search_filter.dart';
 import 'scraper_input.dart';
 import 'admin_bean_card.dart';
@@ -157,7 +156,7 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
           SliverAppBar(
             pinned: true,
             title: const Text('Beans'),
-            backgroundColor: AppColors.surfaceBackground,
+            backgroundColor: theme.scaffoldBackgroundColor,
             surfaceTintColor: Colors.transparent,
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: theme.colorScheme.primary),
