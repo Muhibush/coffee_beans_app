@@ -1,8 +1,6 @@
-import 'package:coffee_beans_app/utils/design_system/app_theme_forest.dart';
 import 'package:coffee_beans_app/utils/design_system/app_theme_sage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:coffee_beans_app/utils/design_system/app_theme.dart';
 import 'package:coffee_beans_app/utils/router/app_router.dart';
 
 void main() {
