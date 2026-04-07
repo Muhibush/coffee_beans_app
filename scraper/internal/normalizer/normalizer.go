@@ -39,50 +39,26 @@ func Normalize(raw *model.RawProduct) *model.ScrapedBean {
 	return bean
 }
 
-// buildVariants constructs the weight-keyed variants map from raw product data.
-func buildVariants(raw *model.RawProduct) map[string]model.Variant {
-	variants := make(map[string]model.Variant)
+// buildVariants constructs the weight-keyed variants map (in grams) from raw product data.
+func buildVariants(raw *model.RawProduct) map[int]model.Variant {
+	variants := make(map[int]model.Variant)
 	marketplace := mapSourceToMarketplace(raw.Source)
 
 	// If raw has explicit variants from the page
 	if len(raw.Variants) > 0 {
 		for _, rv := range raw.Variants {
-			// Try to extract weight from variant name
-			weightKey, _ := ExtractFirstWeight(rv.Name)
+			// Try to extract weight from variant name in grams
+			grams, _ := ExtractFirstWeightGrams(rv.Name)
+			grindType := extractGrindType(rv.Name)
 
-			if weightKey == "" {
-				// Check if it's a grind type variant (biji/bubuk)
-				// Per user: extract grind type if it comes from variant
-				grindType := extractGrindType(rv.Name)
-				if grindType != "" {
-					// Use the weight from the title if available
-					titleWeight, _ := ExtractFirstWeight(raw.Title)
-					if titleWeight == "" {
-						titleWeight = "unknown"
-					}
-
-					// Append grind info to weight key
-					key := titleWeight
-					existing, exists := variants[key]
-					if exists {
-						// Update existing variant with grind info
-						existing.GrindType = grindType
-						variants[key] = existing
-					} else {
-						price := rv.Price
-						if price == 0 {
-							price = raw.Price
-						}
-						variants[key] = model.Variant{
-							Price:       price,
-							BuyURL:      raw.SourceURL,
-							Marketplace: marketplace,
-							GrindType:   grindType,
-						}
-					}
-					continue
+			// Fallback to title weight if variant name doesn't specify weight
+			if grams == 0 {
+				titleGrams, _ := ExtractFirstWeightGrams(raw.Title)
+				if titleGrams > 0 {
+					grams = titleGrams
+				} else {
+					grams = -1 // Unknown weight placeholder
 				}
-				continue // Skip variants without weight or grind info
 			}
 
 			price := rv.Price
@@ -90,25 +66,39 @@ func buildVariants(raw *model.RawProduct) map[string]model.Variant {
 				price = raw.Price
 			}
 
-			variants[weightKey] = model.Variant{
-				Price:       price,
-				BuyURL:      raw.SourceURL,
-				Marketplace: marketplace,
+			existing, exists := variants[grams]
+			if exists {
+				// Merge info
+				if grindType != "" {
+					existing.GrindType = grindType
+				}
+				// If we find a non-zero price, keep it
+				if existing.Price == 0 {
+					existing.Price = price
+				}
+				variants[grams] = existing
+			} else {
+				variants[grams] = model.Variant{
+					Price:       price,
+					BuyURL:      raw.SourceURL,
+					Marketplace: marketplace,
+					GrindType:   grindType,
+				}
 			}
 		}
 	}
 
-	// If no weight variants were extracted, use the main product info
+	// If no weight variants were extracted (or all were invalid), use the main product info
 	if len(variants) == 0 {
-		weightKey, _ := ExtractFirstWeight(raw.Title)
-		if weightKey == "" {
-			weightKey, _ = ExtractFirstWeight(raw.Weight)
+		grams, _ := ExtractFirstWeightGrams(raw.Title)
+		if grams == 0 {
+			grams, _ = ExtractFirstWeightGrams(raw.Weight)
 		}
-		if weightKey == "" {
-			weightKey = "unknown"
+		if grams == 0 {
+			grams = -1 // Unknown weight placeholder
 		}
 
-		variants[weightKey] = model.Variant{
+		variants[grams] = model.Variant{
 			Price:       raw.Price,
 			BuyURL:      raw.SourceURL,
 			Marketplace: marketplace,

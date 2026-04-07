@@ -32,7 +32,7 @@ type ScrapedBean struct {
 	Origin      string             `json:"origin,omitempty"`
 	Altitude    string             `json:"altitude,omitempty"`
 	Description string             `json:"description,omitempty"`
-	Variants    map[string]Variant `json:"variants"`
+	Variants    map[int]Variant    `json:"variants"`
 	Source      string             `json:"source"`
 	SourceURL   string             `json:"source_url"`
 }

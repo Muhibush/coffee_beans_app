@@ -93,3 +93,28 @@ func TestExtractFirstWeight(t *testing.T) {
 		})
 	}
 }
+
+func TestExtractFirstWeightGrams(t *testing.T) {
+	tests := []struct {
+		input         string
+		expectedGrams int
+		expectedRaw   string
+	}{
+		{"Kopi 250gr Arabika", 250, "250gr"},
+		{"No weight here", 0, ""},
+		{"Pack 1kg", 1000, "1kg"},
+		{"Half kilo 500 gram", 500, "500 gram"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			grams, raw := ExtractFirstWeightGrams(tt.input)
+			if grams != tt.expectedGrams {
+				t.Errorf("grams: expected %d, got %d", tt.expectedGrams, grams)
+			}
+			if raw != tt.expectedRaw {
+				t.Errorf("raw: expected %q, got %q", tt.expectedRaw, raw)
+			}
+		})
+	}
+}

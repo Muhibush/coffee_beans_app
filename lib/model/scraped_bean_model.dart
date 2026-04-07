@@ -10,7 +10,7 @@ class ScrapedBean {
   final String? origin;
   final String? altitude;
   final String? description;
-  final Map<String, ScrapedVariant> variants;
+  final Map<int, ScrapedVariant> variants;
   final String source;
   final String sourceUrl;
 
@@ -33,7 +33,7 @@ class ScrapedBean {
     final rawVariants = json['variants'] as Map<String, dynamic>? ?? {};
     final parsedVariants = rawVariants.map(
       (key, value) => MapEntry(
-        key,
+        int.tryParse(key) ?? 0,
         ScrapedVariant.fromJson(value as Map<String, dynamic>),
       ),
     );

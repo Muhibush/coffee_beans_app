@@ -468,7 +468,9 @@ class _BeanEditFormState extends State<_BeanEditForm> {
 
   Widget _buildVariantsSection(Bean bean) {
     final colorScheme = Theme.of(context).colorScheme;
-    final entries = bean.variants.entries.toList();
+    // Sort entrants numerically by weight (grams)
+    final entries = bean.variants.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
 
     return Column(
       children: [
@@ -477,10 +479,10 @@ class _BeanEditFormState extends State<_BeanEditForm> {
             padding: const EdgeInsets.only(bottom: 16.0),
             child: VariantEditorCard(
               weight: entry.key,
-              price: 'Rp ${entry.value.price}',
+              price: entry.value.price.toString(),
               url: entry.value.buyUrl,
               onDelete: () {
-                final updated = Map<String, BeanVariant>.from(bean.variants);
+                final updated = Map<int, BeanVariant>.from(bean.variants);
                 updated.remove(entry.key);
                 _dispatch(UpdateBeanField('variants', updated));
               },
@@ -493,9 +495,14 @@ class _BeanEditFormState extends State<_BeanEditForm> {
             side: BorderSide(color: colorScheme.outlineVariant),
           ),
           onPressed: () {
-            final updated = Map<String, BeanVariant>.from(bean.variants);
-            final key = '${(entries.length + 1) * 100}g';
-            updated[key] = const BeanVariant(price: 0, buyUrl: '', marketplace: '');
+            final updated = Map<int, BeanVariant>.from(bean.variants);
+            // Default to next 250g increment if possible
+            int nextWeight = 250;
+            if (entries.isNotEmpty) {
+              nextWeight = entries.last.key + 250;
+            }
+            updated[nextWeight] =
+                const BeanVariant(price: 0, buyUrl: '', marketplace: '');
             _dispatch(UpdateBeanField('variants', updated));
           },
           icon: const Icon(Icons.add_circle_outline),

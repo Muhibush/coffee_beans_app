@@ -79,7 +79,7 @@ class AdminBeanEditBloc extends Bloc<AdminBeanEditEvent, AdminBeanEditState> {
         updated = b.copyWith(notes: event.value as List<String>);
         break;
       case 'variants':
-        updated = b.copyWith(variants: event.value as Map<String, BeanVariant>);
+        updated = b.copyWith(variants: event.value as Map<int, BeanVariant>);
         break;
       case 'imageUrl':
         updated = b.copyWith(imageUrl: event.value as String);

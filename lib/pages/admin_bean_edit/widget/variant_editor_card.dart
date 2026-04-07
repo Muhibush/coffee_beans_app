@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class VariantEditorCard extends StatelessWidget {
-  final String weight;
+  final int weight;
   final String price;
   final String url;
   final VoidCallback onDelete;
@@ -55,7 +55,7 @@ class VariantEditorCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _buildField(context, 'Weight (e.g., 100g)', weight),
+          _buildField(context, 'Weight (e.g., 100g)', weight <= 0 ? 'Unknown' : '${weight}g'),
           const SizedBox(height: 12),
           _buildField(context, 'Price (e.g., Rp 85.000)', price),
           const SizedBox(height: 12),

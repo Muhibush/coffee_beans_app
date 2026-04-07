@@ -133,19 +133,40 @@ func (e *TokopediaExtractor) Extract(ctx context.Context, productURL string) (*m
 	finalURL := page.MustInfo().URL
 	log.Printf("[tokopedia] Final URL: %s", finalURL)
 
-	// Strategy 1: Try JSON-LD first (most reliable structured data)
+	// Strategy 1: JSON-LD for base metadata
 	raw, err := e.extractFromJSONLD(page)
-	if err == nil && raw.Title != "" {
-		log.Printf("[tokopedia] Extracted via JSON-LD: %s", raw.Title)
-		raw.SourceURL = finalURL
-		return raw, nil
+	if err != nil || raw == nil || raw.Title == "" {
+		log.Printf("[tokopedia] JSON-LD extraction failed or empty, using empty base: %v", err)
+		raw = &model.RawProduct{}
+	} else {
+		log.Printf("[tokopedia] Base metadata extracted via JSON-LD: %s", raw.Title)
 	}
-	log.Printf("[tokopedia] JSON-LD extraction failed or empty, falling back to DOM: %v", err)
 
-	// Strategy 2: Fall back to DOM parsing
-	raw, err = e.extractFromDOM(page)
+	// Strategy 2: DOM for variants and potential gaps
+	domData, err := e.extractFromDOM(page)
 	if err != nil {
-		return nil, fmt.Errorf("both JSON-LD and DOM extraction failed: %w", err)
+		if raw.Title == "" {
+			return nil, fmt.Errorf("extraction failed: JSON-LD failed and DOM failed: %w", err)
+		}
+		log.Printf("[tokopedia] DOM extraction failed, but using JSON-LD data: %v", err)
+	} else {
+		// Merge DOM data into JSON-LD data if JSON-LD missed anything
+		if raw.Title == "" {
+			raw.Title = domData.Title
+		}
+		if raw.Description == "" {
+			raw.Description = domData.Description
+		}
+		if raw.Price == 0 {
+			raw.Price = domData.Price
+		}
+		if len(raw.ImageURLs) == 0 && len(domData.ImageURLs) > 0 {
+			raw.ImageURLs = domData.ImageURLs
+		}
+		// ALWAYS take variants from DOM if available
+		if len(domData.Variants) > 0 {
+			raw.Variants = domData.Variants
+		}
 	}
 
 	raw.SourceURL = finalURL
@@ -246,7 +267,7 @@ func (e *TokopediaExtractor) extractFromDOM(page *rod.Page) (*model.RawProduct, 
 			return el ? el.getAttribute(attr) || '' : '';
 		};
 
-		// Title — try multiple selectors
+		// Title
 		let title = getTextBySelector('h1[data-testid="lblPDPDetailProductName"]') ||
 			getTextBySelector('h1.css-1320e5d') ||
 			getTextBySelector('h1') ||
@@ -269,13 +290,19 @@ func (e *TokopediaExtractor) extractFromDOM(page *rod.Page) (*model.RawProduct, 
 			'';
 
 		// Variants (weight/grind options)
+		// Tokopedia uses multiple structures for variants. 
+		// btnPDPVariant is common for buttons. 
+		// We also check for dropdown values if needed, but buttons are primary for specialty coffee.
 		let variants = [];
 		const variantElements = document.querySelectorAll('[data-testid^="btnPDPVariant"]');
 		variantElements.forEach(el => {
-			variants.push({
-				name: el.textContent.trim(),
-				price: 0
-			});
+			const text = el.textContent.trim();
+			if (text) {
+				variants.push({
+					name: text,
+					price: 0
+				});
+			}
 		});
 
 		return JSON.stringify({

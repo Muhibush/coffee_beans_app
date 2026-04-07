@@ -9,7 +9,9 @@ import (
 
 // weightPattern matches weight values in product titles/descriptions.
 // Examples: "250gr", "500 gram", "1kg", "100g", "1 kilogram"
-var weightPattern = regexp.MustCompile(`(?i)(\d+)\s*(gram|gr|g|kg|kilogram)\b`)
+// weightPattern matches weight values in product titles/descriptions.
+// Examples: "250gr", "500 gram", "1kg", "100g", "1 kilogram"
+var weightPattern = regexp.MustCompile(`(?i)(\d+)[ \t\x{00a0}\r\n]*(gram|gr|g|kg|kilogram)\b`)
 
 // WeightMatch holds a parsed weight occurrence.
 type WeightMatch struct {
@@ -67,6 +69,19 @@ func ExtractFirstWeight(text string) (normalized string, raw string) {
 		return "", ""
 	}
 	return weights[0].Normalized, weights[0].Raw
+}
+
+// ExtractFirstWeightGrams extracts the first weight and returns the value in grams.
+func ExtractFirstWeightGrams(text string) (grams int, raw string) {
+	weights := ExtractWeights(text)
+	if len(weights) == 0 {
+		return 0, ""
+	}
+	w := weights[0]
+	if w.Unit == "kg" {
+		return w.Value * 1000, w.Raw
+	}
+	return w.Value, w.Raw
 }
 
 // standardizeUnit normalizes weight unit strings.

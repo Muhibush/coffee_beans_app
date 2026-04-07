@@ -44,12 +44,26 @@ class AdminBeanListRepository {
   }
 
   /// Converts a ScrapedBean into a Bean row and inserts it as 'draft'.
-  /// Uses fingerprint logic: roastery_id + slugified clean_name.
+  /// IMPLEMENTS DEEP-MERGE: Merges new variants with existing ones if the bean exists.
   Future<Bean> insertScrapedBean(String roasteryId, ScrapedBean scraped) async {
     final fingerprint = '${roasteryId}_${_slugify(scraped.cleanName)}';
 
-    // Convert ScrapedVariant → BeanVariant
-    final variants = scraped.variants.map((key, sv) => MapEntry(
+    // 1. Check for existing bean
+    final existingResponse = await _client
+        .from('beans')
+        .select()
+        .eq('fingerprint', fingerprint)
+        .maybeSingle();
+
+    Map<int, BeanVariant> mergedVariants = {};
+
+    if (existingResponse != null) {
+      final existingBean = Bean.fromJson(existingResponse);
+      mergedVariants.addAll(existingBean.variants);
+    }
+
+    // 2. Map ScrapedVariants to BeanVariants and merge
+    final newVariants = scraped.variants.map((key, sv) => MapEntry(
           key,
           BeanVariant(
             price: sv.price,
@@ -58,8 +72,10 @@ class AdminBeanListRepository {
           ),
         ));
 
+    mergedVariants.addAll(newVariants);
+
     final bean = Bean(
-      id: '',
+      id: existingResponse != null ? existingResponse['id'] as String : '',
       roasteryId: roasteryId,
       cleanName: scraped.cleanName,
       fingerprint: fingerprint,
@@ -68,7 +84,7 @@ class AdminBeanListRepository {
       process: scraped.process,
       roastLevel: scraped.roastLevel,
       status: 'draft',
-      variants: variants,
+      variants: mergedVariants,
       imageUrl: scraped.imageUrl,
       origin: scraped.origin,
       altitude: scraped.altitude,

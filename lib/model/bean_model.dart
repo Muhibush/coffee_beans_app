@@ -54,7 +54,7 @@ class Bean extends Equatable {
   final String? process;
   final String? roastLevel;
   final String status; // 'published', 'draft', 'unpublished'
-  final Map<String, BeanVariant> variants;
+  final Map<int, BeanVariant> variants;
   final String? imageUrl;
   final String? origin;
   final String? altitude;
@@ -93,11 +93,11 @@ class Bean extends Equatable {
   }
 
   factory Bean.fromJson(Map<String, dynamic> json) {
-    // Parse variants JSONB → Map<String, BeanVariant>
+    // Parse variants JSONB → Map<int, BeanVariant>
     final rawVariants = json['variants'] as Map<String, dynamic>? ?? {};
     final parsedVariants = rawVariants.map(
       (key, value) => MapEntry(
-        key,
+        int.tryParse(key) ?? 0,
         BeanVariant.fromJson(value as Map<String, dynamic>),
       ),
     );
@@ -140,7 +140,7 @@ class Bean extends Equatable {
       'process': process,
       'roast_level': roastLevel,
       'status': status,
-      'variants': variants.map((key, v) => MapEntry(key, v.toJson())),
+      'variants': variants.map((key, v) => MapEntry(key.toString(), v.toJson())),
       'image_url': imageUrl,
       'origin': origin,
       'altitude': altitude,
@@ -180,7 +180,7 @@ class Bean extends Equatable {
     String? process,
     String? roastLevel,
     String? status,
-    Map<String, BeanVariant>? variants,
+    Map<int, BeanVariant>? variants,
     String? imageUrl,
     String? origin,
     String? altitude,
