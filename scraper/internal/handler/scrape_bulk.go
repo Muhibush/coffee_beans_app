@@ -42,7 +42,7 @@ func BulkScrapeHandler(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	// Route to the appropriate bulk extractor
-	urls, sourceName, err := extractor.RouteBulk(ctx, req.URL, req.MaxProducts)
+	products, sourceName, err := extractor.RouteBulk(ctx, req.URL, req.MaxProducts)
 	if err != nil {
 		log.Printf("[handler] Bulk Extraction failed: %v", err)
 		writeJSON(w, http.StatusInternalServerError, model.BulkScrapeResponse{
@@ -52,12 +52,12 @@ func BulkScrapeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("[handler] Successfully extracted %d URLs from%s", len(urls), sourceName)
+	log.Printf("[handler] Successfully extracted %d items from %s", len(products), sourceName)
 
 	// Return success response
 	writeJSON(w, http.StatusOK, model.BulkScrapeResponse{
 		Success:      true,
-		URLs:         urls,
-		ProductCount: len(urls),
+		Products:     products,
+		ProductCount: len(products),
 	})
 }

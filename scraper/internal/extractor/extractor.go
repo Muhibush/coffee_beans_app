@@ -21,8 +21,8 @@ type Extractor interface {
 
 // BulkExtractor defines the interface for extracting multiple product URLs from a store.
 type BulkExtractor interface {
-	// ExtractURLs fetches and returns product URLs from the given store/collection URL.
-	ExtractURLs(ctx context.Context, storeURL string, maxProducts int) ([]string, error)
+	// ExtractURLs fetches and returns product URLs and titles from the given store/collection URL.
+	ExtractURLs(ctx context.Context, storeURL string, maxProducts int) ([]model.BulkProduct, error)
 	// CanHandleBulk returns true if this extractor supports bulk scraping for the given URL.
 	CanHandleBulk(storeURL string) bool
 	// Name returns the source identifier.
@@ -88,8 +88,8 @@ func Route(ctx context.Context, rawURL string) (*model.RawProduct, error) {
 	return nil, fmt.Errorf("no extractor found for URL: %s", rawURL)
 }
 
-// RouteBulk finds the appropriate bulk extractor for a given URL and extracts product URLs.
-func RouteBulk(ctx context.Context, rawURL string, maxProducts int) ([]string, string, error) {
+// RouteBulk finds the appropriate bulk extractor for a given URL and extracts product items.
+func RouteBulk(ctx context.Context, rawURL string, maxProducts int) ([]model.BulkProduct, string, error) {
 	// Normalize the URL
 	rawURL = strings.TrimSpace(rawURL)
 	if rawURL == "" {
@@ -108,11 +108,11 @@ func RouteBulk(ctx context.Context, rawURL string, maxProducts int) ([]string, s
 	// Find matching bulk extractor
 	for _, ext := range bulkRegistry {
 		if ext.CanHandleBulk(rawURL) {
-			urls, err := ext.ExtractURLs(ctx, rawURL, maxProducts)
+			products, err := ext.ExtractURLs(ctx, rawURL, maxProducts)
 			if err != nil {
 				return nil, ext.Name(), fmt.Errorf("[%s] bulk extraction failed: %w", ext.Name(), err)
 			}
-			return urls, ext.Name(), nil
+			return products, ext.Name(), nil
 		}
 	}
 

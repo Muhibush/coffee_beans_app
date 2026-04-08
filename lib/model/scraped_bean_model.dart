@@ -81,3 +81,45 @@ class ScrapedVariant {
     );
   }
 }
+
+/// Minimal product info returned by /inspect or /scrape-bulk.
+class ScraperProduct {
+  final String title;
+  final String url;
+
+  const ScraperProduct({required this.title, required this.url});
+
+  factory ScraperProduct.fromJson(Map<String, dynamic> json) {
+    return ScraperProduct(
+      title: json['title'] as String? ?? 'Unknown Product',
+      url: json['url'] as String? ?? '',
+    );
+  }
+}
+
+/// Response from /inspect.
+class ScraperInspectResponse {
+  final bool success;
+  final String type; // "single", "bulk", "unknown"
+  final String url;
+  final String? title;
+  final String? error;
+
+  const ScraperInspectResponse({
+    required this.success,
+    required this.type,
+    required this.url,
+    this.title,
+    this.error,
+  });
+
+  factory ScraperInspectResponse.fromJson(Map<String, dynamic> json) {
+    return ScraperInspectResponse(
+      success: json['success'] as bool? ?? false,
+      type: json['type'] as String? ?? 'unknown',
+      url: json['url'] as String? ?? '',
+      title: json['title'] as String?,
+      error: json['error'] as String?,
+    );
+  }
+}

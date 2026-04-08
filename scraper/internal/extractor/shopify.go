@@ -97,6 +97,7 @@ func (e *ShopifyExtractor) CanHandleBulk(storeURL string) bool {
 
 type shopifyCollectionProduct struct {
 	Handle string `json:"handle"`
+	Title  string `json:"title"`
 }
 
 // shopifyCollectionResponse represents a Shopify collection JSON response containing multiple products.
@@ -104,7 +105,7 @@ type shopifyCollectionResponse struct {
 	Products []shopifyCollectionProduct `json:"products"`
 }
 
-func (e *ShopifyExtractor) ExtractURLs(ctx context.Context, storeURL string, maxProducts int) ([]string, error) {
+func (e *ShopifyExtractor) ExtractURLs(ctx context.Context, storeURL string, maxProducts int) ([]model.BulkProduct, error) {
 	log.Printf("[shopify] Extracting bulk URLs from: %s", storeURL)
 
 	parsed, err := url.Parse(storeURL)
@@ -158,18 +159,21 @@ func (e *ShopifyExtractor) ExtractURLs(ctx context.Context, storeURL string, max
 	// base URL for reconstructing product URLs
 	baseURL := parsed.Scheme + "://" + parsed.Host
 
-	var urls []string
+	var products []model.BulkProduct
 	for i, product := range collectionResp.Products {
 		if maxProducts > 0 && i >= maxProducts {
 			break
 		}
 		if product.Handle != "" {
-			urls = append(urls, baseURL+"/products/"+product.Handle)
+			products = append(products, model.BulkProduct{
+				Title: product.Title,
+				URL:   baseURL + "/products/" + product.Handle,
+			})
 		}
 	}
 
-	log.Printf("[shopify] Extracted %d product URLs successfully", len(urls))
-	return urls, nil
+	log.Printf("[shopify] Extracted %d product items successfully", len(products))
+	return products, nil
 }
 
 func (e *ShopifyExtractor) Extract(ctx context.Context, productURL string) (*model.RawProduct, error) {

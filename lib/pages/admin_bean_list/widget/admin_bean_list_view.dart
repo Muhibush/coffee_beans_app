@@ -59,19 +59,23 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
                           onPressed: () => context.read<AdminBeanListBloc>().add(ClearSelection()),
                           child: const Text('Cancel'),
                         ),
-                      if (!hasSelection && filtered.isNotEmpty)
+                      if (!hasSelection) ...[
                         IconButton(
-                          icon: const Icon(Icons.select_all),
-                          onPressed: () => context.read<AdminBeanListBloc>().add(SelectAllBeans()),
+                          icon: const Icon(Icons.bolt_outlined),
+                          tooltip: 'Scraper',
+                          onPressed: () => _showScraper(context),
                         ),
+                        if (filtered.isNotEmpty)
+                          IconButton(
+                            icon: const Icon(Icons.select_all),
+                            onPressed: () => context.read<AdminBeanListBloc>().add(SelectAllBeans()),
+                          ),
+                      ],
                     ],
                   ),
 
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                      child: ScraperInput(roasteryId: widget.roasteryId),
-                    ),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 12),
                   ),
 
                   SliverPersistentHeader(
@@ -99,8 +103,8 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
 
                   // ── Content ──
                   if (state.status == AdminBeanListStatus.loading)
-                    const SliverFillRemaining(
-                      child: Center(child: CircularProgressIndicator()),
+                    SliverFillRemaining(
+                      child: const Center(child: CircularProgressIndicator()),
                     )
                   else if (state.status == AdminBeanListStatus.error)
                     SliverFillRemaining(
@@ -265,10 +269,45 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Use the scraper to add beans or tap +',
+            'Import beans from marketplaces or add manually',
             style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
           ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FilledButton.icon(
+                onPressed: () => _showScraper(context),
+                icon: const Icon(Icons.bolt),
+                label: const Text('Use Scraper'),
+              ),
+              const SizedBox(width: 12),
+              OutlinedButton.icon(
+                onPressed: () {
+                  context.push('/admin/roastery/${widget.roasteryId}/beans/new');
+                },
+                icon: const Icon(Icons.add),
+                label: const Text('Add Manually'),
+              ),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  void _showScraper(BuildContext context) {
+    final bloc = context.read<AdminBeanListBloc>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => BlocProvider.value(
+        value: bloc,
+        child: ScraperInput(roasteryId: widget.roasteryId),
       ),
     );
   }

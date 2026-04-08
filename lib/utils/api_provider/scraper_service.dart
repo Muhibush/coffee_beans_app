@@ -32,8 +32,18 @@ class ScraperService {
     }
   }
 
-  /// Bulk scrape a store URL → returns list of product URLs.
-  Future<List<String>> scrapeBulk(String url, {int? maxProducts}) async {
+  /// Inspect a URL to see if it is single or bulk.
+  Future<ScraperInspectResponse> inspectUrl(String url) async {
+    try {
+      final response = await _dio.post('/inspect', data: {'url': url});
+      return ScraperInspectResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw Exception('Inspection failed: ${e.message}');
+    }
+  }
+
+  /// Bulk scrape a store URL → returns list of [ScraperProduct].
+  Future<List<ScraperProduct>> scrapeBulk(String url, {int? maxProducts}) async {
     try {
       final data = <String, dynamic>{'url': url};
       if (maxProducts != null) data['max_products'] = maxProducts;
@@ -41,8 +51,10 @@ class ScraperService {
       final response = await _dio.post('/scrape-bulk', data: data);
       final body = response.data as Map<String, dynamic>;
 
-      if (body['success'] == true && body['urls'] != null) {
-        return (body['urls'] as List).cast<String>();
+      if (body['success'] == true && body['products'] != null) {
+        return (body['products'] as List)
+            .map((p) => ScraperProduct.fromJson(p as Map<String, dynamic>))
+            .toList();
       }
       throw Exception(body['error'] ?? 'Unknown bulk scraper error');
     } on DioException catch (e) {

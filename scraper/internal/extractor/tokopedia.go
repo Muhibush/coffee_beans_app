@@ -29,7 +29,7 @@ func (e *TokopediaExtractor) CanHandleBulk(storeURL string) bool {
 	return e.CanHandle(storeURL)
 }
 
-func (e *TokopediaExtractor) ExtractURLs(ctx context.Context, storeURL string, maxProducts int) ([]string, error) {
+func (e *TokopediaExtractor) ExtractURLs(ctx context.Context, storeURL string, maxProducts int) ([]model.BulkProduct, error) {
 	log.Printf("[tokopedia] Extracting bulk URLs from: %s", storeURL)
 
 	b := browser.Get()
@@ -40,7 +40,7 @@ func (e *TokopediaExtractor) ExtractURLs(ctx context.Context, storeURL string, m
 	defer page.MustClose()
 
 	// Wait extra for Tokopedia's JS to render
-	time.Sleep(3 * time.Second)
+	time.Sleep(5 * time.Second)
 
 	// Determine username/shop name from URL to filter out other links
 	parsed, err := url.Parse(storeURL)
@@ -53,53 +53,76 @@ func (e *TokopediaExtractor) ExtractURLs(ctx context.Context, storeURL string, m
 		username = parts[0]
 	}
 
-	urlsMap := make(map[string]bool)
-	var urls []string
+	productsMap := make(map[string]bool)
+	var products []model.BulkProduct
+
+	// Normalize shop name for filtering
+	shopPattern := "/" + username + "/"
 
 	// Infinite scroll logic
 	scrollWait := 2 * time.Second
-	for i := 0; i < 15; i++ { // limit scroll attempts to avoid infinite loops
-		// Execute JS to get links
-		linksResult, err := page.Eval(`() => {
+	for i := 0; i < 10; i++ { // limit scroll attempts
+		// Execute JS to get links and titles
+		results, err := page.Eval(fmt.Sprintf(`() => {
 			const arr = [];
-			document.querySelectorAll('a').forEach(a => {
-				const href = a.getAttribute('href');
-				if (href && !href.includes('/review')) {
-					arr.push(a.href);
+			// Find all anchors that likely point to products in this shop
+			const links = document.querySelectorAll('a[href*="%s"]');
+			
+			links.forEach(a => {
+				const href = a.href;
+				if (!href || href.includes('/review') || href.includes('/etalase') || href.endsWith('/product')) return;
+
+				// Try to find a title within the anchor or nearby
+				// data-testid="linkProductName" is the most specific for Tokopedia
+				const titleEl = a.querySelector('[data-testid="linkProductName"], .prd_link-product-name') || a;
+				const title = titleEl.innerText.trim();
+				
+				// Products usually have multi-word titles and a certain length
+				if (title.length > 5 && title.split(' ').length >= 2) {
+					arr.push({ url: href, title: title });
 				}
 			});
 			return arr;
-		}`)
+		}`, shopPattern))
 		if err != nil {
 			log.Printf("[tokopedia] JS evaluate failed during bulk scrape: %v", err)
 			break
 		}
 		
-		var links []string
-		for _, v := range linksResult.Value.Arr() {
-			links = append(links, v.String())
+		type jsResult struct {
+			URL   string `json:"url"`
+			Title string `json:"title"`
 		}
+		var items []jsResult
+		results.Value.Unmarshal(&items)
 
-		prevLen := len(urlsMap)
+		prevLen := len(productsMap)
 		
-		for _, href := range links {
-			if username != "" && strings.Contains(href, "/"+username+"/") {
-				if !strings.Contains(href, "/product") && !strings.Contains(href, "/etalase") && !strings.Contains(href, "/review") {
-					if !urlsMap[href] {
-						urlsMap[href] = true
-						urls = append(urls, href)
-					}
-				}
+		for _, item := range items {
+			href := item.URL
+			// Strip query params and fragments
+			if u, err := url.Parse(href); err == nil {
+				u.RawQuery = ""
+				u.Fragment = ""
+				href = u.String()
+			}
+
+			// Final sanity check on the URL
+			if !productsMap[href] {
+				productsMap[href] = true
+				products = append(products, model.BulkProduct{
+					Title: item.Title,
+					URL:   href,
+				})
 			}
 		}
 
-		if maxProducts > 0 && len(urls) >= maxProducts {
+		if maxProducts > 0 && len(products) >= maxProducts {
 			break
 		}
 
 		// Check if we didn't find any new links
-		if len(urlsMap) == prevLen && i > 0 {
-			// No new links found after scrolling, assuming we reached the end
+		if len(productsMap) == prevLen && i > 0 {
 			break
 		}
 
@@ -108,12 +131,12 @@ func (e *TokopediaExtractor) ExtractURLs(ctx context.Context, storeURL string, m
 		time.Sleep(scrollWait)
 	}
 
-	if maxProducts > 0 && len(urls) > maxProducts {
-		urls = urls[:maxProducts]
+	if maxProducts > 0 && len(products) > maxProducts {
+		products = products[:maxProducts]
 	}
 
-	log.Printf("[tokopedia] Extracted %d product URLs successfully", len(urls))
-	return urls, nil
+	log.Printf("[tokopedia] Extracted %d product items successfully", len(products))
+	return products, nil
 }
 
 func (e *TokopediaExtractor) Extract(ctx context.Context, productURL string) (*model.RawProduct, error) {

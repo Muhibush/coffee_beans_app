@@ -22,7 +22,6 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
     on<SaveScrapedBean>(_onSaveScrapedBean);
     on<UpdateBeanStatus>(_onUpdateBeanStatus);
     on<DeleteBeanFromList>(_onDeleteBean);
-    on<ScrapeBulkUrl>(_onScrapeBulkUrl);
 
     // Selection Events
     on<ToggleSelectBean>(_onToggleSelect);
@@ -30,6 +29,175 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
     on<ClearSelection>(_onClearSelection);
     on<BulkUpdateStatus>(_onBulkUpdateStatus);
     on<BulkDeleteBeans>(_onBulkDelete);
+
+    // Wizard Events
+    on<StartScraperWizard>(_onStartScraperWizard);
+    on<ToggleScraperProductSelection>(_onToggleScraperProductSelection);
+    on<ConfirmBulkScrape>(_onConfirmBulkScrape);
+    on<CancelScraperWizard>(_onCancelScraperWizard);
+  }
+
+  Future<void> _onStartScraperWizard(
+    StartScraperWizard event,
+    Emitter<AdminBeanListState> emit,
+  ) async {
+    emit(state.copyWith(
+      scraperStatus: ScraperStatus.inspecting,
+      scraperError: null,
+      discoveredProducts: [],
+      selectedDiscoveredUrls: {},
+    ));
+
+    try {
+      if (event.isBulk) {
+        // Bulk -> Fetch preview products for selection
+        emit(state.copyWith(
+          scraperStatus: ScraperStatus.scraping,
+          scraperMessage: 'Analyzing store...',
+        ));
+
+        final products = await scraperService.scrapeBulk(
+          event.url,
+          maxProducts: event.maxProducts,
+        );
+
+        emit(state.copyWith(
+          scraperStatus: ScraperStatus.selecting,
+          discoveredProducts: products,
+          selectedDiscoveredUrls: products.map((p) => p.url).toSet(), // Default select all
+        ));
+      } else {
+        // Single product -> Go straight to scraping
+        add(ScrapeUrl(url: event.url, roasteryId: event.roasteryId));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        scraperStatus: ScraperStatus.error,
+        scraperError: e.toString(),
+      ));
+    }
+  }
+
+  void _onToggleScraperProductSelection(
+    ToggleScraperProductSelection event,
+    Emitter<AdminBeanListState> emit,
+  ) {
+    final newSelection = Set<String>.from(state.selectedDiscoveredUrls);
+    if (newSelection.contains(event.product.url)) {
+      newSelection.remove(event.product.url);
+    } else {
+      newSelection.add(event.product.url);
+    }
+    emit(state.copyWith(selectedDiscoveredUrls: newSelection));
+  }
+
+  Future<void> _onConfirmBulkScrape(
+    ConfirmBulkScrape event,
+    Emitter<AdminBeanListState> emit,
+  ) async {
+    // Collect the URLs to scrape from the selection
+    final urlsToScrape = state.discoveredProducts
+        .where((p) => state.selectedDiscoveredUrls.contains(p.url))
+        .map((p) => p.url)
+        .toList();
+
+    if (urlsToScrape.isEmpty) {
+      emit(state.copyWith(
+        scraperStatus: ScraperStatus.error,
+        scraperError: 'Please select at least one item.',
+      ));
+      return;
+    }
+
+    emit(state.copyWith(
+      scraperStatus: ScraperStatus.scraping,
+      scraperMessage: 'Preparing to scrape ${urlsToScrape.length} items...',
+    ));
+
+    try {
+      int successCount = 0;
+      int errorCount = 0;
+      int skippedCount = 0;
+      final sessionAddedIds = <String>{};
+
+      // Build registries for fast lookup and skipping
+      final currentBeans = await repository.fetchBeans(event.roasteryId);
+      final existingFingerprints =
+          currentBeans.map((b) => b.fingerprint).toSet();
+      final existingUrls = currentBeans
+          .expand((b) => b.variants.values.map((v) => v.buyUrl))
+          .toSet();
+
+      for (int i = 0; i < urlsToScrape.length; i++) {
+        final url = urlsToScrape[i];
+
+        // 1. Pre-scrape Scope Filtering
+        if (event.scope == BulkScrapeScope.newOnly && existingUrls.contains(url)) {
+          skippedCount++;
+          continue;
+        }
+
+        if (event.scope == BulkScrapeScope.updateOnly && !existingUrls.contains(url)) {
+          skippedCount++;
+          continue;
+        }
+
+        emit(state.copyWith(
+          scraperMessage: 'Scraping ${i + 1}/${urlsToScrape.length}',
+        ));
+
+        try {
+          final scraped = await scraperService.scrapeProduct(url);
+          final slug = scraped.cleanName
+              .toLowerCase()
+              .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
+              .replaceAll(RegExp(r'^-|-$'), '');
+          final fingerprint = '${event.roasteryId}_$slug';
+
+          // 2. Post-scrape Scope Filtering
+          if (event.scope == BulkScrapeScope.newOnly &&
+              existingFingerprints.contains(fingerprint)) {
+            skippedCount++;
+            continue;
+          }
+
+          final bean = await repository.insertScrapedBean(event.roasteryId, scraped);
+          sessionAddedIds.add(bean.id);
+          successCount++;
+        } catch (e) {
+          errorCount++;
+          debugPrint('Error scraping item $url: $e');
+        }
+      }
+
+      // Reload full list
+      final beans = await repository.fetchBeans(event.roasteryId);
+      emit(state.copyWith(
+        scraperStatus: ScraperStatus.success,
+        scraperMessage:
+            'Success: $successCount saved, $skippedCount skipped, $errorCount errors.',
+        allBeans: beans,
+        filteredBeans: beans,
+        sessionAddedIds: {...state.sessionAddedIds, ...sessionAddedIds},
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        scraperStatus: ScraperStatus.error,
+        scraperError: e.toString(),
+      ));
+    }
+  }
+
+  void _onCancelScraperWizard(
+    CancelScraperWizard event,
+    Emitter<AdminBeanListState> emit,
+  ) {
+    emit(state.copyWith(
+      scraperStatus: ScraperStatus.idle,
+      discoveredProducts: [],
+      selectedDiscoveredUrls: {},
+      scraperError: null,
+    ));
   }
 
   Future<void> _onLoadBeans(
@@ -98,113 +266,6 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
       emit(state.copyWith(
         scraperStatus: ScraperStatus.error,
         scraperError: e.toString(),
-      ));
-    }
-  }
-
-  Future<void> _onScrapeBulkUrl(
-    ScrapeBulkUrl event,
-    Emitter<AdminBeanListState> emit,
-  ) async {
-    emit(state.copyWith(
-      scraperStatus: ScraperStatus.scraping,
-      scraperMessage: 'Extracting product URLs...',
-    ));
-
-    try {
-      final urls = await scraperService.scrapeBulk(
-        event.url,
-        maxProducts: event.maxProducts > 0 ? event.maxProducts : null,
-      );
-
-      if (urls.isEmpty) {
-        emit(state.copyWith(
-          scraperStatus: ScraperStatus.error,
-          scraperError: 'No product URLs found at this location.',
-        ));
-        return;
-      }
-
-      int successCount = 0;
-      int errorCount = 0;
-      int skippedCount = 0;
-
-      // Build registries for fast lookup and skipping
-      final currentBeans = await repository.fetchBeans(event.roasteryId);
-      final existingFingerprints =
-          currentBeans.map((b) => b.fingerprint).toSet();
-      final existingUrls = currentBeans
-          .expand((b) => b.variants.values.map((v) => v.buyUrl))
-          .toSet();
-
-      for (int i = 0; i < urls.length; i++) {
-        final url = urls[i];
-
-        // 1. Pre-scrape Scope Filtering using URL as a proxy
-        if (event.scope == BulkScrapeScope.newOnly &&
-            existingUrls.contains(url)) {
-          skippedCount++;
-          emit(state.copyWith(
-            scraperMessage: 'Skipping existing: ${i + 1}/${urls.length}',
-          ));
-          continue;
-        }
-
-        if (event.scope == BulkScrapeScope.updateOnly &&
-            !existingUrls.contains(url)) {
-          skippedCount++;
-          emit(state.copyWith(
-            scraperMessage: 'Skipping new item: ${i + 1}/${urls.length}',
-          ));
-          continue;
-        }
-
-        emit(state.copyWith(
-          scraperMessage: 'Scraping ${i + 1}/${urls.length}: $url',
-        ));
-
-        try {
-          final scraped = await scraperService.scrapeProduct(url);
-          final slug = scraped.cleanName
-              .toLowerCase()
-              .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
-              .replaceAll(RegExp(r'^-|-$'), '');
-          final fingerprint = '${event.roasteryId}_$slug';
-
-          // 2. Post-scrape Scope Filtering
-          // Needed for new URLs that map to existing beans (same fingerprint)
-          if (event.scope == BulkScrapeScope.newOnly &&
-              existingFingerprints.contains(fingerprint)) {
-            skippedCount++;
-            continue;
-          }
-
-          // For UpdateOnly, we already verified the URL exists above.
-          // If a new URL somehow maps to an existing fingerprint, we still want to save (merge).
-
-          await repository.insertScrapedBean(event.roasteryId, scraped);
-          successCount++;
-        } catch (e) {
-          errorCount++;
-          debugPrint('Error scraping bulk item $url: $e');
-        }
-      }
-
-      // Reload list
-      if (_roasteryId != null) {
-        final beans = await repository.fetchBeans(_roasteryId!);
-        emit(state.copyWith(
-          scraperStatus: ScraperStatus.success,
-          scraperMessage:
-              'Bulk scrape complete: $successCount saved, $skippedCount skipped, $errorCount errors.',
-          allBeans: beans,
-          filteredBeans: beans,
-        ));
-      }
-    } catch (e) {
-      emit(state.copyWith(
-        scraperStatus: ScraperStatus.error,
-        scraperError: 'Bulk scrape failed: ${e.toString()}',
       ));
     }
   }

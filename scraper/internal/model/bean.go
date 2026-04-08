@@ -65,8 +65,15 @@ type BulkScrapeRequest struct {
 
 // BulkScrapeResponse is the API response envelope for bulk scraping.
 type BulkScrapeResponse struct {
-	Success      bool     `json:"success"`
-	URLs         []string `json:"urls,omitempty"`
-	ProductCount int      `json:"product_count"`
-	Error        string   `json:"error,omitempty"`
+	Success      bool          `json:"success"`
+	URLs         []string      `json:"urls,omitempty"` // Deprecated: use products instead
+	Products     []BulkProduct `json:"products,omitempty"`
+	ProductCount int           `json:"product_count"`
+	Error        string        `json:"error,omitempty"`
+}
+
+// BulkProduct represents a single product link and title found during bulk extraction.
+type BulkProduct struct {
+	Title string `json:"title"`
+	URL   string `json:"url"`
 }

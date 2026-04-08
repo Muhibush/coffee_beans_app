@@ -73,3 +73,31 @@ class BulkUpdateStatus extends AdminBeanListEvent {
 }
 
 class BulkDeleteBeans extends AdminBeanListEvent {}
+
+/// --- Scraper Wizard Events ---
+
+class StartScraperWizard extends AdminBeanListEvent {
+  final String url;
+  final String roasteryId;
+  final bool isBulk;
+  final int? maxProducts;
+  StartScraperWizard({
+    required this.url,
+    required this.roasteryId,
+    this.isBulk = false,
+    this.maxProducts,
+  });
+}
+
+class ToggleScraperProductSelection extends AdminBeanListEvent {
+  final ScraperProduct product;
+  ToggleScraperProductSelection(this.product);
+}
+
+class ConfirmBulkScrape extends AdminBeanListEvent {
+  final String roasteryId;
+  final BulkScrapeScope scope;
+  ConfirmBulkScrape({required this.roasteryId, required this.scope});
+}
+
+class CancelScraperWizard extends AdminBeanListEvent {}
