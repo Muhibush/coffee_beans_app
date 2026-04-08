@@ -120,7 +120,10 @@ class AdminRoasteryCard extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 // ── Status Badge ──
-                                StatusBadge(isActive: roastery.isActive),
+                                StatusBadge.roastery(
+                                  isActive: roastery.isActive,
+                                  colorScheme: colorScheme,
+                                ),
                               ],
                             ),
                           ],

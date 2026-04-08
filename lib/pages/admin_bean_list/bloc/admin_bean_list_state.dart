@@ -13,6 +13,12 @@ enum ScraperStatus {
   error
 }
 
+enum AdminBeanSortOption {
+  name,
+  createdAt,
+  updatedAt,
+}
+
 class AdminBeanListState extends Equatable {
   final AdminBeanListStatus status;
   final ScraperStatus scraperStatus;
@@ -20,13 +26,16 @@ class AdminBeanListState extends Equatable {
   final List<Bean> filteredBeans;
   final String searchQuery;
   final String activeFilter; // 'all', 'published', 'draft', 'unpublished'
+  final AdminBeanSortOption sortBy;
+  final bool sortAscending;
   final String? errorMessage;
   final String? scraperError;
   final ScrapedBean? scrapedResult;
   final List<ScraperProduct> discoveredProducts;
   final String? scraperMessage;
   final Set<String> selectedIds;
-  final Set<String> sessionAddedIds; // Tracks beans added during this session
+  final Set<String> sessionAddedIds; // Tracks beans newly created during this session
+  final Set<String> sessionUpdatedIds; // Tracks beans updated during this session
   final Set<String> selectedDiscoveredUrls; // Selection in the wizard bulk list
 
   const AdminBeanListState({
@@ -36,6 +45,8 @@ class AdminBeanListState extends Equatable {
     this.filteredBeans = const [],
     this.searchQuery = '',
     this.activeFilter = 'all',
+    this.sortBy = AdminBeanSortOption.updatedAt,
+    this.sortAscending = false,
     this.errorMessage,
     this.scraperError,
     this.scrapedResult,
@@ -43,6 +54,7 @@ class AdminBeanListState extends Equatable {
     this.scraperMessage,
     this.selectedIds = const {},
     this.sessionAddedIds = const {},
+    this.sessionUpdatedIds = const {},
     this.selectedDiscoveredUrls = const {},
   });
 
@@ -57,6 +69,8 @@ class AdminBeanListState extends Equatable {
     List<Bean>? filteredBeans,
     String? searchQuery,
     String? activeFilter,
+    AdminBeanSortOption? sortBy,
+    bool? sortAscending,
     String? errorMessage,
     String? scraperError,
     ScrapedBean? scrapedResult,
@@ -64,6 +78,7 @@ class AdminBeanListState extends Equatable {
     String? scraperMessage,
     Set<String>? selectedIds,
     Set<String>? sessionAddedIds,
+    Set<String>? sessionUpdatedIds,
     Set<String>? selectedDiscoveredUrls,
   }) {
     return AdminBeanListState(
@@ -73,6 +88,8 @@ class AdminBeanListState extends Equatable {
       filteredBeans: filteredBeans ?? this.filteredBeans,
       searchQuery: searchQuery ?? this.searchQuery,
       activeFilter: activeFilter ?? this.activeFilter,
+      sortBy: sortBy ?? this.sortBy,
+      sortAscending: sortAscending ?? this.sortAscending,
       errorMessage: errorMessage,
       scraperError: scraperError,
       scrapedResult: scrapedResult,
@@ -80,6 +97,7 @@ class AdminBeanListState extends Equatable {
       scraperMessage: scraperMessage,
       selectedIds: selectedIds ?? this.selectedIds,
       sessionAddedIds: sessionAddedIds ?? this.sessionAddedIds,
+      sessionUpdatedIds: sessionUpdatedIds ?? this.sessionUpdatedIds,
       selectedDiscoveredUrls: selectedDiscoveredUrls ?? this.selectedDiscoveredUrls,
     );
   }
@@ -92,6 +110,8 @@ class AdminBeanListState extends Equatable {
         filteredBeans,
         searchQuery,
         activeFilter,
+        sortBy,
+        sortAscending,
         errorMessage,
         scraperError,
         scrapedResult,
@@ -99,6 +119,7 @@ class AdminBeanListState extends Equatable {
         scraperMessage,
         selectedIds,
         sessionAddedIds,
+        sessionUpdatedIds,
         selectedDiscoveredUrls,
       ];
 }

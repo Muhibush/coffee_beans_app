@@ -18,6 +18,7 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
     on<LoadBeans>(_onLoadBeans);
     on<SearchBeans>(_onSearchBeans);
     on<FilterBeans>(_onFilterBeans);
+    on<ChangeSortOption>(_onChangeSortOption);
     on<ScrapeUrl>(_onScrapeUrl);
     on<SaveScrapedBean>(_onSaveScrapedBean);
     on<UpdateBeanStatus>(_onUpdateBeanStatus);
@@ -35,6 +36,7 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
     on<ToggleScraperProductSelection>(_onToggleScraperProductSelection);
     on<ConfirmBulkScrape>(_onConfirmBulkScrape);
     on<CancelScraperWizard>(_onCancelScraperWizard);
+    on<ChangeScraperScope>(_onChangeScraperScope);
   }
 
   Future<void> _onStartScraperWizard(
@@ -91,6 +93,31 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
     emit(state.copyWith(selectedDiscoveredUrls: newSelection));
   }
 
+  void _onChangeScraperScope(
+    ChangeScraperScope event,
+    Emitter<AdminBeanListState> emit,
+  ) {
+    Set<String> newSelection = {};
+    if (event.scope == BulkScrapeScope.all) {
+      newSelection = state.discoveredProducts.map((p) => p.url).toSet();
+    } else {
+      final existingUrls = state.allBeans
+          .expand((b) => b.variants.values.map((v) => v.buyUrl))
+          .toSet();
+
+      for (var product in state.discoveredProducts) {
+        final exists = existingUrls.contains(product.url);
+        if (event.scope == BulkScrapeScope.newOnly && !exists) {
+          newSelection.add(product.url);
+        } else if (event.scope == BulkScrapeScope.updateOnly && exists) {
+          newSelection.add(product.url);
+        }
+      }
+    }
+    emit(state.copyWith(selectedDiscoveredUrls: newSelection));
+  }
+
+
   Future<void> _onConfirmBulkScrape(
     ConfirmBulkScrape event,
     Emitter<AdminBeanListState> emit,
@@ -119,6 +146,7 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
       int errorCount = 0;
       int skippedCount = 0;
       final sessionAddedIds = <String>{};
+      final sessionUpdatedIds = <String>{};
 
       // Build registries for fast lookup and skipping
       final currentBeans = await repository.fetchBeans(event.roasteryId);
@@ -155,14 +183,18 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
           final fingerprint = '${event.roasteryId}_$slug';
 
           // 2. Post-scrape Scope Filtering
-          if (event.scope == BulkScrapeScope.newOnly &&
-              existingFingerprints.contains(fingerprint)) {
+          final isExisting = existingFingerprints.contains(fingerprint);
+          if (event.scope == BulkScrapeScope.newOnly && isExisting) {
             skippedCount++;
             continue;
           }
 
           final bean = await repository.insertScrapedBean(event.roasteryId, scraped);
-          sessionAddedIds.add(bean.id);
+          if (isExisting) {
+            sessionUpdatedIds.add(bean.id);
+          } else {
+            sessionAddedIds.add(bean.id);
+          }
           successCount++;
         } catch (e) {
           errorCount++;
@@ -179,6 +211,7 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
         allBeans: beans,
         filteredBeans: beans,
         sessionAddedIds: {...state.sessionAddedIds, ...sessionAddedIds},
+        sessionUpdatedIds: {...state.sessionUpdatedIds, ...sessionUpdatedIds},
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -402,7 +435,24 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
     }
   }
 
-  void _applyFilters(Emitter<AdminBeanListState> emit) {
+  void _onChangeSortOption(
+    ChangeSortOption event,
+    Emitter<AdminBeanListState> emit,
+  ) {
+    emit(state.copyWith(
+      sortBy: event.sortOption,
+      sortAscending: event.isAscending,
+    ));
+    // Since sort is updated in state, we must pass the new state fields 
+    // to apply the sort properly. Re-evaluate against the current emission:
+    _applyFilters(emit, overrideSortBy: event.sortOption, overrideAsc: event.isAscending);
+  }
+
+  void _applyFilters(
+    Emitter<AdminBeanListState> emit, {
+    AdminBeanSortOption? overrideSortBy,
+    bool? overrideAsc,
+  }) {
     var filtered = List<Bean>.from(state.allBeans);
 
     if (state.activeFilter != 'all') {
@@ -415,6 +465,29 @@ class AdminBeanListBloc extends Bloc<AdminBeanListEvent, AdminBeanListState> {
         return b.cleanName.toLowerCase().contains(query);
       }).toList();
     }
+
+    final sortBy = overrideSortBy ?? state.sortBy;
+    final sortAsc = overrideAsc ?? state.sortAscending;
+
+    filtered.sort((a, b) {
+      int comparison = 0;
+      switch (sortBy) {
+        case AdminBeanSortOption.name:
+          comparison = a.cleanName.compareTo(b.cleanName);
+          break;
+        case AdminBeanSortOption.createdAt:
+          final aDate = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+          final bDate = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+          comparison = aDate.compareTo(bDate);
+          break;
+        case AdminBeanSortOption.updatedAt:
+          final aDate = a.updatedAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+          final bDate = b.updatedAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+          comparison = aDate.compareTo(bDate);
+          break;
+      }
+      return sortAsc ? comparison : -comparison;
+    });
 
     emit(state.copyWith(filteredBeans: filtered));
   }

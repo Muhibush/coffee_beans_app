@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:coffee_beans_app/widget/status_badge.dart';
 
 class AdminBeanCard extends StatelessWidget {
   final String title;
@@ -12,6 +13,9 @@ class AdminBeanCard extends StatelessWidget {
   final bool isSelected;
   final ValueChanged<bool?>? onSelectedChanged;
 
+  // Badge for session actions
+  final String? sessionBadge;
+
   const AdminBeanCard({
     super.key,
     required this.title,
@@ -22,31 +26,30 @@ class AdminBeanCard extends StatelessWidget {
     this.isSelectionMode = false,
     this.isSelected = false,
     this.onSelectedChanged,
+    this.sessionBadge,
   });
 
-  Color _getStatusBgColor(ColorScheme colorScheme) {
+  StatusBadge _buildStatusBadge(ColorScheme colorScheme) {
     switch (status.toLowerCase()) {
       case 'published':
-        return Colors.green.withValues(alpha: 0.1);
+        return StatusBadge(
+          label: 'PUBLISHED',
+          backgroundColor: colorScheme.primaryContainer,
+          textColor: colorScheme.onPrimary,
+        );
       case 'draft':
-        return Colors.amber.withValues(alpha: 0.1);
+        return StatusBadge(
+          label: 'DRAFT',
+          backgroundColor: colorScheme.secondaryContainer,
+          textColor: colorScheme.onSecondaryContainer,
+        );
       case 'unpublished':
-        return colorScheme.outlineVariant.withValues(alpha: 0.2);
       default:
-        return colorScheme.outlineVariant.withValues(alpha: 0.2);
-    }
-  }
-
-  Color _getStatusTextColor(ColorScheme colorScheme) {
-    switch (status.toLowerCase()) {
-      case 'published':
-        return Colors.green.shade700;
-      case 'draft':
-        return Colors.amber.shade900;
-      case 'unpublished':
-        return colorScheme.outline;
-      default:
-        return colorScheme.outline;
+        return StatusBadge(
+          label: status.toUpperCase(),
+          backgroundColor: colorScheme.surfaceContainerHighest,
+          textColor: colorScheme.onSurfaceVariant,
+        );
     }
   }
 
@@ -66,12 +69,22 @@ class AdminBeanCard extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: isSelected 
-                ? colorScheme.primaryContainer.withValues(alpha: 0.3)
+                ? colorScheme.primaryContainer.withValues(alpha: 0.1)
                 : colorScheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12),
-            border: isSelected 
-                ? Border.all(color: colorScheme.primary.withValues(alpha: 0.5), width: 1)
-                : Border.all(color: Colors.transparent, width: 1),
+            border: Border.all(
+              color: isSelected 
+                  ? colorScheme.primary.withValues(alpha: 0.4)
+                  : colorScheme.outlineVariant.withValues(alpha: 0.2),
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: colorScheme.onSurface.withValues(alpha: 0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -89,17 +102,20 @@ class AdminBeanCard extends StatelessWidget {
               // Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: imageUrl.isNotEmpty
-                    ? Image.network(
-                        imageUrl,
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return _buildPlaceholder(colorScheme);
-                        },
-                      )
-                    : _buildPlaceholder(colorScheme),
+                child: Hero(
+                  tag: 'bean_image_$title',
+                  child: imageUrl.isNotEmpty
+                      ? Image.network(
+                          imageUrl,
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return _buildPlaceholder(colorScheme);
+                          },
+                        )
+                      : _buildPlaceholder(colorScheme),
+                ),
               ),
               const SizedBox(width: 16),
               
@@ -110,33 +126,43 @@ class AdminBeanCard extends StatelessWidget {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Text(
                             title,
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             ),
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: _getStatusBgColor(colorScheme),
-                            borderRadius: BorderRadius.circular(9999),
-                          ),
-                          child: Text(
-                            status.toUpperCase(),
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.5,
-                              color: _getStatusTextColor(colorScheme),
-                            ),
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            if (sessionBadge != null) ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                margin: const EdgeInsets.only(bottom: 4),
+                                decoration: BoxDecoration(
+                                  color: colorScheme.primary,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  sessionBadge!,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.bold,
+                                    color: colorScheme.onPrimary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            _buildStatusBadge(colorScheme),
+                          ],
                         ),
                       ],
                     ),
@@ -145,7 +171,8 @@ class AdminBeanCard extends StatelessWidget {
                       price,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
                       ),
                     ),
                   ],
@@ -163,10 +190,14 @@ class AdminBeanCard extends StatelessWidget {
       width: 80,
       height: 80,
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHigh,
+        color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Icon(Icons.coffee_rounded, color: colorScheme.onSurfaceVariant),
+      child: Icon(
+        Icons.coffee_rounded, 
+        color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+        size: 32,
+      ),
     );
   }
 }

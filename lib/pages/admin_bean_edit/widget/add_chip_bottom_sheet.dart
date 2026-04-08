@@ -23,8 +23,9 @@ class AddChipBottomSheet extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: theme.scaffoldBackgroundColor,
+      barrierColor: theme.colorScheme.scrim.withValues(alpha: 0.3),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24.0)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32.0)),
       ),
       builder: (context) => AddChipBottomSheet(
         title: title,
@@ -77,75 +78,150 @@ class _AddChipBottomSheetState extends State<AddChipBottomSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.6,
+          maxHeight: MediaQuery.of(context).size.height * 0.7,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   widget.title,
-                  style: theme.textTheme.titleLarge,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.close),
+                const Spacer(),
+                IconButton.filledTonal(
+                  icon: const Icon(Icons.close_rounded, size: 20),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             TextField(
               controller: _controller,
               onChanged: _filterOptions,
               onSubmitted: _submit,
+              autofocus: true,
+              style: theme.textTheme.bodyLarge,
               decoration: InputDecoration(
-                hintText: 'Type or select...',
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                hintText: 'Type to filter or add new...',
+                prefixIcon: const Icon(Icons.search_rounded),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
                 fillColor: colorScheme.surfaceContainerLow,
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.check, color: colorScheme.primary),
-                  onPressed: () => _submit(_controller.text),
-                ),
+                suffixIcon: _controller.text.isNotEmpty
+                    ? IconButton(
+                        icon: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.add_rounded, color: colorScheme.onPrimary, size: 20),
+                        ),
+                        onPressed: () => _submit(_controller.text),
+                      )
+                    : null,
               ),
             ),
-            const SizedBox(height: 16),
-            if (_filteredOptions.isNotEmpty)
-              Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: _filteredOptions.length,
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: (context, index) {
-                    final option = _filteredOptions[index];
-                    return ListTile(
-                      title: Text(option, style: theme.textTheme.bodyMedium),
-                      onTap: () => _submit(option),
-                    );
-                  },
-                ),
-              )
-            else
-              const Expanded(
-                child: Center(
-                  child: Text('No options found. Type to add a new one.'),
-                ),
+            const SizedBox(height: 24),
+            Text(
+              'SUGGESTED OPTIONS',
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                letterSpacing: 1.2,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: _filteredOptions.isNotEmpty
+                  ? ListView.separated(
+                      padding: EdgeInsets.zero,
+                      itemCount: _filteredOptions.length,
+                      separatorBuilder: (context, index) => const SizedBox(height: 8),
+                      itemBuilder: (context, index) {
+                        final option = _filteredOptions[index];
+                        return Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => _submit(option),
+                            borderRadius: BorderRadius.circular(12),
+                            child: Ink(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                              decoration: BoxDecoration(
+                                color: colorScheme.surfaceContainerLowest,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: colorScheme.surfaceContainer),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    option,
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      color: colorScheme.onSurface,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 14,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 40),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.info_outline_rounded,
+                                size: 40, color: colorScheme.outlineVariant),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No matching options found.\nHit enter or tap the + button to add.',
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+            ),
           ],
         ),
       ),

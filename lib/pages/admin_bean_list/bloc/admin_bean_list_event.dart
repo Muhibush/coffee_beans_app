@@ -1,4 +1,5 @@
 import '../../../model/scraped_bean_model.dart';
+import 'admin_bean_list_state.dart';
 
 abstract class AdminBeanListEvent {}
 
@@ -15,6 +16,15 @@ class SearchBeans extends AdminBeanListEvent {
 class FilterBeans extends AdminBeanListEvent {
   final String filter;
   FilterBeans(this.filter);
+}
+
+class ChangeSortOption extends AdminBeanListEvent {
+  final AdminBeanSortOption sortOption;
+  final bool isAscending;
+  ChangeSortOption({
+    required this.sortOption,
+    required this.isAscending,
+  });
 }
 
 class ScrapeUrl extends AdminBeanListEvent {
@@ -92,6 +102,11 @@ class StartScraperWizard extends AdminBeanListEvent {
 class ToggleScraperProductSelection extends AdminBeanListEvent {
   final ScraperProduct product;
   ToggleScraperProductSelection(this.product);
+}
+
+class ChangeScraperScope extends AdminBeanListEvent {
+  final BulkScrapeScope scope;
+  ChangeScraperScope(this.scope);
 }
 
 class ConfirmBulkScrape extends AdminBeanListEvent {

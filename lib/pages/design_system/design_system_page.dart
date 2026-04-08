@@ -206,10 +206,16 @@ class _ComponentSection extends StatelessWidget {
         Text('Status Badge', style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 12),
         Row(
-          children: const [
-            StatusBadge(isActive: true),
-            SizedBox(width: 8),
-            StatusBadge(isActive: false),
+          children: [
+            StatusBadge.roastery(isActive: true, colorScheme: colorScheme),
+            const SizedBox(width: 8),
+            StatusBadge.roastery(isActive: false, colorScheme: colorScheme),
+            const SizedBox(width: 16),
+            StatusBadge(
+              label: 'DRAFT',
+              backgroundColor: colorScheme.tertiaryContainer,
+              textColor: colorScheme.onTertiaryContainer,
+            ),
           ],
         ),
         const SizedBox(height: 24),
