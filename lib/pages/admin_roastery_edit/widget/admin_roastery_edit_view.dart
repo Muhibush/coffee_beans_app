@@ -54,7 +54,9 @@ class AdminRoasteryEditView extends StatelessWidget {
         return Scaffold(
           backgroundColor: theme.scaffoldBackgroundColor,
           appBar: AppBar(
-            backgroundColor: theme.scaffoldBackgroundColor.withValues(alpha: 0.9),
+            backgroundColor: theme.scaffoldBackgroundColor.withValues(
+              alpha: 0.9,
+            ),
             elevation: 0,
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: colorScheme.primary),
@@ -66,7 +68,7 @@ class AdminRoasteryEditView extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            centerTitle: true,
+            centerTitle: false,
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.only(
@@ -94,9 +96,9 @@ class AdminRoasteryEditView extends StatelessWidget {
                         Text(
                           'Danger Zone',
                           style: textTheme.titleMedium?.copyWith(
-                                color: colorScheme.error,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            color: colorScheme.error,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -105,12 +107,14 @@ class AdminRoasteryEditView extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         FilledButton.tonal(
-                          onPressed: state.status == AdminRoasteryEditStatus.saving ||
-                                  state.status == AdminRoasteryEditStatus.loading
-                               ? null
-                               : () => context.read<AdminRoasteryEditBloc>().add(
-                                     DeleteRoastery(),
-                                   ),
+                          onPressed:
+                              state.status == AdminRoasteryEditStatus.saving ||
+                                  state.status ==
+                                      AdminRoasteryEditStatus.loading
+                              ? null
+                              : () => context.read<AdminRoasteryEditBloc>().add(
+                                  DeleteRoastery(),
+                                ),
                           style: FilledButton.styleFrom(
                             backgroundColor: colorScheme.errorContainer,
                             foregroundColor: colorScheme.onErrorContainer,
@@ -171,8 +175,9 @@ class AdminRoasteryEditView extends StatelessWidget {
                         const SizedBox(height: 12),
                         Text(
                           'Long press to set logo',
-                          style: theme.textTheme.bodyMedium
-                              ?.copyWith(color: colorScheme.outline),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.outline,
+                          ),
                         ),
                       ],
                     ),
@@ -247,7 +252,9 @@ class AdminRoasteryEditView extends StatelessWidget {
               city.isEmpty ? 'Select a city' : city,
               style: textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w500,
-                color: city.isEmpty ? colorScheme.outline : colorScheme.onSurface,
+                color: city.isEmpty
+                    ? colorScheme.outline
+                    : colorScheme.onSurface,
               ),
             ),
           ),
@@ -453,7 +460,8 @@ class AdminRoasteryEditView extends StatelessWidget {
             Expanded(
               flex: 1,
               child: OutlinedButton.icon(
-                onPressed: () => context.push('/admin/roastery/${state.roastery!.id}/beans'),
+                onPressed: () =>
+                    context.push('/admin/roastery/${state.roastery!.id}/beans'),
                 icon: const Icon(Icons.inventory_2_outlined, size: 20),
                 label: const Text('Beans'),
               ),

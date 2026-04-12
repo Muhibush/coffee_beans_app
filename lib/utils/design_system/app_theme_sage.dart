@@ -121,6 +121,38 @@ class AppThemeSage {
         ),
       ),
 
+      // ── Text Button ──
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: AppColorsSage.primary,
+          textStyle: textTheme.labelLarge,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusLg),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        ),
+      ),
+
+      // ── Elevated Button ──
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColorsSage.surfaceContainerLow,
+          foregroundColor: AppColorsSage.primary,
+          textStyle: textTheme.labelLarge,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusLg),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          elevation: 0,
+        ).copyWith(
+          elevation: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.pressed)) return 0;
+            if (states.contains(WidgetState.hovered)) return 1;
+            return 0;
+          }),
+        ),
+      ),
+
       // ── Divider ──
       dividerTheme: const DividerThemeData(
         color: AppColorsSage.surfaceVariant,

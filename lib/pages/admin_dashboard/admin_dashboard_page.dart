@@ -23,9 +23,9 @@ class AdminDashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AdminDashboardBloc(
-        repository: AdminDashboardRepository(),
-      )..add(LoadRoasteries()),
+      create: (context) =>
+          AdminDashboardBloc(repository: AdminDashboardRepository())
+            ..add(LoadRoasteries()),
       child: const _AdminDashboardView(),
     );
   }
@@ -52,7 +52,6 @@ class _AdminDashboardViewState extends State<_AdminDashboardView> {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<AdminDashboardBloc, AdminDashboardState>(
       builder: (context, state) {
         final filtered = state.filteredRoasteries;
@@ -74,7 +73,10 @@ class _AdminDashboardViewState extends State<_AdminDashboardView> {
                   filters: const [
                     FilterOption(label: 'All', value: RoasteryFilter.all),
                     FilterOption(label: 'Active', value: RoasteryFilter.active),
-                    FilterOption(label: 'Inactive', value: RoasteryFilter.inactive),
+                    FilterOption(
+                      label: 'Inactive',
+                      value: RoasteryFilter.inactive,
+                    ),
                   ],
                   onFilterChanged: (f) {
                     setState(() => _activeFilter = f);
@@ -83,9 +85,7 @@ class _AdminDashboardViewState extends State<_AdminDashboardView> {
                     );
                   },
                   onSearchChanged: (q) {
-                    context.read<AdminDashboardBloc>().add(
-                      SearchRoasteries(q),
-                    );
+                    context.read<AdminDashboardBloc>().add(SearchRoasteries(q));
                   },
                   resultCount: filtered.length,
                 ),
@@ -169,7 +169,10 @@ class _AdminDashboardViewState extends State<_AdminDashboardView> {
     );
   }
 
-  Widget _buildDashboardHeader(BuildContext context, AdminDashboardState state) {
+  Widget _buildDashboardHeader(
+    BuildContext context,
+    AdminDashboardState state,
+  ) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -234,16 +237,24 @@ class _AdminDashboardViewState extends State<_AdminDashboardView> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.search_off_rounded, size: 64, color: colorScheme.outlineVariant),
+          Icon(
+            Icons.search_off_rounded,
+            size: 64,
+            color: colorScheme.outlineVariant,
+          ),
           const SizedBox(height: 16),
           Text(
             'No roasteries found',
-            style: theme.textTheme.titleMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             'Try adjusting your search or filters',
-            style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.outline,
+            ),
           ),
         ],
       ),
@@ -261,17 +272,22 @@ class _AdminDashboardViewState extends State<_AdminDashboardView> {
           const SizedBox(height: 16),
           Text(
             'Failed to load roasteries',
-            style: theme.textTheme.titleMedium?.copyWith(color: colorScheme.error),
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: colorScheme.error,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             message ?? 'Unknown error',
-            style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.outline),
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.outline,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
           FilledButton.tonal(
-            onPressed: () => context.read<AdminDashboardBloc>().add(LoadRoasteries()),
+            onPressed: () =>
+                context.read<AdminDashboardBloc>().add(LoadRoasteries()),
             child: const Text('Retry'),
           ),
         ],

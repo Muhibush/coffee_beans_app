@@ -7,7 +7,7 @@ class AdminBeanCard extends StatelessWidget {
   final String imageUrl;
   final String status;
   final VoidCallback? onTap;
-  
+
   // Selection support
   final bool? isSelectionMode;
   final bool isSelected;
@@ -57,23 +57,26 @@ class AdminBeanCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        onLongPress: onSelectedChanged != null ? () => onSelectedChanged!(!isSelected) : null,
+        onLongPress: onSelectedChanged != null
+            ? () => onSelectedChanged!(!isSelected)
+            : null,
         borderRadius: BorderRadius.circular(12),
         hoverColor: colorScheme.surfaceContainerLow,
         child: Container(
+          height: 104,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: isSelected 
+            color: isSelected
                 ? colorScheme.primaryContainer.withValues(alpha: 0.1)
                 : colorScheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isSelected 
+              color: isSelected
                   ? colorScheme.primary.withValues(alpha: 0.4)
                   : colorScheme.outlineVariant.withValues(alpha: 0.2),
               width: 1,
@@ -89,16 +92,6 @@ class AdminBeanCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Selection Checkbox
-              if (isSelectionMode == true) ...[
-                Checkbox(
-                  value: isSelected,
-                  onChanged: onSelectedChanged,
-                  visualDensity: VisualDensity.compact,
-                ),
-                const SizedBox(width: 8),
-              ],
-
               // Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
@@ -118,62 +111,59 @@ class AdminBeanCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              
+
               // Info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+
+                    _buildStatusBadge(colorScheme),
+                    const SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                        Text(
+                          price,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: colorScheme.primary,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            if (sessionBadge != null) ...[
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                margin: const EdgeInsets.only(bottom: 4),
-                                decoration: BoxDecoration(
-                                  color: colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  sessionBadge!,
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold,
-                                    color: colorScheme.onPrimary,
-                                  ),
-                                ),
+
+                        if (sessionBadge != null) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            margin: const EdgeInsets.only(bottom: 4),
+                            decoration: BoxDecoration(
+                              color: colorScheme.primary,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              sessionBadge!,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.onPrimary,
                               ),
-                            ],
-                            _buildStatusBadge(colorScheme),
-                          ],
-                        ),
+                            ),
+                          ),
+                        ],
                       ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      price,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16,
-                      ),
                     ),
                   ],
                 ),
@@ -194,7 +184,7 @@ class AdminBeanCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(
-        Icons.coffee_rounded, 
+        Icons.coffee_rounded,
         color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
         size: 32,
       ),

@@ -1,61 +1,1010 @@
 {
     "success": true,
-    "data": {
-        "clean_name": "Watermelon Smash Natural",
-        "image_url": "https://p16-images-sign-sg.tokopedia-static.net/tos-alisg-i-aphluv4xwc-sg/44c35f8ea27944c18964c974cdd2dd9d~tplv-aphluv4xwc-resize-jpeg:700:0.jpeg?lk3s=0ccea506\u0026x-expires=1775037802\u0026x-signature=vKcmM0NICT5X0aeA5sNg7BM8GDk%3D\u0026x-signature-webp=TC2%2BegQ%2FALtEkIyijF3Rf%2BCZpQg%3D",
-        "process": "Anaerobic Natural",
-        "roast_level": "Light",
-        "variety": [
-            "Mix Variety"
-        ],
-        "notes": [
-            "Berry",
-            "Strawberry",
-            "Watermelon",
-            "Melon",
-            "Orange"
-        ],
-        "origin": "Java",
-        "altitude": "1500 masl",
-        "description": "HALAL ID32110016691860324P-IRT3083273010347-27Origin:Kamojang,WestjavaProses: Anaerobic NaturalVariety:MixvarietyAltitude:1500maslRoasted:LightRoastTastingnotes:Watermelon,Strawberry,MandarinOrangeBijikopidapatlangsungdigilinglangsungsesuaipermintaan:-GilingEspresso-GilingKasar-GilingMedium-GilingHalus-GIlingV60(disesuaikandenganresepyangandadapat)PENTING!SemuaPesananyangmasuklewatdarijam3soreAKANDIKIRIMKEESOKANharinya.KAMIAKANBERIKAN8grFREESAMPLEBEANS!SEBAGAIBENTUKPENYESUAIANKARENAHARGABAHANBAKUSEMAKINMENINGKAT,FREESAMPLEUNTUKCUPPINGAKANKAMIBERIKANSEBANYAK8gr.Silahkanpilih1beansdariprodukyangadadietalasetokokamidantulisdicatatansaatcheckoutpesanan(beansdietalasespecialreleasetidakbisadipilihuntuksample)#GreatCoffeeForGreatPeoplePenting!Fotoproduk,desainprodukdapatberubahtanpaadapemberitahuan,karenasesuaistokkemasankopiyangada.terimakasih.",
-        "variants": {
-            "100g": {
-                "price": 96570,
-                "buy_url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-watermelon-smash-100-gram-natural-biji-bubuk-biji",
-                "marketplace": "tokopedia"
-            }
+    "products": [
+        {
+            "title": "biji kopi arabika kerinci lactic natural 1 kg single origin coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-kerinci-lactic-natural-1-kg-single-origin-coffee-1734920425645310979-1734920463095858179"
         },
-        "source": "tokopedia",
-        "source_url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-watermelon-smash-100-gram-natural-biji-bubuk-biji"
-    }
-}
-
-
-
-{
-    "success": true,
-    "urls": [
-        "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-kerinci-lactic-natural-1-kg-single-origin-coffee-1734920425645310979-1734920463095858179?extParam=src%3Dshop%26whid%3D6698918\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-kerinci-lactic-natural-500-gr-single-origin-coffee-1734920390304957443-1734920390814368771?extParam=src%3Dshop%26whid%3D6698918\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-kerinci-lactic-natural-100-gr-single-origin-coffee-1734920239065564163-1734920387665101827?extParam=src%3Dshop%26whid%3D6698918\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/fugolcoffee/kopi-arabika-watermelon-smash-100-gram-natural-biji-bubuk-1734919725647561731-1734919735422518275?extParam=src%3Dshop%26whid%3D6698918\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/fugolcoffee/kopi-arabica-colombia-la-miel-java-specialty-single-origin-coffee-1734826280680260611-1734826039184819203?extParam=src%3Dshop%26whid%3D6698918\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/fugolcoffee/kopi-arabica-colombia-narino-anaerobic-honey-cattura-specialty-single-origin-coffee-1734693139179799555-1734693142225191939?extParam=src%3Dshop%26whid%3D6698918\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/fugolcoffee/kopi-arabica-colombia-inmaculada-pink-bourbon-specialty-single-origin-coffee-1734586877184082947-1734586995859424259?extParam=src%3Dshop%26whid%3D6698918\u0026aff_unique_id=\u0026channel=others\u0026chain_key="
+        {
+            "title": "biji kopi arabika kerinci lactic natural 500 gr single origin coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-kerinci-lactic-natural-500-gr-single-origin-coffee-1734920390304957443-1734920390814368771"
+        },
+        {
+            "title": "biji kopi arabika kerinci lactic natural 100 gr single origin coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-kerinci-lactic-natural-100-gr-single-origin-coffee-1734920239065564163-1734920387665101827"
+        },
+        {
+            "title": "kopi arabika watermelon smash 100 gram natural biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-watermelon-smash-100-gram-natural-biji-bubuk-1734919725647561731-1734919735422518275"
+        },
+        {
+            "title": "kopi arabica colombia la miel java specialty single origin coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-colombia-la-miel-java-specialty-single-origin-coffee-1734826280680260611-1734826039184819203"
+        },
+        {
+            "title": "kopi arabica colombia narino anaerobic honey cattura specialty single origin coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-colombia-narino-anaerobic-honey-cattura-specialty-single-origin-coffee-1734693139179799555-1734693142225191939"
+        },
+        {
+            "title": "kopi arabica colombia inmaculada pink bourbon specialty single origin coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-colombia-inmaculada-pink-bourbon-specialty-single-origin-coffee-1734586877184082947-1734586995859424259"
+        },
+        {
+            "title": "kopi arabica colombia inmaculada pink bourbon specialty single origin coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-colombia-inmaculada-pink-bourbon-specialty-single-origin-coffee-1734472695173186563"
+        },
+        {
+            "title": "kopi arabica colombia pink bourbon decaf specialty single origin coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-colombia-pink-bourbon-decaf-specialty-single-origin-coffee-1734440951006462979"
+        },
+        {
+            "title": "biji kopi arabika sweet love blend 200 gr specialty coffee bean",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-sweet-love-blend-200-gr-specialty-coffee-bean-1729581837877806083"
+        },
+        {
+            "title": "biji kopi arabica west java finca de berman cm hypoxia specialty coffee beans biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-west-java-finca-de-berman-cm-hypoxia-specialty-coffee-beans-biji-bubuk-1734355776730858499"
+        },
+        {
+            "title": "biji kopi arabica west java finca de berman wet hulled mossto specialty coffee beans biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-west-java-finca-de-berman-wet-hulled-mossto-specialty-coffee-beans-biji-bubuk-1734355658183050243"
+        },
+        {
+            "title": "biji kopi arabica west java finca de berman anaerobic honey specialty coffee beans biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-west-java-finca-de-berman-anaerobic-honey-specialty-coffee-beans-biji-bubuk-1734355644092285955"
+        },
+        {
+            "title": "biji kopi arabica west java finca de berman full washed specialty coffee beans biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-west-java-finca-de-berman-full-washed-specialty-coffee-beans-biji-bubuk-1734355385479562243"
+        },
+        {
+            "title": "biji kopi arabica west java finca de berman natural specialty coffee beans biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-west-java-finca-de-berman-natural-specialty-coffee-beans-biji-bubuk-1734355380682130435"
+        },
+        {
+            "title": "kopi arabika east java finca suprapto 150gr single origin specialty coffee arabica beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-east-java-finca-suprapto-150gr-single-origin-specialty-coffee-arabica-beans-1734318839408919555"
+        },
+        {
+            "title": "kopi arabica ethiopia nensebo refisa washed specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-ethiopia-nensebo-refisa-washed-specialty-single-origin-1734246589804479491"
+        },
+        {
+            "title": "kopi arabika sulawesi latimojong washed 1 kg specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-sulawesi-latimojong-washed-1-kg-specialty-coffee-1734127674031375363"
+        },
+        {
+            "title": "biji kopi arabika sulawesi latimojong washed 500 gram specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-sulawesi-latimojong-washed-500-gram-specialty-coffee-1734127688779203587"
+        },
+        {
+            "title": "kopi arabika sulawesi latimojong wahsed 200 gram specialty coffee biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-sulawesi-latimojong-wahsed-200-gram-specialty-coffee-biji-bubuk-1734127654927041539"
+        },
+        {
+            "title": "kopi arabika sulawesi latimojong washed 100 gram specialty coffee biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-sulawesi-latimojong-washed-100-gram-specialty-coffee-biji-bubuk-1734127560902345731"
+        },
+        {
+            "title": "biji kopi arabica finca don obar yellow bourbon natural 150gr specialty arabica coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-finca-don-obar-yellow-bourbon-natural-150gr-specialty-arabica-coffee-beans-1734024047766242307"
+        },
+        {
+            "title": "biji kopi arabica colombia pink bourbon la carolina tropical natural specialty arabica coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-colombia-pink-bourbon-la-carolina-tropical-natural-specialty-arabica-coffee-beans-1733918135928980483"
+        },
+        {
+            "title": "colombia la miel wush wush natural specialty arabica coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/colombia-la-miel-wush-wush-natural-specialty-arabica-coffee-beans-1733812032599065603"
+        },
+        {
+            "title": "kopi arabica ethiopia aricha adorsi specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-ethiopia-aricha-adorsi-specialty-single-origin-1733715330470740995"
+        },
+        {
+            "title": "gift card box christmas edition coffee add on",
+            "url": "https://www.tokopedia.com/fugolcoffee/gift-card-box-christmas-edition-coffee-add-on-1733668235392353283"
+        },
+        {
+            "title": "kopi arabica pangalengan anaerobic natural 1 kg specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-pangalengan-anaerobic-natural-1-kg-specialty-single-origin-1733619801264784387"
+        },
+        {
+            "title": "kopi arabica pangalengan anaerobic natural 500 gram specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-pangalengan-anaerobic-natural-500-gram-specialty-single-origin-1733619792611148803"
+        },
+        {
+            "title": "kopi arabica pangalengan anaerobic natural 200 gram specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-pangalengan-anaerobic-natural-200-gram-specialty-single-origin-1733619699380552707"
+        },
+        {
+            "title": "kopi arabica pangalengan anaerobic natural 100 gram specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-pangalengan-anaerobic-natural-100-gram-specialty-single-origin-1733619692135744515"
+        },
+        {
+            "title": "biji kopi arabica colombia papayo inmaculada natural specialty arabica coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-colombia-papayo-inmaculada-natural-specialty-arabica-coffee-beans-1733549379657171971"
+        },
+        {
+            "title": "biji kopi arabika peru lenin flores washed 200gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-peru-lenin-flores-washed-200gr-single-origin-specialty-coffee-beans-1733413454256112643"
+        },
+        {
+            "title": "biji kopi arabika peru lenin flores washed 500gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-peru-lenin-flores-washed-500gr-single-origin-specialty-coffee-beans-1733413348770677763"
+        },
+        {
+            "title": "biji kopi arabika peru lenin flores washed 150gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-peru-lenin-flores-washed-150gr-single-origin-specialty-coffee-beans-1733413308732834819"
+        },
+        {
+            "title": "biji kopi arabika peru lenin flores washed 100gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-peru-lenin-flores-washed-100gr-single-origin-specialty-coffee-beans-1733413303985538051"
+        },
+        {
+            "title": "baju kaos tshirt fugol coffee roasters typographic great coffee for great people special edition fugol est 2019",
+            "url": "https://www.tokopedia.com/fugolcoffee/baju-kaos-tshirt-fugol-coffee-roasters-typographic-great-coffee-for-great-people-special-edition-fugol-est-2019-1733252787408307203"
+        },
+        {
+            "title": "baju kaos tshirt fugol coffee roasters graphic hitam compass special edition fugol art 3 compass",
+            "url": "https://www.tokopedia.com/fugolcoffee/baju-kaos-tshirt-fugol-coffee-roasters-graphic-hitam-compass-special-edition-fugol-art-3-compass-1733252649666511875"
+        },
+        {
+            "title": "baju kaos tshirt fugol coffee roasters graphic set your goals high special edition fugol art 2 set you goals high",
+            "url": "https://www.tokopedia.com/fugolcoffee/baju-kaos-tshirt-fugol-coffee-roasters-graphic-set-your-goals-high-special-edition-fugol-art-2-set-you-goals-high-1733251595460772867"
+        },
+        {
+            "title": "baju olahraga kaos jersey sepak bola fugol special edition jersey fugol coffee roasters",
+            "url": "https://www.tokopedia.com/fugolcoffee/baju-olahraga-kaos-jersey-sepak-bola-fugol-special-edition-jersey-fugol-coffee-roasters-1733249905185620995"
+        },
+        {
+            "title": "biji kopi arabica competition coffee series panama geisha finca deborah symmetry carbonic maceration natural x wonosalam excels anaerobic natural",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-competition-coffee-series-panama-geisha-finca-deborah-symmetry-carbonic-maceration-natural-x-wonosalam-excels-anaerobic-natural-1733162517039186947"
+        },
+        {
+            "title": "baju kaos tshirt fugol coffee roasters graphic great coffee for great people special edition fugol art 1 gcfgp",
+            "url": "https://www.tokopedia.com/fugolcoffee/baju-kaos-tshirt-fugol-coffee-roasters-graphic-great-coffee-for-great-people-special-edition-fugol-art-1-gcfgp-1733173533550543875"
+        },
+        {
+            "title": "fugol kaos kaki socks ankle mid calf kaus kaki fugol coffee roasters",
+            "url": "https://www.tokopedia.com/fugolcoffee/fugol-kaos-kaki-socks-ankle-mid-calf-kaus-kaki-fugol-coffee-roasters-1733159801101911043"
+        },
+        {
+            "title": "quminy sling bag fugol coffee roasters x artch tas selempang kecil",
+            "url": "https://www.tokopedia.com/fugolcoffee/quminy-sling-bag-fugol-coffee-roasters-x-artch-tas-selempang-kecil-1733157501204857859"
+        },
+        {
+            "title": "biji kopi wonosalam excelsa natural 100 gr single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-wonosalam-excelsa-natural-100-gr-single-origin-1733157531530658819"
+        },
+        {
+            "title": "dompet breezy fugol coffee roasters x artch dompet fugol",
+            "url": "https://www.tokopedia.com/fugolcoffee/dompet-breezy-fugol-coffee-roasters-x-artch-dompet-fugol-1733157392395699203"
+        },
+        {
+            "title": "biji kopi arabika gayo avatara cm raisin 150 gr single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-gayo-avatara-cm-raisin-150-gr-single-origin-1733157210216301571"
+        },
+        {
+            "title": "dompet flip fugol coffee roasters x artch dompet kartu dan uang lipat fugol",
+            "url": "https://www.tokopedia.com/fugolcoffee/dompet-flip-fugol-coffee-roasters-x-artch-dompet-kartu-dan-uang-lipat-fugol-1733157037006685187"
+        },
+        {
+            "title": "biji kopi arabika aceh gayo anoxia natural 150 gr single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-aceh-gayo-anoxia-natural-150-gr-single-origin-1733157167743140867"
+        },
+        {
+            "title": "topi fugol coffee roasters fugol sporty panel cap",
+            "url": "https://www.tokopedia.com/fugolcoffee/topi-fugol-coffee-roasters-fugol-sporty-panel-cap-1733151191320134659"
+        },
+        {
+            "title": "biji kopi arabika flores manggarai anerobic washed 150gr specialty coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-flores-manggarai-anerobic-washed-150gr-specialty-coffee-arabica-1733096318887625731"
+        },
+        {
+            "title": "biji kopi arabika ribang gayo natural 150gr specialty coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-ribang-gayo-natural-150gr-specialty-coffee-arabica-1733096231806731267"
+        },
+        {
+            "title": "biji kopi arabica pasuruan gumandar special lot fugol 150gr specialty coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-pasuruan-gumandar-special-lot-fugol-150gr-specialty-coffee-arabica-1733096129327236099"
+        },
+        {
+            "title": "biji kopi arabika brazil fazenda santa maria 100 gram single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-brazil-fazenda-santa-maria-100-gram-single-origin-1732462473410348035"
+        },
+        {
+            "title": "kopi arabika solok bukik gompong honey 100 gram natural biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-solok-bukik-gompong-honey-100-gram-natural-biji-bubuk-1732062734271349763"
+        },
+        {
+            "title": "biji kopi arabika solok bukik gompong honey 500 gram specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-solok-bukik-gompong-honey-500-gram-specialty-coffee-1732062799357379587"
+        },
+        {
+            "title": "kopi arabika solok bukik gompong honey 1 kg natural",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-solok-bukik-gompong-honey-1-kg-natural-1732062818444280835"
+        },
+        {
+            "title": "kopi arabika solok bukik gompong honey 200 gram natural biji bubuk",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-solok-bukik-gompong-honey-200-gram-natural-biji-bubuk-1732062746359727107"
+        },
+        {
+            "title": "kopi arabika solok bukik gompong washed 1 kg specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-solok-bukik-gompong-washed-1-kg-specialty-coffee-beans-1731958163253462019"
+        },
+        {
+            "title": "kopi arabika solok bukik gompong washed 500 gr specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-solok-bukik-gompong-washed-500-gr-specialty-coffee-beans-1731958104916853763"
+        },
+        {
+            "title": "kopi arabika solok bukik gompong washed 200 gr specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-solok-bukik-gompong-washed-200-gr-specialty-coffee-beans-1731958124510217219"
+        },
+        {
+            "title": "kopi arabika solok bukik gompong washed 100 gr specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-solok-bukik-gompong-washed-100-gr-specialty-coffee-beans-1731957903215789059"
+        },
+        {
+            "title": "kopi biji arabica blend 1 kg espresso blend whole beans coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-biji-arabica-blend-1-kg-espresso-blend-whole-beans-coffee-1731927528170619907"
+        },
+        {
+            "title": "biji kopi arabika mantesa bengkulu natural 1 kg single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-mantesa-bengkulu-natural-1-kg-single-origin-specialty-coffee-beans-1731698435254223875"
+        },
+        {
+            "title": "biji kopi arabika mantesa bengkulu natural 500gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-mantesa-bengkulu-natural-500gr-single-origin-specialty-coffee-beans-1731698432158041091"
+        },
+        {
+            "title": "biji kopi arabika mantesa bengkulu natural 200gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-mantesa-bengkulu-natural-200gr-single-origin-specialty-coffee-beans-1731698366576886787"
+        },
+        {
+            "title": "biji kopi arabika mantesa bengkulu natural 100gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-mantesa-bengkulu-natural-100gr-single-origin-specialty-coffee-beans-1731697974451864579"
+        },
+        {
+            "title": "biji kopi arabica finca don obar sigararutang hsh 500gr specialty arabica coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-finca-don-obar-sigararutang-hsh-500gr-specialty-arabica-coffee-beans-1731635337239168003"
+        },
+        {
+            "title": "biji kopi arabica finca don obar sigararutang hsh 200gr specialty arabica coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-finca-don-obar-sigararutang-hsh-200gr-specialty-arabica-coffee-beans-1731634924731204611"
+        },
+        {
+            "title": "biji kopi arabica finca don obar sigararutang hsh 150gr specialty arabica coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-finca-don-obar-sigararutang-hsh-150gr-specialty-arabica-coffee-beans-1731634722195604483"
+        },
+        {
+            "title": "biji kopi berry smash espresso 1 kg espresso blend",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-berry-smash-espresso-1-kg-espresso-blend-1731596976173253635"
+        },
+        {
+            "title": "biji kopi berry smash espresso 500 gram espresso blend",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-berry-smash-espresso-500-gram-espresso-blend-1731596851163857923"
+        },
+        {
+            "title": "biji kopi berry smash espresso 200 gram espresso blend",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-berry-smash-espresso-200-gram-espresso-blend-1731596726901769219"
+        },
+        {
+            "title": "biji kopi arabica kamojang yellow caturra 150gr specialty arabica coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-kamojang-yellow-caturra-150gr-specialty-arabica-coffee-1731533709493240835"
+        },
+        {
+            "title": "biji kopi arabica sumatra kerinci mossto 150gr specialty arabica coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-sumatra-kerinci-mossto-150gr-specialty-arabica-coffee-1731533644157912067"
+        },
+        {
+            "title": "espresso arabusta fruity blend kopi susu special 500 gr",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-arabusta-fruity-blend-kopi-susu-special-500-gr-1729588523671127043"
+        },
+        {
+            "title": "kopi arabika sisola tana luwu anaerobic natural 200 gram specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-sisola-tana-luwu-anaerobic-natural-200-gram-specialty-coffee-beans-1731088551570736131"
+        },
+        {
+            "title": "kopi arabica gayo pantan sinaku 500 gram specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-gayo-pantan-sinaku-500-gram-specialty-single-origin-1731218978389328899"
+        },
+        {
+            "title": "kopi arabika sisola tana luwu anaerobic natural 100 gram specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-sisola-tana-luwu-anaerobic-natural-100-gram-specialty-coffee-beans-1731088143515616259"
+        },
+        {
+            "title": "biji kopi arabica blend 1 kg espresso blend whole beans coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-blend-1-kg-espresso-blend-whole-beans-coffee-1729574070125429763"
+        },
+        {
+            "title": "cherry apple bomb 200 gr natural anaerobic specialty coffee arabica kopi filter",
+            "url": "https://www.tokopedia.com/fugolcoffee/cherry-apple-bomb-200-gr-natural-anaerobic-specialty-coffee-arabica-kopi-filter-1729573295353005059"
+        },
+        {
+            "title": "product",
+            "url": "https://www.tokopedia.com/fugolcoffee/product"
+        },
+        {
+            "title": "biji kopi arabica flores tura jaji 500gr specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-flores-tura-jaji-500gr-specialty-single-origin-1729637859969500163"
+        },
+        {
+            "title": "kopi arabika gayo wine 100gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-gayo-wine-100gr-single-origin-specialty-coffee-beans-1729569564581266435"
+        },
+        {
+            "title": "biji kopi arabica flores tura jaji 200gr specialty single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-flores-tura-jaji-200gr-specialty-single-origin-1729628931037758467"
+        },
+        {
+            "title": "cup tasters kit volume 4 practice like a champion",
+            "url": "https://www.tokopedia.com/fugolcoffee/cup-tasters-kit-volume-4-practice-like-a-champion-1729577760648692739"
+        },
+        {
+            "title": "kopi arabika kobe blend 200gr espresso coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-kobe-blend-200gr-espresso-coffee-arabica-1729567801873040387"
+        },
+        {
+            "title": "espresso kopi susu special 1kg arabusta blend",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-kopi-susu-special-1kg-arabusta-blend-1729574058503144451"
+        },
+        {
+            "title": "week of joy vol 2 specialty arabica coffee drip bag 7 single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/week-of-joy-vol-2-specialty-arabica-coffee-drip-bag-7-single-origin-1729605947760215043"
+        },
+        {
+            "title": "cherry apple bomb 100 gr natural anaerobic specialty coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/cherry-apple-bomb-100-gr-natural-anaerobic-specialty-coffee-arabica-1729573281098531843"
+        },
+        {
+            "title": "es kopi susu 200 gram espresso blend whole beans arabica coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/es-kopi-susu-200-gram-espresso-blend-whole-beans-arabica-coffee-1729574280881210371"
+        },
+        {
+            "title": "week of joy vol 1 specialty arabica coffee drip bag 7 single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/week-of-joy-vol-1-specialty-arabica-coffee-drip-bag-7-single-origin-1729585522190418947"
+        },
+        {
+            "title": "jelajah nusantara specialty arabica coffee drip bag 10 single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/jelajah-nusantara-specialty-arabica-coffee-drip-bag-10-single-origin-1729585667338830851"
+        },
+        {
+            "title": "kopi robusta purbalingga natural 100 gram filter coffee biji kopi",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-robusta-purbalingga-natural-100-gram-filter-coffee-biji-kopi-1730691618071413763"
+        },
+        {
+            "title": "baju kaos tshirt fugol coffee roasters great coffee for great people broken white",
+            "url": "https://www.tokopedia.com/fugolcoffee/baju-kaos-tshirt-fugol-coffee-roasters-great-coffee-for-great-people-broken-white-1731333486468629507"
+        },
+        {
+            "title": "kopi arabika sisola tana luwu anaerobic natural 1 kg specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-sisola-tana-luwu-anaerobic-natural-1-kg-specialty-coffee-beans-1731084266914219361"
+        },
+        {
+            "title": "kopi arabika sisola tana luwu anaerobic natural 500gr specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-sisola-tana-luwu-anaerobic-natural-500gr-specialty-coffee-beans-1731084258551498081"
+        },
+        {
+            "title": "biji kopi arabika colombia pacamara colombia pacamara finca zarza natural specialty arabica coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-colombia-pacamara-colombia-pacamara-finca-zarza-natural-specialty-arabica-coffee-1731024651368105313"
+        },
+        {
+            "title": "biji kopi arabika colombia aroma nativo honey double fermentation specialty arabica coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-colombia-aroma-nativo-honey-double-fermentation-specialty-arabica-coffee-1730987469332317537"
+        },
+        {
+            "title": "baju kaos tshirt yellow fugol coffee roasters great coffee for great people special edition",
+            "url": "https://www.tokopedia.com/fugolcoffee/baju-kaos-tshirt-yellow-fugol-coffee-roasters-great-coffee-for-great-people-special-edition-1731333586351784963"
+        },
+        {
+            "title": "biji kopi arabika colombia aji bourbon el diviso anaerobic natural specialty arabica coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-colombia-aji-bourbon-el-diviso-anaerobic-natural-specialty-arabica-coffee-1730944766230889825"
+        },
+        {
+            "title": "espresso arabusta fruity blend kopi susu special 10 kg grosir",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-arabusta-fruity-blend-kopi-susu-special-10-kg-grosir-1730943460266444129"
+        },
+        {
+            "title": "espresso arabusta fruity blend kopi susu special 5 kg grosir",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-arabusta-fruity-blend-kopi-susu-special-5-kg-grosir-1730943434149234017"
+        },
+        {
+            "title": "espresso cair konsentrat kopi aren 250 ml",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-aren-250-ml-1730914858041902433"
+        },
+        {
+            "title": "espresso cair konsentrat kopi aren 500 ml",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-aren-500-ml-1730914839127229793"
+        },
+        {
+            "title": "espresso cair konsentrat kopi aren 1 liter",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-aren-1-liter-1730914810792871265"
+        },
+        {
+            "title": "biji kopi arabica puntang espresso natural 10 kg grosir",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-puntang-espresso-natural-10-kg-grosir-1730752020561036641"
+        },
+        {
+            "title": "biji kopi arabica puntang espresso natural 5 kg grosir",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-puntang-espresso-natural-5-kg-grosir-1730752021684520289"
+        },
+        {
+            "title": "biji kopi arabica puntang espresso natural 1 kg",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-puntang-espresso-natural-1-kg-1730751996296725857"
+        },
+        {
+            "title": "biji kopi arabica puntang espresso natural 500gr",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-puntang-espresso-natural-500gr-1730751994934756705"
+        },
+        {
+            "title": "biji kopi arabica puntang espresso natural 200gr",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-puntang-espresso-natural-200gr-1730751974968624481"
+        },
+        {
+            "title": "los pirineos bourbon washed 100gram single origin specialty coffee arabica beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/los-pirineos-bourbon-washed-100gram-single-origin-specialty-coffee-arabica-beans-1730747641472320865"
+        },
+        {
+            "title": "kopi robusta purbalingga natural 200 gram filter coffee biji kopi biji d5779",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-robusta-purbalingga-natural-200-gram-filter-coffee-biji-kopi-biji-d5779"
+        },
+        {
+            "title": "kopi bubuk sachet vietnam drip instant arabica robusta fugol coffee roasters",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-bubuk-sachet-vietnam-drip-instant-arabica-robusta-fugol-coffee-roasters-1730744373250720771"
+        },
+        {
+            "title": "biji kopi cold brew blend vol 2 arabica coffee beans 200gr",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-cold-brew-blend-vol-2-arabica-coffee-beans-200gr-1730661411393340419"
+        },
+        {
+            "title": "costa rica mozart caturra raisin honey specialty arabica coffee 50gr biji 9c3b3",
+            "url": "https://www.tokopedia.com/fugolcoffee/costa-rica-mozart-caturra-raisin-honey-specialty-arabica-coffee-50gr-biji-9c3b3"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 250 ml arabica gayo",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-250-ml-arabica-gayo"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 250 ml arabusta arabica robusta",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-250-ml-arabusta-arabica-robusta"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 250 ml full robusta",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-250-ml-full-robusta"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 250 ml full arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-250-ml-full-arabica"
+        },
+        {
+            "title": "sttoke x fugol cupping bowl great coffee for great people special edition beli 3 7cbbc",
+            "url": "https://www.tokopedia.com/fugolcoffee/sttoke-x-fugol-cupping-bowl-great-coffee-for-great-people-special-edition-beli-3-7cbbc"
+        },
+        {
+            "title": "kopi arabika bali natural kismis 1 kg single origin specialty biji 461b4",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-bali-natural-kismis-1-kg-single-origin-specialty-biji-461b4"
+        },
+        {
+            "title": "kopi arabika bali natural kismis 500 gram single origin specialty biji bd3da",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-bali-natural-kismis-500-gram-single-origin-specialty-biji-bd3da"
+        },
+        {
+            "title": "kopi arabika bali natural kismis 200 gram single origin specialty biji 97e57",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-bali-natural-kismis-200-gram-single-origin-specialty-biji-97e57"
+        },
+        {
+            "title": "kopi arabika bali natural kismis 100 gram single origin specialty biji 618c9",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-bali-natural-kismis-100-gram-single-origin-specialty-biji-618c9"
+        },
+        {
+            "title": "kopi arabika east java gunung kawi malang 1 kg single origin specialty",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-east-java-gunung-kawi-malang-1-kg-single-origin-specialty-1730227447568827395"
+        },
+        {
+            "title": "kopi arabika east java gunung kawi malang 500 gram single origin specialty",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-east-java-gunung-kawi-malang-500-gram-single-origin-specialty-1730227415366796291"
+        },
+        {
+            "title": "kopi arabika east java gunung kawi malang 100 gram single origin specialty",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-east-java-gunung-kawi-malang-100-gram-single-origin-specialty-1730227114064708611"
+        },
+        {
+            "title": "kopi arabika east java gunung kawi malang 200 gram single origin specialty",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-east-java-gunung-kawi-malang-200-gram-single-origin-specialty-1730225768383546371"
+        },
+        {
+            "title": "biji kopi espresso arabica harga hemat 10 kg grosir whole beans biji ef576",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-espresso-arabica-harga-hemat-10-kg-grosir-whole-beans-biji-ef576"
+        },
+        {
+            "title": "biji kopi espresso arabica harga hemat 5 kg grosir whole beans biji 0d2b8",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-espresso-arabica-harga-hemat-5-kg-grosir-whole-beans-biji-0d2b8"
+        },
+        {
+            "title": "biji kopi espresso arabica harga hemat 1 kg whole beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-espresso-arabica-harga-hemat-1-kg-whole-beans-1729779126162588675"
+        },
+        {
+            "title": "colombia decaf espresso 1kg espresso blend whole beans biji 68832",
+            "url": "https://www.tokopedia.com/fugolcoffee/colombia-decaf-espresso-1kg-espresso-blend-whole-beans-biji-68832"
+        },
+        {
+            "title": "colombia decaf espresso 500gr espresso blend whole beans biji 3cc35",
+            "url": "https://www.tokopedia.com/fugolcoffee/colombia-decaf-espresso-500gr-espresso-blend-whole-beans-biji-3cc35"
+        },
+        {
+            "title": "colombia decaf espresso 200gr espresso blend whole beans biji df506",
+            "url": "https://www.tokopedia.com/fugolcoffee/colombia-decaf-espresso-200gr-espresso-blend-whole-beans-biji-df506"
+        },
+        {
+            "title": "buzzer beater blend 10 kg grosir espresso blend whole beans arabica biji 26db3",
+            "url": "https://www.tokopedia.com/fugolcoffee/buzzer-beater-blend-10-kg-grosir-espresso-blend-whole-beans-arabica-biji-26db3"
+        },
+        {
+            "title": "buzzer beater blend 5 kg grosir espresso blend whole beans arabica biji 0e1a1",
+            "url": "https://www.tokopedia.com/fugolcoffee/buzzer-beater-blend-5-kg-grosir-espresso-blend-whole-beans-arabica-biji-0e1a1"
+        },
+        {
+            "title": "kopi espresso special slam dunk 10 kg grosir specialty full arabica biji 9e7ea",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-espresso-special-slam-dunk-10-kg-grosir-specialty-full-arabica-biji-9e7ea"
+        },
+        {
+            "title": "kopi espresso special slam dunk 5 kg grosir specialty full arabica biji 93700",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-espresso-special-slam-dunk-5-kg-grosir-specialty-full-arabica-biji-93700"
+        },
+        {
+            "title": "kopi arabica gayo pantan sinaku 1 kg specialty single origin biji 49eab",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-gayo-pantan-sinaku-1-kg-specialty-single-origin-biji-49eab"
+        },
+        {
+            "title": "kopi arabica gayo pantan sinaku 100 gram specialty single origin biji 585f0",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-gayo-pantan-sinaku-100-gram-specialty-single-origin-biji-585f0"
+        },
+        {
+            "title": "kopi arabica gayo pantan sinaku 200 gram specialty single origin biji b2274",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-gayo-pantan-sinaku-200-gram-specialty-single-origin-biji-b2274"
+        },
+        {
+            "title": "biji kopi arabica kobe blend 10 kg grosir espresso blend whole beans biji 3bcf9",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-kobe-blend-10-kg-grosir-espresso-blend-whole-beans-biji-3bcf9"
+        },
+        {
+            "title": "biji kopi arabica kobe blend 5 kg grosir espresso blend whole beans biji f13e2",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-kobe-blend-5-kg-grosir-espresso-blend-whole-beans-biji-f13e2"
+        },
+        {
+            "title": "biji kopi arabica blend 10 kg grosir espresso blend whole beans biji 348e9",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-blend-10-kg-grosir-espresso-blend-whole-beans-biji-348e9"
+        },
+        {
+            "title": "biji kopi arabica blend 5 kg grosir espresso blend whole beans biji 1d41c",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-blend-5-kg-grosir-espresso-blend-whole-beans-biji-1d41c"
+        },
+        {
+            "title": "biji kopi es kopi susu 10 kg grosir espresso arabica biji bubuk biji a3647",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-es-kopi-susu-10-kg-grosir-espresso-arabica-biji-bubuk-biji-a3647"
+        },
+        {
+            "title": "biji kopi es kopi susu 5 kg grosir espresso arabica beans biji bubuk biji 4b1fd",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-es-kopi-susu-5-kg-grosir-espresso-arabica-beans-biji-bubuk-biji-4b1fd"
+        },
+        {
+            "title": "espresso kopi susu special robusta 10 kg grosir biji bubuk biji 0d25b",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-kopi-susu-special-robusta-10-kg-grosir-biji-bubuk-biji-0d25b"
+        },
+        {
+            "title": "espresso kopi susu special robusta 5 kg grosir biji bubuk biji 31d81",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-kopi-susu-special-robusta-5-kg-grosir-biji-bubuk-biji-31d81"
+        },
+        {
+            "title": "keychain fugol coffee roasters character keychain gantungan kunci special edition fugol",
+            "url": "https://www.tokopedia.com/fugolcoffee/keychain-fugol-coffee-roasters-character-keychain-gantungan-kunci-special-edition-fugol-1732339482214433795"
+        },
+        {
+            "title": "stiker fugol coffee roasters character sticker special edition fugol michael jordan ba214",
+            "url": "https://www.tokopedia.com/fugolcoffee/stiker-fugol-coffee-roasters-character-sticker-special-edition-fugol-michael-jordan-ba214"
+        },
+        {
+            "title": "gayo avatara carbonic maceration honey 500 gr single origin coffee biji c4cc8",
+            "url": "https://www.tokopedia.com/fugolcoffee/gayo-avatara-carbonic-maceration-honey-500-gr-single-origin-coffee-biji-c4cc8"
+        },
+        {
+            "title": "gayo avatara carbonic maceration honey 1 kg single origin coffee biji 3c26e",
+            "url": "https://www.tokopedia.com/fugolcoffee/gayo-avatara-carbonic-maceration-honey-1-kg-single-origin-coffee-biji-3c26e"
+        },
+        {
+            "title": "biji kopi arabica flores tura jaji 1 kg specialty single origin biji 7848a",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-flores-tura-jaji-1-kg-specialty-single-origin-biji-7848a"
+        },
+        {
+            "title": "biji kopi arabica flores tura jaji 100gr specialty single origin biji 35397",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-flores-tura-jaji-100gr-specialty-single-origin-biji-35397"
+        },
+        {
+            "title": "biji kopi cold brew blend arabica coffee beans 1 kg biji c14d5",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-cold-brew-blend-arabica-coffee-beans-1-kg-biji-c14d5"
+        },
+        {
+            "title": "biji kopi cold brew blend arabica coffee beans 500gr",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-cold-brew-blend-arabica-coffee-beans-500gr-1729648777575236611"
+        },
+        {
+            "title": "biji kopi espresso house blend package arabica robusta beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-espresso-house-blend-package-arabica-robusta-beans-1729614808429921283"
+        },
+        {
+            "title": "kopi arabica aceh gayo blue musara 1 kg specialty single origin biji d404f",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-aceh-gayo-blue-musara-1-kg-specialty-single-origin-biji-d404f"
+        },
+        {
+            "title": "kopi arabica aceh gayo blue musara 500gr specialty single origin biji 18012",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-aceh-gayo-blue-musara-500gr-specialty-single-origin-biji-18012"
+        },
+        {
+            "title": "kopi arabica aceh gayo blue musara 100gr specialty single origin biji 2c2aa",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-aceh-gayo-blue-musara-100gr-specialty-single-origin-biji-2c2aa"
+        },
+        {
+            "title": "kopi arabica aceh gayo blue musara 200gr specialty single origin biji 97bb6",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabica-aceh-gayo-blue-musara-200gr-specialty-single-origin-biji-97bb6"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 1 liter arabica gayo",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-1-liter-arabica-gayo"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 500 ml arabica gayo",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-500-ml-arabica-gayo"
+        },
+        {
+            "title": "cup tasters kit practice like a champion volume 4 60gr bubuk 6394a",
+            "url": "https://www.tokopedia.com/fugolcoffee/cup-tasters-kit-practice-like-a-champion-volume-4-60gr-bubuk-6394a"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 1 l arabusta arabica robusta",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-1-l-arabusta-arabica-robusta"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 500 ml arabusta arabica robusta",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-500-ml-arabusta-arabica-robusta"
+        },
+        {
+            "title": "cup tasters kit practice like a champion volume 3 60gr biji bbcc6",
+            "url": "https://www.tokopedia.com/fugolcoffee/cup-tasters-kit-practice-like-a-champion-volume-3-60gr-biji-bbcc6"
+        },
+        {
+            "title": "biji kopi arabika enrekang angin angin honey 1 kg single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-enrekang-angin-angin-honey-1-kg-single-origin-1729568528281863171"
+        },
+        {
+            "title": "biji kopi arabika enrekang angin angin honey 500 gr single origin biji b15b3",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-enrekang-angin-angin-honey-500-gr-single-origin-biji-b15b3"
+        },
+        {
+            "title": "biji kopi arabika enrekang angin angin honey 200 gr single origin biji 7c576",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-enrekang-angin-angin-honey-200-gr-single-origin-biji-7c576"
+        },
+        {
+            "title": "biji kopi arabika enrekang angin angin honey 100 gram single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-enrekang-angin-angin-honey-100-gram-single-origin-1729568355691168771"
+        },
+        {
+            "title": "espresso arabusta fruity blend kopi susu special 200 gram",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-arabusta-fruity-blend-kopi-susu-special-200-gram-1729573922475901955"
+        },
+        {
+            "title": "biji kopi cold brew blend arabica coffee beans 200gr biji 21c6f",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-cold-brew-blend-arabica-coffee-beans-200gr-biji-21c6f"
+        },
+        {
+            "title": "espresso arabusta fruity blend kopi susu special 1 kg biji be94d",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-arabusta-fruity-blend-kopi-susu-special-1-kg-biji-be94d"
+        },
+        {
+            "title": "biji kopi espresso house blend package full arabica beans biji 7b9fb",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-espresso-house-blend-package-full-arabica-beans-biji-7b9fb"
+        },
+        {
+            "title": "the bottle series minuman es kopi kemasan botol playmaker bs a7ba1",
+            "url": "https://www.tokopedia.com/fugolcoffee/the-bottle-series-minuman-es-kopi-kemasan-botol-playmaker-bs-a7ba1"
+        },
+        {
+            "title": "espresso special slam dunk 1 kg specialty full arabica biji 00bcf",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-special-slam-dunk-1-kg-specialty-full-arabica-biji-00bcf"
+        },
+        {
+            "title": "espresso special slam dunk 500 gr specialty full arabica biji c6796",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-special-slam-dunk-500-gr-specialty-full-arabica-biji-c6796"
+        },
+        {
+            "title": "espresso special slam dunk 200 gr specialty full arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-special-slam-dunk-200-gr-specialty-full-arabica-1729573873260200963"
+        },
+        {
+            "title": "biji kopi arabika colombia decaf 1 kg single origin coffee biji 08d52",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-colombia-decaf-1-kg-single-origin-coffee-biji-08d52"
+        },
+        {
+            "title": "biji kopi arabika colombia decaf 500gr single origin coffee biji 34115",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-colombia-decaf-500gr-single-origin-coffee-biji-34115"
+        },
+        {
+            "title": "biji kopi arabika colombia decaf 200gr single origin coffee biji 736fa",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-colombia-decaf-200gr-single-origin-coffee-biji-736fa"
+        },
+        {
+            "title": "gayo avatara carbonic maceration honey 200 gr single origin coffee biji d852a",
+            "url": "https://www.tokopedia.com/fugolcoffee/gayo-avatara-carbonic-maceration-honey-200-gr-single-origin-coffee-biji-d852a"
+        },
+        {
+            "title": "gayo avatara carbonic maceration honey 100 gr single origin coffee biji d61b5",
+            "url": "https://www.tokopedia.com/fugolcoffee/gayo-avatara-carbonic-maceration-honey-100-gr-single-origin-coffee-biji-d61b5"
+        },
+        {
+            "title": "kopi arabika john s blend 200 gr vol 2 specialty arabica coffee beans biji eba5f",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-john-s-blend-200-gr-vol-2-specialty-arabica-coffee-beans-biji-eba5f"
+        },
+        {
+            "title": "biji kopi arabika john s blend 200 gr specialty arabica coffee beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-john-s-blend-200-gr-specialty-arabica-coffee-beans-biji"
+        },
+        {
+            "title": "kopi tubruk sachet fugol coffee roasters specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-tubruk-sachet-fugol-coffee-roasters-specialty-coffee-beans"
+        },
+        {
+            "title": "kopi arabika gayo wine 1 kg single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-gayo-wine-1-kg-single-origin-specialty-coffee-beans-1729569600167773187"
+        },
+        {
+            "title": "kopi arabika gayo wine 500gr single origin specialty coffee beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-gayo-wine-500gr-single-origin-specialty-coffee-beans-biji"
+        },
+        {
+            "title": "kopi arabika gayo wine 200gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-gayo-wine-200gr-single-origin-specialty-coffee-beans-1729569559570842627"
+        },
+        {
+            "title": "kamojang water guava 1 kg single origin specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-water-guava-1-kg-single-origin-specialty-coffee-1729573462618440707"
+        },
+        {
+            "title": "sulawesi tana luwu 500gr single origin specialty coffee beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/sulawesi-tana-luwu-500gr-single-origin-specialty-coffee-beans-biji"
+        },
+        {
+            "title": "sulawesi tana luwu 200gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/sulawesi-tana-luwu-200gr-single-origin-specialty-coffee-beans-1729571844845437955"
+        },
+        {
+            "title": "sulawesi tana luwu 100gr single origin specialty coffee beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/sulawesi-tana-luwu-100gr-single-origin-specialty-coffee-beans-1729571899464844291"
+        },
+        {
+            "title": "aceh gayo red apple 500 gr single origin specialty coffee biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/aceh-gayo-red-apple-500-gr-single-origin-specialty-coffee-biji"
+        },
+        {
+            "title": "kamojang green apple 500 gr single origin specialty coffee biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-green-apple-500-gr-single-origin-specialty-coffee-biji"
+        },
+        {
+            "title": "biji kopi arabika gayo maceration hydro honey 1 kg single origin biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-gayo-maceration-hydro-honey-1-kg-single-origin-biji"
+        },
+        {
+            "title": "biji kopi arabika gayo maceration hydro honey 500 gr single origin biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-gayo-maceration-hydro-honey-500-gr-single-origin-biji"
+        },
+        {
+            "title": "biji kopi arabika gayo maceration hydro honey 100 gr single origin biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-gayo-maceration-hydro-honey-100-gr-single-origin-biji"
+        },
+        {
+            "title": "biji kopi arabika brazil fazenda santa maria 1 kg single origin biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-brazil-fazenda-santa-maria-1-kg-single-origin-biji"
+        },
+        {
+            "title": "biji kopi arabika brazil fazenda santa maria 500 gr single origin biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-brazil-fazenda-santa-maria-500-gr-single-origin-biji"
+        },
+        {
+            "title": "biji kopi arabika brazil fazenda santa maria 200 gr single origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-brazil-fazenda-santa-maria-200-gr-single-origin-1729602081201292291"
+        },
+        {
+            "title": "kartu ucapan greeting card fugol coffee roasters red 13947",
+            "url": "https://www.tokopedia.com/fugolcoffee/kartu-ucapan-greeting-card-fugol-coffee-roasters-red-13947"
+        },
+        {
+            "title": "biji kopi arabika wanoja extended natural 500g single origin arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-wanoja-extended-natural-500g-single-origin-arabica-1729574324449346563"
+        },
+        {
+            "title": "biji kopi arabika wanoja extended natural 200g single origin arabica biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-wanoja-extended-natural-200g-single-origin-arabica-biji"
+        },
+        {
+            "title": "aceh gayo red apple 1 kg single origin specialty coffee biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/aceh-gayo-red-apple-1-kg-single-origin-specialty-coffee-biji"
+        },
+        {
+            "title": "biji kopi 1 kg robusta es kopi susu harga hemat rasa nikmat dark roast",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-1-kg-robusta-es-kopi-susu-harga-hemat-rasa-nikmat-dark-roast-1729604703927305219"
+        },
+        {
+            "title": "kamojang lemon tea 1 kg single origin specialty coffee beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-lemon-tea-1-kg-single-origin-specialty-coffee-beans-biji"
+        },
+        {
+            "title": "kamojang lemon tea 500gr single origin specialty coffee beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-lemon-tea-500gr-single-origin-specialty-coffee-beans-biji"
+        },
+        {
+            "title": "kamojang lemon tea 100gr single origin specialty coffee beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-lemon-tea-100gr-single-origin-specialty-coffee-beans-biji"
+        },
+        {
+            "title": "kamojang lemon tea 200gr single origin specialty coffee beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-lemon-tea-200gr-single-origin-specialty-coffee-beans-biji"
+        },
+        {
+            "title": "cherry apple bomb 1 kg natural anaerobic specialty coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/cherry-apple-bomb-1-kg-natural-anaerobic-specialty-coffee-arabica-1729573281106330627"
+        },
+        {
+            "title": "biji kopi arabika kaki gunung guntur anaerobic natural",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-kaki-gunung-guntur-anaerobic-natural-1729559271201342467"
+        },
+        {
+            "title": "es kopi susu 500 gram espresso blend whole beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/es-kopi-susu-500-gram-espresso-blend-whole-beans-biji"
+        },
+        {
+            "title": "cherry apple bomb 500 gr natural anaerobic specialty coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/cherry-apple-bomb-500-gr-natural-anaerobic-specialty-coffee-arabica-1729573362613584899"
+        },
+        {
+            "title": "buzzer beater blend 1 kg espresso blend whole beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/buzzer-beater-blend-1-kg-espresso-blend-whole-beans-1729574058128999427"
+        },
+        {
+            "title": "los angeles blend 1 kg espresso blend whole beans",
+            "url": "https://www.tokopedia.com/fugolcoffee/los-angeles-blend-1-kg-espresso-blend-whole-beans-1729574018152432643"
+        },
+        {
+            "title": "kobe blend 1 kg espresso blend whole beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kobe-blend-1-kg-espresso-blend-whole-beans-biji"
+        },
+        {
+            "title": "es kopi susu 1 kg espresso blend whole beans biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/es-kopi-susu-1-kg-espresso-blend-whole-beans-biji"
+        },
+        {
+            "title": "espresso special buzzer beater blend 200 gr specialty full arabika",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-special-buzzer-beater-blend-200-gr-specialty-full-arabika-1729574018281407491"
+        },
+        {
+            "title": "espresso special buzzer beater blend 500 gr specialty full arabika",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-special-buzzer-beater-blend-500-gr-specialty-full-arabika-1729573959560037379"
+        },
+        {
+            "title": "kopi arabika watermelon smash 1 kg natural",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-watermelon-smash-1-kg-natural-1729573594863862787"
+        },
+        {
+            "title": "biji kopi arabika watermelon smash 500 gram specialty coffee biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-watermelon-smash-500-gram-specialty-coffee-biji"
+        },
+        {
+            "title": "sample biji kopi arabika espresso roast 20 gram fugol specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/sample-biji-kopi-arabika-espresso-roast-20-gram-fugol-specialty-coffee-1729601984332923907"
+        },
+        {
+            "title": "sample biji kopi arabika filter roast 20 gram fugol specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/sample-biji-kopi-arabika-filter-roast-20-gram-fugol-specialty-coffee-1729601952443958275"
+        },
+        {
+            "title": "biji kopi arabika espresso special 200 gram arabica blend coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-espresso-special-200-gram-arabica-blend-coffee-arabica-1731333559605167107"
+        },
+        {
+            "title": "biji kopi arabika espresso special 500 gram arabica blend coffee arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabika-espresso-special-500-gram-arabica-blend-coffee-arabica-1729573994434102275"
+        },
+        {
+            "title": "espresso special kobe blend 500 gr specialty coffee biji full arabika",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-special-kobe-blend-500-gr-specialty-coffee-biji-full-arabika-1729573959320962051"
+        },
+        {
+            "title": "espresso special los angeles blend 200 gram specialty full arabika",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-special-los-angeles-blend-200-gram-specialty-full-arabika-1729573873109795843"
+        },
+        {
+            "title": "espresso special los angeles blend 500 gram specialty full arabika",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-special-los-angeles-blend-500-gram-specialty-full-arabika-1729573873168712707"
+        },
+        {
+            "title": "kamojang water guava 500 gr single origin specialty coffee biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-water-guava-500-gr-single-origin-specialty-coffee-biji"
+        },
+        {
+            "title": "kopi arabika kamojang green apple 1 kg biji bubuk speciality coffee biji kopi",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-kamojang-green-apple-1-kg-biji-bubuk-speciality-coffee-biji-kopi-1731333564286403587"
+        },
+        {
+            "title": "aceh gayo red apple 200 gr single origin specialty coffee biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/aceh-gayo-red-apple-200-gr-single-origin-specialty-coffee-biji"
+        },
+        {
+            "title": "aceh gayo red apple 100 gr single origin specialty coffee biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/aceh-gayo-red-apple-100-gr-single-origin-specialty-coffee-biji"
+        },
+        {
+            "title": "kamojang water guava 200 gr single origin specialty coffee biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-water-guava-200-gr-single-origin-specialty-coffee-biji"
+        },
+        {
+            "title": "biji kopi arabica kamojang water guava 100 gr single origin specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/biji-kopi-arabica-kamojang-water-guava-100-gr-single-origin-specialty-coffee-1731333563886830595"
+        },
+        {
+            "title": "kamojang green apple 200 gr single origin specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-green-apple-200-gr-single-origin-specialty-coffee-1729573514316055555"
+        },
+        {
+            "title": "kamojang green apple 100 gr single origin specialty coffee",
+            "url": "https://www.tokopedia.com/fugolcoffee/kamojang-green-apple-100-gr-single-origin-specialty-coffee-1729573543438353411"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 1 liter full arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-1-liter-full-arabica"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 1 liter full robusta",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-1-liter-full-robusta"
+        },
+        {
+            "title": "kopi arabika watermelon smash 100 gram natural biji bubuk biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-watermelon-smash-100-gram-natural-biji-bubuk-biji"
+        },
+        {
+            "title": "kopi arabika watermelon smash 200 gram natural biji bubuk biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-watermelon-smash-200-gram-natural-biji-bubuk-biji"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 500 ml full robusta",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-500-ml-full-robusta"
+        },
+        {
+            "title": "espresso cair konsentrat kopi 500 ml full arabica",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-cair-konsentrat-kopi-500-ml-full-arabica"
+        },
+        {
+            "title": "kopi arabika drip bag coffee 10 gr pilih 3 origin",
+            "url": "https://www.tokopedia.com/fugolcoffee/kopi-arabika-drip-bag-coffee-10-gr-pilih-3-origin"
+        },
+        {
+            "title": "espresso kopi susu special 500gr robusta biji bubuk biji 980e",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-kopi-susu-special-500gr-robusta-biji-bubuk-biji-980e"
+        },
+        {
+            "title": "espresso kopi susu special 200gr robusta biji bubuk biji de99",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-kopi-susu-special-200gr-robusta-biji-bubuk-biji-de99"
+        },
+        {
+            "title": "espresso kopi susu special 500gr arabusta blend",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-kopi-susu-special-500gr-arabusta-blend-1729574070124839939"
+        },
+        {
+            "title": "espresso kopi susu special 200gr arabusta blend",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-kopi-susu-special-200gr-arabusta-blend-1729574070098560003"
+        },
+        {
+            "title": "espresso kopi susu special 1kg robusta biji bubuk biji",
+            "url": "https://www.tokopedia.com/fugolcoffee/espresso-kopi-susu-special-1kg-robusta-biji-bubuk-biji"
+        }
     ],
-    "product_count": 7
-}
-
-{
-    "success": true,
-    "urls": [
-        "https://www.tokopedia.com/initialcoffee/biji-kopi-exotic-indonesia-ijen-pink-process-1-kg-initial-coffee-biji-bubuk-1734343259510179155?extParam=src%3Dshop%26whid%3D16270\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/initialcoffee/biji-kopi-exotic-indonesia-ijen-pink-process-200-gr-initial-coffee-biji-bubuk-1734343204142089555?extParam=src%3Dshop%26whid%3D16270\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/initialcoffee/biji-kopi-exotic-indonesia-ijen-mosto-200-gr-initial-coffee-biji-bubuk-1734343079438288211?extParam=src%3Dshop%26whid%3D16270\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/initialcoffee/biji-kopi-ijen-extended-pink-200-gr-initial-coffee-biji-bubuk-1734343085765789011?extParam=src%3Dshop%26whid%3D16270\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/initialcoffee/biji-kopi-ijen-yama-signature-200-gr-initial-coffee-biji-bubuk-1734302152532133203?extParam=src%3Dshop%26whid%3D16270\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/initialcoffee/biji-kopi-ijen-yama-signature-1kg-initial-coffee-biji-bubuk-1734302078732371283?extParam=src%3Dshop%26whid%3D16270\u0026aff_unique_id=\u0026channel=others\u0026chain_key=",
-        "https://www.tokopedia.com/initialcoffee/biji-kopi-ijen-berry-punch-200-gr-initial-coffee-biji-bubuk-1734300944652076371?extParam=src%3Dshop%26whid%3D16270\u0026aff_unique_id=\u0026channel=others\u0026chain_key="
-    ],
-    "product_count": 7
+    "product_count": 251
 }

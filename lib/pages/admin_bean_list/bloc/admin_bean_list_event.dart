@@ -64,7 +64,7 @@ class ScrapeBulkUrl extends AdminBeanListEvent {
   });
 }
 
-enum BulkScrapeScope { all, newOnly, updateOnly }
+enum BulkScrapeScope { all, newOnly, updateOnly, none }
 
 /// --- Selection Events ---
 

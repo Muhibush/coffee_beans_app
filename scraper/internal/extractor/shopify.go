@@ -58,37 +58,37 @@ type shopifyProductResponse struct {
 }
 
 type shopifyProduct struct {
-	ID          int64              `json:"id"`
-	Handle      string             `json:"handle"`
-	Title       string             `json:"title"`
-	BodyHTML    string             `json:"body_html"`
-	Vendor      string             `json:"vendor"`
-	ProductType string             `json:"product_type"`
-	Tags        string             `json:"tags"`
-	Variants    []shopifyVariant   `json:"variants"`
-	Images      []shopifyImage     `json:"images"`
-	Image       *shopifyImage      `json:"image"`
+	ID          int64            `json:"id"`
+	Handle      string           `json:"handle"`
+	Title       string           `json:"title"`
+	BodyHTML    string           `json:"body_html"`
+	Vendor      string           `json:"vendor"`
+	ProductType string           `json:"product_type"`
+	Tags        string           `json:"tags"`
+	Variants    []shopifyVariant `json:"variants"`
+	Images      []shopifyImage   `json:"images"`
+	Image       *shopifyImage    `json:"image"`
 }
 
 type shopifyVariant struct {
-	ID                  int64   `json:"id"`
-	Title               string  `json:"title"`
-	Price               string  `json:"price"`
-	CompareAtPrice      string  `json:"compare_at_price"`
-	Option1             string  `json:"option1"`
-	Option2             string  `json:"option2"`
-	Option3             string  `json:"option3"`
-	Grams               int     `json:"grams"`
-	Weight              float64 `json:"weight"`
-	WeightUnit          string  `json:"weight_unit"`
-	Available           bool    `json:"available"`
+	ID             int64   `json:"id"`
+	Title          string  `json:"title"`
+	Price          string  `json:"price"`
+	CompareAtPrice string  `json:"compare_at_price"`
+	Option1        string  `json:"option1"`
+	Option2        string  `json:"option2"`
+	Option3        string  `json:"option3"`
+	Grams          int     `json:"grams"`
+	Weight         float64 `json:"weight"`
+	WeightUnit     string  `json:"weight_unit"`
+	Available      bool    `json:"available"`
 }
 
 type shopifyImage struct {
-	ID        int64  `json:"id"`
-	Src       string `json:"src"`
-	Width     int    `json:"width"`
-	Height    int    `json:"height"`
+	ID     int64  `json:"id"`
+	Src    string `json:"src"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
 }
 
 func (e *ShopifyExtractor) CanHandleBulk(storeURL string) bool {
@@ -121,57 +121,80 @@ func (e *ShopifyExtractor) ExtractURLs(ctx context.Context, storeURL string, max
 		jsonURL = parsed.Scheme + "://" + parsed.Host + cleanPath + ".json"
 	}
 
-	log.Printf("[shopify] Bulk JSON endpoint: %s", jsonURL)
-
-	client := &http.Client{Timeout: 15 * time.Second}
-	req, err := http.NewRequestWithContext(ctx, "GET", jsonURL, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
-	}
-
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-	req.Header.Set("Accept", "application/json")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch Shopify Collection JSON: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("Shopify JSON endpoint returned status %d", resp.StatusCode)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read response body: %w", err)
-	}
-
-	var collectionResp shopifyCollectionResponse
-	if err := json.Unmarshal(body, &collectionResp); err != nil {
-		return nil, fmt.Errorf("failed to parse Shopify JSON collection: %w", err)
-	}
-
-	if len(collectionResp.Products) == 0 {
-		return nil, fmt.Errorf("no products found in collection")
-	}
-
-	// base URL for reconstructing product URLs
 	baseURL := parsed.Scheme + "://" + parsed.Host
-
 	var products []model.BulkProduct
-	for i, product := range collectionResp.Products {
-		if maxProducts > 0 && i >= maxProducts {
+	page := 1
+	limit := 250 // Shopify max limit for products.json
+
+	for {
+		pagedURL, _ := url.Parse(jsonURL)
+		q := pagedURL.Query()
+		q.Set("page", fmt.Sprintf("%d", page))
+		q.Set("limit", fmt.Sprintf("%d", limit))
+		pagedURL.RawQuery = q.Encode()
+
+		log.Printf("[shopify] Fetching page %d: %s", page, pagedURL.String())
+
+		client := &http.Client{Timeout: 15 * time.Second}
+		req, err := http.NewRequestWithContext(ctx, "GET", pagedURL.String(), nil)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create request: %w", err)
+		}
+
+		req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+		req.Header.Set("Accept", "application/json")
+
+		resp, err := client.Do(req)
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch Shopify Collection JSON: %w", err)
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			resp.Body.Close()
+			return nil, fmt.Errorf("Shopify JSON endpoint returned status %d", resp.StatusCode)
+		}
+
+		body, err := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			return nil, fmt.Errorf("failed to read response body: %w", err)
+		}
+
+		var collectionResp shopifyCollectionResponse
+		if err := json.Unmarshal(body, &collectionResp); err != nil {
+			return nil, fmt.Errorf("failed to parse Shopify JSON collection: %w", err)
+		}
+
+		if len(collectionResp.Products) == 0 {
+			break // No more products
+		}
+
+		for _, product := range collectionResp.Products {
+			if product.Handle != "" {
+				products = append(products, model.BulkProduct{
+					Title: product.Title,
+					URL:   baseURL + "/products/" + product.Handle,
+				})
+			}
+
+			if maxProducts > 0 && len(products) >= maxProducts {
+				goto Done
+			}
+		}
+
+		// If we got fewer products than the limit, it's the last page
+		if len(collectionResp.Products) < limit {
 			break
 		}
-		if product.Handle != "" {
-			products = append(products, model.BulkProduct{
-				Title: product.Title,
-				URL:   baseURL + "/products/" + product.Handle,
-			})
+
+		page++
+		// Safety limit to prevent infinite loops (though Shopify usually caps collections)
+		if page > 50 {
+			break
 		}
 	}
 
+Done:
 	log.Printf("[shopify] Extracted %d product items successfully", len(products))
 	return products, nil
 }

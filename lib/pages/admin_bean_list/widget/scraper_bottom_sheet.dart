@@ -1,5 +1,8 @@
+import 'package:coffee_beans_app/pages/admin_bean_list/widget/discovery_results_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../bloc/admin_bean_list_bloc.dart';
 import '../bloc/admin_bean_list_event.dart';
 import '../bloc/admin_bean_list_state.dart';
@@ -15,7 +18,7 @@ class ScraperBottomSheet extends StatefulWidget {
 
 class _ScraperBottomSheetState extends State<ScraperBottomSheet> {
   final TextEditingController _urlController = TextEditingController();
-  final TextEditingController _maxItemsController = TextEditingController(text: '10');
+  final TextEditingController _maxItemsController = TextEditingController();
   BulkScrapeScope _scope = BulkScrapeScope.all;
   bool _isBulk = false;
 
@@ -39,6 +42,10 @@ class _ScraperBottomSheetState extends State<ScraperBottomSheet> {
         }
       },
       builder: (context, state) {
+        if (state.scraperStatus == ScraperStatus.selecting) {
+          return DiscoveryResultsBottomSheet(roasteryId: widget.roasteryId);
+        }
+
         return Padding(
           padding: EdgeInsets.only(
             left: 24,
@@ -47,7 +54,8 @@ class _ScraperBottomSheetState extends State<ScraperBottomSheet> {
             bottom: MediaQuery.of(context).viewInsets.bottom + 24,
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Allow sheet to wrap content if small
+            mainAxisSize:
+                MainAxisSize.min, // Allow sheet to wrap content if small
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Drag handle
@@ -68,34 +76,24 @@ class _ScraperBottomSheetState extends State<ScraperBottomSheet> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer.withValues(alpha: 0.4),
+                      color: colorScheme.primaryContainer.withValues(
+                        alpha: 0.4,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(Icons.bolt_rounded, size: 20, color: colorScheme.primary),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    'Scraper Wizard',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w900,
+                    child: Icon(
+                      Icons.bolt_rounded,
+                      size: 20,
+                      color: colorScheme.primary,
                     ),
                   ),
+                  const SizedBox(width: 12),
+                  Text('Scraper Wizard', style: theme.textTheme.titleLarge),
                   const Spacer(),
-                  IconButton.filledTonal(
-                    onPressed: () {
-                      context.read<AdminBeanListBloc>().add(CancelScraperWizard());
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.close_rounded, size: 20),
-                  ),
                 ],
               ),
               const SizedBox(height: 32),
-              
-              // Content
-              Flexible(
-                child: _buildWizardContent(context, theme, state),
-              ),
+              Flexible(child: _buildWizardContent(context, theme, state)),
             ],
           ),
         );
@@ -103,22 +101,28 @@ class _ScraperBottomSheetState extends State<ScraperBottomSheet> {
     );
   }
 
-  Widget _buildWizardContent(BuildContext context, ThemeData theme, AdminBeanListState state) {
+  Widget _buildWizardContent(
+    BuildContext context,
+    ThemeData theme,
+    AdminBeanListState state,
+  ) {
     switch (state.scraperStatus) {
       case ScraperStatus.idle:
-        return _buildIdleStep(context, theme);
       case ScraperStatus.inspecting:
-        return _buildLoadingStep(context, theme, 'Analyzing marketplace source...');
-      case ScraperStatus.selecting:
-        return _buildSelectionStep(context, theme, state);
+        return _buildIdleStep(context, theme, state);
       default:
-        return _buildIdleStep(context, theme);
+        return _buildIdleStep(context, theme, state);
     }
   }
 
-  Widget _buildIdleStep(BuildContext context, ThemeData theme) {
+  Widget _buildIdleStep(
+    BuildContext context,
+    ThemeData theme,
+    AdminBeanListState state,
+  ) {
     final colorScheme = theme.colorScheme;
-    
+    final isInspecting = state.scraperStatus == ScraperStatus.inspecting;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -128,16 +132,26 @@ class _ScraperBottomSheetState extends State<ScraperBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SegmentedButton<bool>(
+                showSelectedIcon: false,
+                style: SegmentedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
                 segments: const [
                   ButtonSegment(
                     value: false,
                     label: Text('Single Item'),
-                    icon: Icon(Icons.description_outlined),
+                    // icon: Icon(Icons.description_outlined),
                   ),
                   ButtonSegment(
                     value: true,
                     label: Text('Bulk Store'),
-                    icon: Icon(Icons.grid_view_outlined),
+                    // icon: Icon(Icons.grid_view_outlined),
                   ),
                 ],
                 selected: {_isBulk},
@@ -146,218 +160,116 @@ class _ScraperBottomSheetState extends State<ScraperBottomSheet> {
                 },
               ),
               const SizedBox(height: 24),
-              Text(
-                'TARGET URL',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.2,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _urlController,
-                decoration: InputDecoration(
-                  hintText: _isBulk ? 'https://tokopedia.com/roastery-name' : 'https://tokopedia.com/product-url',
-                  prefixIcon: const Icon(Icons.link_rounded),
-                ),
-              ),
-              if (_isBulk) ...[
-                const SizedBox(height: 24),
-                Text(
-                  'SCRAPE LIMIT',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.2,
-                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _maxItemsController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'e.g. 25',
-                    prefixIcon: Icon(Icons.format_list_numbered_rounded),
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        const SizedBox(height: 40),
-        FilledButton.icon(
-          onPressed: () {
-            final url = _urlController.text.trim();
-            if (url.isEmpty) return;
-            
-            final maxProducts = int.tryParse(_maxItemsController.text) ?? 10;
-            
-            context.read<AdminBeanListBloc>().add(
-                  StartScraperWizard(
-                    url: url,
-                    roasteryId: widget.roasteryId,
-                    isBulk: _isBulk,
-                    maxProducts: _isBulk ? maxProducts : null,
-                  ),
-                );
-            if (!_isBulk) {
-               Navigator.pop(context);
-            }
-          },
-          icon: const Icon(Icons.auto_awesome_rounded),
-          style: FilledButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-          ),
-          label: Text(_isBulk ? 'Explore Products' : 'Extract Bean Data'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLoadingStep(BuildContext context, ThemeData theme, String message) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 48),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CircularProgressIndicator(),
-          const SizedBox(height: 24),
-          Text(
-            message, 
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSelectionStep(BuildContext context, ThemeData theme, AdminBeanListState state) {
-    final colorScheme = theme.colorScheme;
-    final products = state.discoveredProducts;
-    final selectedCount = state.selectedDiscoveredUrls.length;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHigh,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.check_circle_outline_rounded, size: 20, color: colorScheme.primary),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  '${products.length} Items Found',
-                  style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w900, color: colorScheme.primary),
-                ),
-              ),
-              const SizedBox(width: 8),
-              SizedBox(
-                width: 140,
-                child: DropdownButtonFormField<BulkScrapeScope>(
-                  value: _scope,
-                  isExpanded: true,
-                  decoration: const InputDecoration(
-                    isDense: true, 
-                    contentPadding: EdgeInsets.zero, 
-                    border: InputBorder.none,
-                  ),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                  icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
-                  items: const [
-                    DropdownMenuItem(value: BulkScrapeScope.all, child: Text('Check All')),
-                    DropdownMenuItem(value: BulkScrapeScope.newOnly, child: Text('Check New')),
-                    DropdownMenuItem(value: BulkScrapeScope.updateOnly, child: Text('Check Existing')),
-                  ],
-                  onChanged: (val) {
-                    if (val != null) {
-                      setState(() => _scope = val);
-                      context.read<AdminBeanListBloc>().add(ChangeScraperScope(val));
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        Expanded(
-          child: ListView.separated(
-            itemCount: products.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              final product = products[index];
-              final isSelected = state.selectedDiscoveredUrls.contains(product.url);
-              
-              return Material(
-                color: isSelected ? colorScheme.primaryContainer.withValues(alpha: 0.2) : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
-                child: InkWell(
-                  onTap: () => context.read<AdminBeanListBloc>().add(ToggleScraperProductSelection(product)),
-                  borderRadius: BorderRadius.circular(12),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    child: Row(
+              Row(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // Align fields at the top
+                children: [
+                  // URL Field
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Checkbox(
-                          value: isSelected,
-                          onChanged: (_) => context.read<AdminBeanListBloc>().add(ToggleScraperProductSelection(product)),
-                          visualDensity: VisualDensity.compact,
+                        Text(
+                          'TARGET URL',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                product.title, 
-                                maxLines: 1, 
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                product.url, 
-                                maxLines: 1, 
-                                overflow: TextOverflow.ellipsis, 
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                                ),
-                              ),
-                            ],
+                        TextField(
+                          controller: _urlController,
+                          decoration: InputDecoration(
+                            hintText: _isBulk
+                                ? 'https://tokopedia.com/roastery-name'
+                                : 'https://tokopedia.com/product-url',
+                            border:
+                                const OutlineInputBorder(), // Added for better visual structure
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              );
-            },
+
+                  // Conditional Max Items Field
+                  if (_isBulk) ...[
+                    const SizedBox(width: 12), // Gap between fields
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'SCRAPE LIMIT',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          TextField(
+                            controller: _maxItemsController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            decoration: const InputDecoration(
+                              hintText: 'e.g. 25',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 24),
-        FilledButton.icon(
-          onPressed: selectedCount == 0
-              ? null
-              : () {
-                  context.read<AdminBeanListBloc>().add(
-                        ConfirmBulkScrape(roasteryId: widget.roasteryId, scope: _scope),
-                      );
-                  Navigator.pop(context);
-                },
-          icon: const Icon(Icons.cloud_download_rounded),
-          style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-          label: Text('Sync $selectedCount Items'),
+        Center(
+          child: FilledButton(
+            onPressed: isInspecting
+                ? null
+                : () {
+                    final url = _urlController.text.trim();
+                    if (url.isEmpty) return;
+
+                    final maxProducts =
+                        int.tryParse(_maxItemsController.text) ?? 0;
+
+                    context.read<AdminBeanListBloc>().add(
+                      StartScraperWizard(
+                        url: url,
+                        roasteryId: widget.roasteryId,
+                        isBulk: _isBulk,
+                        maxProducts: _isBulk ? maxProducts : null,
+                      ),
+                    );
+                    if (!_isBulk) {
+                      Navigator.pop(context);
+                    }
+                  },
+            style: FilledButton.styleFrom(
+              minimumSize: const Size(double.infinity, 56),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+            child: isInspecting
+                ? SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: colorScheme.onPrimary,
+                    ),
+                  )
+                : Text(
+                    _isBulk ? 'Explore Products' : 'Extract Bean Data',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+          ),
         ),
       ],
     );

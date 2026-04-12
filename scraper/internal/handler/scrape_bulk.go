@@ -37,8 +37,15 @@ func BulkScrapeHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("[handler] Bulk Scrape request for: %s (max_products: %d)", req.URL, req.MaxProducts)
 
+	// Determine timeout: longer for "scrape all" mode
+	timeout := BulkScrapeTimeout
+	if req.MaxProducts == 0 {
+		timeout = 10 * time.Minute
+		log.Printf("[handler] Using extended timeout (10m) for 'scrape all' mode")
+	}
+
 	// Create a context with timeout
-	ctx, cancel := context.WithTimeout(r.Context(), BulkScrapeTimeout)
+	ctx, cancel := context.WithTimeout(r.Context(), timeout)
 	defer cancel()
 
 	// Route to the appropriate bulk extractor

@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
+	"github.com/go-rod/rod/lib/proto"
 	"github.com/go-rod/stealth"
 )
 
@@ -24,7 +25,7 @@ type Browser struct {
 }
 
 // DefaultTimeout is the default page load timeout.
-const DefaultTimeout = 30 * time.Second
+const DefaultTimeout = 2 * time.Minute
 
 // Get returns the singleton Browser instance.
 func Get() *Browser {
@@ -42,7 +43,13 @@ func (b *Browser) ensureBrowser() (*rod.Browser, error) {
 	defer b.mu.Unlock()
 
 	if b.browser != nil {
-		return b.browser, nil
+		// Check if the browser is still responsive
+		_, err := b.browser.Version()
+		if err == nil {
+			return b.browser, nil
+		}
+		log.Printf("[browser] Stale browser detected: %v. Re-initializing...", err)
+		b.browser = nil
 	}
 
 	// Launch Chrome with stealth-friendly flags
@@ -53,6 +60,7 @@ func (b *Browser) ensureBrowser() (*rod.Browser, error) {
 		Set("no-first-run").
 		Set("no-default-browser-check").
 		Set("disable-default-apps").
+		Set("window-size", "1920,1080").
 		Launch()
 	if err != nil {
 		return nil, err
@@ -81,6 +89,28 @@ func (b *Browser) NewStealthPage() (*rod.Page, error) {
 	}
 
 	page = page.Timeout(b.timeout)
+
+	scale := 1.0
+	// Set desktop viewport with DPR=1 to ensure consistent rendering
+	if err := page.SetViewport(&proto.EmulationSetDeviceMetricsOverride{
+		Width:             1920,
+		Height:            1080,
+		DeviceScaleFactor: 1,
+		Scale:             &scale,
+		Mobile:            false,
+	}); err != nil {
+		page.Close()
+		return nil, err
+	}
+
+	// Set a real Desktop User Agent to further trick Tokopedia into serving the full grid
+	if err := page.SetUserAgent(&proto.NetworkSetUserAgentOverride{
+		UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+	}); err != nil {
+		page.Close()
+		return nil, err
+	}
+
 	return page, nil
 }
 
@@ -101,13 +131,13 @@ func (b *Browser) NavigateWithStealth(ctx context.Context, url string) (*rod.Pag
 
 	// Navigate to the URL
 	if err := page.Navigate(url); err != nil {
-		page.MustClose()
+		page.Close()
 		return nil, err
 	}
 
 	// Wait for the page to finish loading
 	if err := page.WaitLoad(); err != nil {
-		page.MustClose()
+		page.Close()
 		return nil, err
 	}
 

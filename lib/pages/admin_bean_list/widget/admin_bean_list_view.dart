@@ -1,11 +1,13 @@
+import 'package:coffee_beans_app/pages/admin_bean_list/widget/filter_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
 import '../bloc/admin_bean_list_bloc.dart';
 import '../bloc/admin_bean_list_event.dart';
 import '../bloc/admin_bean_list_state.dart';
-import 'scraper_bottom_sheet.dart';
 import 'admin_bean_card.dart';
+import 'scraper_bottom_sheet.dart';
 
 enum BeanStatusFilter { all, published, draft, unpublished }
 
@@ -46,18 +48,24 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
                 slivers: [
                   SliverAppBar(
                     pinned: true,
+                    centerTitle: false,
                     title: const Text('Beans Catalog'),
                     backgroundColor: theme.scaffoldBackgroundColor,
                     surfaceTintColor: Colors.transparent,
-                    centerTitle: false,
                     leading: IconButton(
-                      icon: Icon(Icons.arrow_back_ios_new_rounded, color: colorScheme.primary, size: 20),
+                      icon: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: colorScheme.primary,
+                        size: 20,
+                      ),
                       onPressed: () => context.pop(),
                     ),
                     actions: [
                       if (hasSelection)
                         TextButton(
-                          onPressed: () => context.read<AdminBeanListBloc>().add(ClearSelection()),
+                          onPressed: () => context
+                              .read<AdminBeanListBloc>()
+                              .add(ClearSelection()),
                           child: Text(
                             'Cancel',
                             style: theme.textTheme.labelLarge?.copyWith(
@@ -68,15 +76,25 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
                         ),
                       if (!hasSelection) ...[
                         IconButton(
-                          icon: Icon(Icons.bolt_outlined, color: colorScheme.onSurfaceVariant),
+                          highlightColor: Colors.transparent,
+                          icon: Icon(
+                            Icons.bolt_outlined,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
                           tooltip: 'Scraper',
                           onPressed: () => _showScraper(context),
                         ),
                         if (filtered.isNotEmpty)
                           IconButton(
-                            icon: Icon(Icons.checklist_rounded, color: colorScheme.onSurfaceVariant),
+                            highlightColor: Colors.transparent,
+                            icon: Icon(
+                              Icons.checklist_rounded,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
                             tooltip: 'Select All',
-                            onPressed: () => context.read<AdminBeanListBloc>().add(SelectAllBeans()),
+                            onPressed: () => context
+                                .read<AdminBeanListBloc>()
+                                .add(SelectAllBeans()),
                           ),
                       ],
                       const SizedBox(width: 8),
@@ -108,15 +126,22 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
                     SliverFillRemaining(child: _buildEmptyState(context))
                   else
                     SliverPadding(
-                      padding: EdgeInsets.fromLTRB(16, 20, 16, hasSelection ? 140 : 100),
+                      padding: EdgeInsets.fromLTRB(
+                        16,
+                        20,
+                        16,
+                        hasSelection ? 140 : 100,
+                      ),
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {
                           final bean = filtered[index];
                           final isUnpublished = bean.status == 'unpublished';
-                          final isSelected = state.selectedIds.contains(bean.id);
+                          final isSelected = state.selectedIds.contains(
+                            bean.id,
+                          );
 
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
+                            padding: const EdgeInsets.only(bottom: 8.0),
                             child: Opacity(
                               opacity: isUnpublished ? 0.8 : 1.0,
                               child: AdminBeanCard(
@@ -126,12 +151,22 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
                                 status: bean.status,
                                 isSelectionMode: hasSelection,
                                 isSelected: isSelected,
+                                sessionBadge:
+                                    state.sessionAddedIds.contains(bean.id)
+                                    ? 'NEW'
+                                    : state.sessionUpdatedIds.contains(bean.id)
+                                    ? 'UPDATED'
+                                    : null,
                                 onSelectedChanged: (val) {
-                                  context.read<AdminBeanListBloc>().add(ToggleSelectBean(bean.id));
+                                  context.read<AdminBeanListBloc>().add(
+                                    ToggleSelectBean(bean.id),
+                                  );
                                 },
                                 onTap: () {
                                   if (hasSelection) {
-                                    context.read<AdminBeanListBloc>().add(ToggleSelectBean(bean.id));
+                                    context.read<AdminBeanListBloc>().add(
+                                      ToggleSelectBean(bean.id),
+                                    );
                                   } else {
                                     context.push(
                                       '/admin/roastery/${widget.roasteryId}/beans/${bean.id}',
@@ -146,17 +181,21 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
                     ),
                 ],
               ),
-              
+
               // Bulk Action Bar
-              if (hasSelection)
-                _buildBulkActionBar(context, state),
+              if (hasSelection) _buildBulkActionBar(context, state),
+
+              // Scraper Progress Overlay
+              _buildScraperProgressOverlay(context, state),
             ],
           ),
-          floatingActionButton: hasSelection 
-              ? null 
+          floatingActionButton: hasSelection
+              ? null
               : FloatingActionButton.extended(
                   onPressed: () {
-                    context.push('/admin/roastery/${widget.roasteryId}/beans/new');
+                    context.push(
+                      '/admin/roastery/${widget.roasteryId}/beans/new',
+                    );
                   },
                   icon: const Icon(Icons.add_rounded),
                   label: const Text('Add Bean'),
@@ -182,7 +221,7 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
         builder: (context, value, child) {
           return Transform.translate(
             offset: Offset(0, 50 * (1 - value)),
-            child: Opacity(opacity: value, child: child),
+            child: Opacity(opacity: value.clamp(0.0, 1.0), child: child),
           );
         },
         child: Container(
@@ -202,7 +241,10 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: colorScheme.primary,
                     borderRadius: BorderRadius.circular(12),
@@ -229,13 +271,17 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
                 _ActionButton(
                   icon: Icons.publish_rounded,
                   label: 'Pub',
-                  onTap: () => context.read<AdminBeanListBloc>().add(BulkUpdateStatus('published')),
+                  onTap: () => context.read<AdminBeanListBloc>().add(
+                    BulkUpdateStatus('published'),
+                  ),
                 ),
                 const SizedBox(width: 4),
                 _ActionButton(
                   icon: Icons.drafts_outlined,
                   label: 'Draft',
-                  onTap: () => context.read<AdminBeanListBloc>().add(BulkUpdateStatus('draft')),
+                  onTap: () => context.read<AdminBeanListBloc>().add(
+                    BulkUpdateStatus('draft'),
+                  ),
                 ),
                 const SizedBox(width: 4),
                 _ActionButton(
@@ -257,15 +303,22 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete selected beans?'),
-        content: const Text('This action cannot be undone and will remove these beans from your catalog.'),
+        content: const Text(
+          'This action cannot be undone and will remove these beans from your catalog.',
+        ),
         actions: [
           TextButton(
-            onPressed: () => context.pop(false), 
-            child: Text('Keep', style: TextStyle(color: Theme.of(context).colorScheme.outline)),
+            onPressed: () => context.pop(false),
+            child: Text(
+              'Keep',
+              style: TextStyle(color: Theme.of(context).colorScheme.outline),
+            ),
           ),
           FilledButton(
-            onPressed: () => context.pop(true), 
-            style: FilledButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error),
+            onPressed: () => context.pop(true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
             child: const Text('Delete Permanently'),
           ),
         ],
@@ -289,7 +342,11 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
               color: colorScheme.surfaceContainerLow,
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.coffee_maker_outlined, size: 80, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2)),
+            child: Icon(
+              Icons.coffee_maker_outlined,
+              size: 80,
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
+            ),
           ),
           const SizedBox(height: 24),
           Text(
@@ -325,7 +382,9 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: () {
-                      context.push('/admin/roastery/${widget.roasteryId}/beans/new');
+                      context.push(
+                        '/admin/roastery/${widget.roasteryId}/beans/new',
+                      );
                     },
                     icon: const Icon(Icons.add_rounded),
                     label: const Text('Add manually'),
@@ -368,18 +427,25 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
           const SizedBox(height: 24),
           Text(
             'Connection Error',
-            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 12),
           Text(
-            message ?? 'We couldn\'t load your beans right now. Please check your internet connection and try again.',
+            message ??
+                'We couldn\'t load your beans right now. Please check your internet connection and try again.',
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 32),
           FilledButton.icon(
             onPressed: () {
-              context.read<AdminBeanListBloc>().add(LoadBeans(widget.roasteryId));
+              context.read<AdminBeanListBloc>().add(
+                LoadBeans(widget.roasteryId),
+              );
             },
             icon: const Icon(Icons.refresh_rounded),
             label: const Text('Retry Connection'),
@@ -400,9 +466,26 @@ class _AdminBeanListViewState extends State<AdminBeanListView> {
       builder: (bottomSheetContext) {
         return BlocProvider.value(
           value: context.read<AdminBeanListBloc>(),
-          child: const _AdminBeanFilterSortSheet(),
+          child: const AdminBeanFilterSortSheet(),
         );
       },
+    );
+  }
+
+  Widget _buildScraperProgressOverlay(
+    BuildContext context,
+    AdminBeanListState state,
+  ) {
+    final isScraping = state.scraperStatus == ScraperStatus.scraping;
+    final isSuccess = state.scraperStatus == ScraperStatus.success;
+    final hasMessage = state.scraperMessage != null;
+
+    final show = isScraping || (isSuccess && hasMessage);
+
+    return _ScraperProgressOverlay(
+      show: show,
+      message: state.scraperMessage ?? 'Processing...',
+      isSuccess: isSuccess,
     );
   }
 }
@@ -455,146 +538,100 @@ class _ActionButton extends StatelessWidget {
   }
 }
 
-class _AdminBeanFilterSortSheet extends StatelessWidget {
-  const _AdminBeanFilterSortSheet();
+class _ScraperProgressOverlay extends StatelessWidget {
+  final bool show;
+  final String message;
+  final bool isSuccess;
+
+  const _ScraperProgressOverlay({
+    required this.show,
+    required this.message,
+    required this.isSuccess,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bloc = context.read<AdminBeanListBloc>();
+    final colorScheme = theme.colorScheme;
 
-    return BlocBuilder<AdminBeanListBloc, AdminBeanListState>(
-      buildWhen: (previous, current) {
-        return previous.activeFilter != current.activeFilter ||
-               previous.sortBy != current.sortBy ||
-               previous.sortAscending != current.sortAscending;
-      },
-      builder: (context, state) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text('Filter & Sort', style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900)),
-                    const Spacer(),
-                    IconButton.filledTonal(
-                      icon: const Icon(Icons.close_rounded, size: 20),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
-                _buildSectionHeader(theme, 'DISPLAY STATUS'),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    _buildFilterChip(context, state, 'All Items', BeanStatusFilter.all.name),
-                    _buildFilterChip(context, state, 'Published', BeanStatusFilter.published.name),
-                    _buildFilterChip(context, state, 'Drafts', BeanStatusFilter.draft.name),
-                    _buildFilterChip(context, state, 'Archived', BeanStatusFilter.unpublished.name),
-                  ],
-                ),
-                const SizedBox(height: 40),
-                _buildSectionHeader(theme, 'SORT BY'),
-                const SizedBox(height: 12),
-                _buildSortRadio(context, state, 'Product Name', AdminBeanSortOption.name),
-                _buildSortRadio(context, state, 'Date Created', AdminBeanSortOption.createdAt),
-                _buildSortRadio(context, state, 'Last Modified', AdminBeanSortOption.updatedAt),
-                const SizedBox(height: 32),
-                Row(
-                  children: [
-                    Text('Ordering', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-                    const Spacer(),
-                    SegmentedButton<bool>(
-                      segments: const [
-                        ButtonSegment(value: true, icon: Icon(Icons.arrow_upward_rounded), label: Text('Asc')),
-                        ButtonSegment(value: false, icon: Icon(Icons.arrow_downward_rounded), label: Text('Desc')),
-                      ],
-                      selected: {state.sortAscending},
-                      onSelectionChanged: (Set<bool> selected) {
-                        bloc.add(ChangeSortOption(
-                          sortOption: state.sortBy,
-                          isAscending: selected.first,
-                        ));
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
-              ],
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOutBack,
+      top: show ? 110 : -100,
+      // Positions below the AppBar when visible
+      left: 20,
+      right: 20,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 400),
+        opacity: show ? 1.0 : 0.0,
+        child: Container(
+          decoration: BoxDecoration(
+            color: isSuccess
+                ? theme.colorScheme.primaryContainer
+                : colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: theme.shadowColor.withValues(alpha: 0.1),
+                blurRadius: 30,
+                offset: const Offset(0, 10),
+              ),
+            ],
+            border: Border.all(
+              color: isSuccess
+                  ? theme.colorScheme.primary.withValues(alpha: 0.2)
+                  : colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSectionHeader(ThemeData theme, String title) {
-    return Text(
-      title,
-      style: theme.textTheme.labelSmall?.copyWith(
-        fontWeight: FontWeight.w900,
-        letterSpacing: 1.5,
-        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-      ),
-    );
-  }
-
-  Widget _buildFilterChip(BuildContext context, AdminBeanListState state, String label, String value) {
-    final bool isSelected = state.activeFilter == value;
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (selected) {
-        if (selected) {
-          context.read<AdminBeanListBloc>().add(FilterBeans(value));
-        }
-      },
-      selectedColor: colorScheme.primary,
-      checkmarkColor: colorScheme.onPrimary,
-      labelStyle: TextStyle(
-        color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
-        fontWeight: isSelected ? FontWeight.w900 : FontWeight.normal,
-      ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    );
-  }
-
-  Widget _buildSortRadio(BuildContext context, AdminBeanListState state, String label, AdminBeanSortOption option) {
-    final isSelected = state.sortBy == option;
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return RadioListTile<AdminBeanSortOption>(
-      title: Text(
-        label,
-        style: TextStyle(
-          fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
-          color: isSelected ? colorScheme.primary : colorScheme.onSurface,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Material(
+              color: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                child: Row(
+                  children: [
+                    if (!isSuccess)
+                      SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor: AlwaysStoppedAnimation(
+                            colorScheme.primary,
+                          ),
+                        ),
+                      )
+                    else
+                      Icon(
+                        Icons.check_circle_rounded,
+                        color: theme.colorScheme.primary,
+                        size: 20,
+                      ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        message,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: isSuccess
+                              ? theme.colorScheme.onPrimaryContainer
+                              : colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
-      value: option,
-      groupValue: state.sortBy,
-      activeColor: colorScheme.primary,
-      onChanged: (AdminBeanSortOption? value) {
-        if (value != null) {
-          context.read<AdminBeanListBloc>().add(ChangeSortOption(
-                sortOption: value,
-                isAscending: state.sortAscending,
-              ));
-        }
-      },
-      contentPadding: EdgeInsets.zero,
-      visualDensity: VisualDensity.compact,
     );
   }
 }
@@ -613,9 +650,10 @@ class _AdminBeanStickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   final int resultCount;
 
   @override
-  double get maxExtent => 110;
+  double get maxExtent => 80;
+
   @override
-  double get minExtent => 110;
+  double get minExtent => 80;
 
   @override
   Widget build(
@@ -648,48 +686,43 @@ class _AdminBeanStickyHeaderDelegate extends SliverPersistentHeaderDelegate {
               children: [
                 // Search Bar
                 Expanded(
-                child: TextField(
-                  controller: searchController,
-                  onChanged: onSearchChanged,
-                  decoration: InputDecoration(
-                    hintText: 'Search beans...',
-                    prefixIcon: Icon(
-                      Icons.search_rounded,
-                      color: colorScheme.primary,
-                      size: 24,
+                  child: TextField(
+                    controller: searchController,
+                    onChanged: onSearchChanged,
+                    decoration: InputDecoration(
+                      hintText: 'Search beans...',
+                      prefixIcon: Icon(
+                        Icons.search_rounded,
+                        color: colorScheme.primary,
+                        size: 24,
+                      ),
+                      suffixIcon: searchController.text.isNotEmpty
+                          ? IconButton(
+                              onPressed: () {
+                                searchController.clear();
+                                onSearchChanged('');
+                              },
+                              icon: Icon(
+                                Icons.cancel_rounded,
+                                size: 20,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            )
+                          : null,
                     ),
-                    suffixIcon: searchController.text.isNotEmpty
-                        ? IconButton(
-                            onPressed: () {
-                              searchController.clear();
-                              onSearchChanged('');
-                            },
-                            icon: Icon(
-                              Icons.cancel_rounded,
-                              size: 20,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                          )
-                        : null,
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              // Filter Button
-              Container(
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHigh,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: IconButton(
+                const SizedBox(width: 12),
+                // Filter Button
+                IconButton(
                   onPressed: onFilterTap,
+                  highlightColor: Colors.transparent,
                   icon: Icon(Icons.tune_rounded, color: colorScheme.primary),
                   tooltip: 'Filters',
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         ],
       ),
     );
